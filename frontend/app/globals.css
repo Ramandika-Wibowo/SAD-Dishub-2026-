@@ -49,10 +49,14 @@
   .dark textarea::placeholder {
     color: #94a3b8 !important;
   }
-  .dark .card-base {
+  .dark .card-base,
+  .dark .bg-white {
     background-color: #0f172a !important;
     border-color: #1e293b !important;
     color: #ffffff !important;
+  }
+  .dark .bg-primary-50 {
+    background-color: rgba(30, 58, 138, 0.25) !important;
   }
   .dark .border-surface-100,
   .dark .border-surface-200 {
