@@ -23,7 +23,7 @@ const Input = ({
   <div>
     <label htmlFor={id} className="label-base">{label}</label>
     <div className="relative">
-      <Icon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400" />
+      <Icon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400 dark:text-slate-400" />
       <input
         id={id} type={type} value={value} onChange={onChange}
         className={`input-base pl-10 ${error ? "input-error" : ""}`}
@@ -103,13 +103,13 @@ export default function RegisterPage() {
         <div>
           <label htmlFor="password" className="label-base">Kata Sandi</label>
           <div className="relative">
-            <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400" />
+            <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400 dark:text-slate-400" />
             <input id="password" type={showPw ? "text" : "password"} value={form.password}
               onChange={(e) => set("password", e.target.value)}
               className={`input-base pl-10 pr-10 ${errors.password ? "input-error" : ""}`}
               placeholder="Buat kata sandi" />
             <button type="button" onClick={() => setShowPw(!showPw)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-surface-400 hover:text-surface-600 focus:outline-none" tabIndex={-1}>
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-surface-400 hover:text-surface-600 dark:text-slate-400 dark:hover:text-white focus:outline-none" tabIndex={-1}>
               {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
           </div>
@@ -124,12 +124,12 @@ export default function RegisterPage() {
         <div>
           <label htmlFor="applicant_type" className="label-base">Jenis Pendaftar</label>
           <div className="relative">
-            <GraduationCap className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400" />
+            <GraduationCap className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400 dark:text-slate-400" />
             <select id="applicant_type" value={form.applicant_type}
               onChange={(e) => set("applicant_type", e.target.value)}
               className="input-base pl-10 appearance-none cursor-pointer">
               {applicantTypes.map((t) => (
-                <option key={t.value} value={t.value}>{t.label}</option>
+                <option key={t.value} value={t.value} className="dark:bg-slate-900 dark:text-white">{t.label}</option>
               ))}
             </select>
           </div>

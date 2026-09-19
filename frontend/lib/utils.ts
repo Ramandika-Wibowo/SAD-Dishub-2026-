@@ -62,11 +62,11 @@ export function getStatusColor(status: ApplicationStatus | "locked"): {
   dot: string;
 } {
   const colors = {
-    pending: { bg: "bg-status-pending-bg", text: "text-amber-700", dot: "bg-status-pending" },
-    reviewing: { bg: "bg-status-reviewing-bg", text: "text-blue-700", dot: "bg-status-reviewing" },
-    accepted: { bg: "bg-status-accepted-bg", text: "text-emerald-700", dot: "bg-status-accepted" },
-    rejected: { bg: "bg-status-rejected-bg", text: "text-red-700", dot: "bg-status-rejected" },
-    locked: { bg: "bg-status-locked-bg", text: "text-gray-600", dot: "bg-status-locked" },
+    pending: { bg: "bg-amber-50 dark:bg-amber-950/80 border border-amber-200 dark:border-amber-800/60", text: "text-amber-800 dark:text-amber-200", dot: "bg-amber-500" },
+    reviewing: { bg: "bg-blue-50 dark:bg-blue-950/80 border border-blue-200 dark:border-blue-800/60", text: "text-blue-800 dark:text-blue-200", dot: "bg-blue-500" },
+    accepted: { bg: "bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800/60", text: "text-emerald-800 dark:text-emerald-200", dot: "bg-emerald-500" },
+    rejected: { bg: "bg-red-50 dark:bg-red-950/80 border border-red-200 dark:border-red-800/60", text: "text-red-800 dark:text-red-200", dot: "bg-red-500" },
+    locked: { bg: "bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700", text: "text-slate-700 dark:text-white", dot: "bg-slate-400" },
   };
   return colors[status] || colors.pending;
 }

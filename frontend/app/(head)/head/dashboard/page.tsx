@@ -59,10 +59,10 @@ export default function HeadDashboardPage() {
   if (!data) return <p className="text-center py-16 text-surface-400">Gagal memuat data analitik.</p>;
 
   const kpis = [
-    { label: "Total Pelamar Aktif", value: data.total_applicants, icon: Users, color: "text-primary-600 bg-primary-50" },
-    { label: "Total Diterima", value: data.total_accepted, icon: CheckCircle, color: "text-emerald-600 bg-emerald-50" },
-    { label: "Total Ditolak", value: data.total_rejected, icon: XCircle, color: "text-red-600 bg-red-50" },
-    { label: "Divisi Penuh", value: data.locked_divisions_count, icon: Lock, color: "text-amber-600 bg-amber-50" },
+    { label: "Total Pelamar Aktif", value: data.total_applicants, icon: Users, color: "text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-950/60" },
+    { label: "Total Diterima", value: data.total_accepted, icon: CheckCircle, color: "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60" },
+    { label: "Total Ditolak", value: data.total_rejected, icon: XCircle, color: "text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/60" },
+    { label: "Divisi Penuh", value: data.locked_divisions_count, icon: Lock, color: "text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/60" },
   ];
 
   const barData = data.applicants_per_division.map((d) => ({
@@ -160,24 +160,24 @@ export default function HeadDashboardPage() {
       {/* Division Capacity Table */}
       <Card padding="none">
         <div className="px-5 pt-5 pb-3">
-          <h3 className="text-base font-semibold text-surface-900">Kapasitas Divisi</h3>
+          <h3 className="text-base font-semibold text-surface-900 dark:text-white">Kapasitas Divisi</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[500px]">
             <thead>
-              <tr className="bg-surface-50 border-y border-surface-200">
+              <tr className="bg-surface-50 dark:bg-slate-900 border-y border-surface-200 dark:border-slate-800">
                 {["Divisi", "Maks", "Aktif", "Sisa", "Kapasitas"].map((h) => (
-                  <th key={h} className="px-4 py-2.5 text-left text-xs font-semibold text-surface-500 uppercase tracking-wider">{h}</th>
+                  <th key={h} className="px-4 py-2.5 text-left text-xs font-semibold text-surface-500 dark:text-slate-300 uppercase tracking-wider">{h}</th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-surface-100">
+            <tbody className="divide-y divide-surface-100 dark:divide-slate-800">
               {data.division_capacity.map((d) => (
-                <tr key={d.division_name} className="hover:bg-surface-50">
-                  <td className="px-4 py-3 text-sm font-medium text-surface-800">{d.division_name}</td>
-                  <td className="px-4 py-3 text-sm text-surface-600">{d.max_quota}</td>
-                  <td className="px-4 py-3 text-sm text-surface-600">{d.active_applicants}</td>
-                  <td className="px-4 py-3 text-sm font-semibold">
+                <tr key={d.division_name} className="hover:bg-surface-50 dark:hover:bg-slate-800/60">
+                  <td className="px-4 py-3 text-sm font-medium text-surface-800 dark:text-white">{d.division_name}</td>
+                  <td className="px-4 py-3 text-sm text-surface-600 dark:text-slate-200">{d.max_quota}</td>
+                  <td className="px-4 py-3 text-sm text-surface-600 dark:text-slate-200">{d.active_applicants}</td>
+                  <td className="px-4 py-3 text-sm font-semibold text-surface-800 dark:text-white">
                     <span className={d.max_quota - d.active_applicants <= 0 ? "text-red-600" : "text-emerald-600"}>
                       {d.max_quota - d.active_applicants}
                     </span>

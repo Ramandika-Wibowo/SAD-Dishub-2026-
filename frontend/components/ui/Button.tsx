@@ -20,17 +20,17 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "bg-primary-700 text-white hover:bg-primary-800 active:bg-primary-900 " +
-    "shadow-sm hover:shadow-md focus:ring-primary-300",
+    "bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800 " +
+    "shadow-sm hover:shadow-md focus:ring-primary-300 dark:focus:ring-primary-800",
   secondary:
-    "bg-primary-50 text-primary-700 hover:bg-primary-100 active:bg-primary-200 " +
+    "bg-primary-50 dark:bg-primary-950/80 text-primary-700 dark:text-primary-300 hover:bg-primary-100 dark:hover:bg-primary-900/60 active:bg-primary-200 " +
     "focus:ring-primary-200",
   outline:
-    "bg-white text-surface-700 border border-surface-300 " +
-    "hover:bg-surface-50 hover:border-surface-400 active:bg-surface-100 " +
+    "bg-white dark:bg-slate-900 text-surface-700 dark:text-white border border-surface-300 dark:border-slate-700 " +
+    "hover:bg-surface-50 dark:hover:bg-slate-800 hover:border-surface-400 active:bg-surface-100 " +
     "focus:ring-surface-200",
   ghost:
-    "bg-transparent text-surface-600 hover:bg-surface-100 hover:text-surface-800 " +
+    "bg-transparent text-surface-600 dark:text-white hover:bg-surface-100 dark:hover:bg-slate-800 hover:text-surface-800 dark:hover:text-white " +
     "active:bg-surface-200 focus:ring-surface-200",
   danger:
     "bg-red-600 text-white hover:bg-red-700 active:bg-red-800 " +

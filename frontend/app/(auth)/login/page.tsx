@@ -53,7 +53,7 @@ function LoginForm() {
         <div className="flex flex-col gap-1.5">
           <label className="label-base">Alamat Email</label>
           <div className="relative">
-            <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400" />
+            <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400 dark:text-slate-400" />
             <input
               type="email"
               value={form.email}
@@ -70,7 +70,7 @@ function LoginForm() {
         <div className="flex flex-col gap-1.5">
           <label className="label-base">Kata Sandi</label>
           <div className="relative">
-            <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400" />
+            <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400 dark:text-slate-400" />
             <input
               type={showPassword ? "text" : "password"}
               value={form.password}
@@ -82,7 +82,7 @@ function LoginForm() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-surface-400 hover:text-surface-600 focus:outline-none"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-surface-400 hover:text-surface-600 dark:text-slate-400 dark:hover:text-white focus:outline-none"
               tabIndex={-1}
             >
               {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}

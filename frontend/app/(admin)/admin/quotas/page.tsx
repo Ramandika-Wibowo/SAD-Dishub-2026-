@@ -110,16 +110,16 @@ export default function AdminQuotasPage() {
                   )}>
                     <td className="px-4 py-3.5">
                       <div className="flex items-center gap-2.5">
-                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${d.is_locked ? "bg-red-100" : "bg-primary-50"}`}>
-                          {d.is_locked ? <Lock className="w-4 h-4 text-red-500" /> : <Building2 className="w-4 h-4 text-primary-600" />}
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${d.is_locked ? "bg-red-100 dark:bg-red-950/60" : "bg-primary-50 dark:bg-primary-950/60"}`}>
+                          {d.is_locked ? <Lock className="w-4 h-4 text-red-500" /> : <Building2 className="w-4 h-4 text-primary-600 dark:text-primary-400" />}
                         </div>
-                        <span className="text-sm font-medium text-surface-800">{d.name}</span>
+                        <span className="text-sm font-medium text-surface-800 dark:text-white">{d.name}</span>
                       </div>
                     </td>
-                    <td className="px-4 py-3.5 text-sm font-semibold text-surface-700">{d.max_quota}</td>
+                    <td className="px-4 py-3.5 text-sm font-semibold text-surface-700 dark:text-white">{d.max_quota}</td>
                     <td className="px-4 py-3.5">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm text-surface-700">{d.active_applicants}</span>
+                        <span className="text-sm text-surface-700 dark:text-white">{d.active_applicants}</span>
                         <div className="w-16 h-2 bg-surface-200 rounded-full overflow-hidden">
                           <div className={`h-full rounded-full transition-all ${
                             pct >= 90 ? "bg-red-500" : pct >= 70 ? "bg-amber-500" : "bg-emerald-500"

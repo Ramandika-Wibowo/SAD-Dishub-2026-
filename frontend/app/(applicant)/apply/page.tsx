@@ -233,39 +233,39 @@ export default function ApplyPage() {
                     <div className="flex items-start gap-3">
                       <div className={cn(
                         "w-10 h-10 rounded-lg flex items-center justify-center shrink-0",
-                        isDisabled ? "bg-surface-100" : isSelected ? "bg-primary-100" : "bg-primary-50"
+                        isDisabled ? "bg-surface-100 dark:bg-slate-800" : isSelected ? "bg-primary-100 dark:bg-primary-950" : "bg-primary-50 dark:bg-primary-950/60"
                       )}>
                         {isFull ? (
-                          <Lock className="w-5 h-5 text-surface-400" />
+                          <Lock className="w-5 h-5 text-surface-400 dark:text-slate-500" />
                         ) : isRejectedBefore ? (
                           <AlertCircle className="w-5 h-5 text-red-400" />
                         ) : (
-                          <Building2 className="w-5 h-5 text-primary-600" />
+                          <Building2 className="w-5 h-5 text-primary-600 dark:text-primary-400" />
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="text-sm font-semibold text-surface-900 truncate">{div.name}</h4>
+                        <h4 className="text-sm font-semibold text-surface-900 dark:text-white truncate">{div.name}</h4>
                         <div className="flex items-center gap-1.5 mt-1.5">
                           {isRejectedBefore ? (
-                            <span className="text-xs font-medium text-red-600 bg-red-50 px-2 py-0.5 rounded-full">
+                            <span className="text-xs font-medium text-red-600 dark:text-red-300 bg-red-50 dark:bg-red-950/60 px-2 py-0.5 rounded-full">
                               Pernah Ditolak (Pilih divisi lain)
                             </span>
                           ) : isFull ? (
                             <>
-                              <Users className="w-3.5 h-3.5 text-surface-400" />
-                              <span className="text-xs font-medium text-red-500 bg-red-50 px-2 py-0.5 rounded-full">Penuh</span>
+                              <Users className="w-3.5 h-3.5 text-surface-400 dark:text-slate-400" />
+                              <span className="text-xs font-medium text-red-500 dark:text-red-300 bg-red-50 dark:bg-red-950/60 px-2 py-0.5 rounded-full">Penuh</span>
                             </>
                           ) : (
                             <>
-                              <Users className="w-3.5 h-3.5 text-surface-400" />
-                              <span className="text-xs text-surface-500">
-                                Sisa kuota: <span className="font-semibold text-primary-700">{div.max_quota - div.active_applicants}</span>/{div.max_quota}
+                              <Users className="w-3.5 h-3.5 text-surface-400 dark:text-slate-400" />
+                              <span className="text-xs text-surface-500 dark:text-slate-300">
+                                Sisa kuota: <span className="font-semibold text-primary-700 dark:text-primary-300">{div.max_quota - div.active_applicants}</span>/{div.max_quota}
                               </span>
                             </>
                           )}
                         </div>
                       </div>
-                      {isSelected && <CheckCircle className="w-5 h-5 text-primary-600 shrink-0" />}
+                      {isSelected && <CheckCircle className="w-5 h-5 text-primary-600 dark:text-primary-400 shrink-0" />}
                     </div>
                   </Card>
                 );

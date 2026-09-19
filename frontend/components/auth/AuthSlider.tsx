@@ -90,8 +90,8 @@ export default function AuthSlider() {
             {/* Cinematic Gradient Overlays */}
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-slate-950/40" />
             <div className="absolute inset-0 bg-gradient-to-r from-slate-950/70 via-transparent to-slate-950/30" />
-            {/* Suara Surabaya Red Accent Glow */}
-            <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-red-600/20 rounded-full blur-3xl pointer-events-none" />
+            {/* Suara Surabaya Blue Accent Glow */}
+            <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-blue-600/25 rounded-full blur-3xl pointer-events-none" />
           </div>
         );
       })}
@@ -99,7 +99,7 @@ export default function AuthSlider() {
       {/* Top Bar: Brand Frequency Badge */}
       <div className="relative z-20 p-8 flex items-center justify-between">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white text-xs font-semibold tracking-wider">
-          <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+          <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
           <span>FM 100 MHz • SUARA SURABAYA MEDIA</span>
         </div>
       </div>
@@ -108,7 +108,7 @@ export default function AuthSlider() {
       <div className="relative z-20 p-8 sm:p-12 mt-auto">
         <div className="max-w-xl space-y-4">
           {/* Tag Pill */}
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-600/90 text-white text-[11px] font-bold tracking-wider uppercase shadow-sm">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-600/95 text-white text-[11px] font-bold tracking-wider uppercase shadow-sm">
             {slides[current].icon}
             <span>{slides[current].tag}</span>
           </div>
@@ -139,7 +139,7 @@ export default function AuthSlider() {
                     <div
                       className={`h-1.5 rounded-full transition-all duration-300 ${
                         isActive
-                          ? "w-10 bg-red-500 shadow-sm shadow-red-500/50"
+                          ? "w-10 bg-blue-500 shadow-sm shadow-blue-500/50"
                           : "w-2.5 bg-white/30 group-hover:bg-white/60"
                       }`}
                     />
@@ -152,14 +152,14 @@ export default function AuthSlider() {
             <div className="flex items-center gap-2">
               <button
                 onClick={prevSlide}
-                className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 backdrop-blur-md text-white border border-white/10 flex items-center justify-center transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-red-400"
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 backdrop-blur-md text-white border border-white/10 flex items-center justify-center transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 aria-label="Previous Slide"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
               <button
                 onClick={nextSlide}
-                className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 backdrop-blur-md text-white border border-white/10 flex items-center justify-center transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-red-400"
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 backdrop-blur-md text-white border border-white/10 flex items-center justify-center transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 aria-label="Next Slide"
               >
                 <ChevronRight className="w-5 h-5" />

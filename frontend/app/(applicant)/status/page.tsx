@@ -204,27 +204,27 @@ export default function StatusPage() {
 
       {/* Decision Card */}
       <Card padding="lg" className={
-        isInternshipEnded ? "bg-teal-50 border-teal-200" :
-        app.status === "accepted" ? "bg-emerald-50 border-emerald-200" :
-        app.status === "rejected" ? "bg-red-50 border-red-200" :
-        "bg-blue-50 border-blue-200"
+        isInternshipEnded ? "bg-teal-50 dark:bg-teal-950/40 border-teal-200 dark:border-teal-900" :
+        app.status === "accepted" ? "bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-900" :
+        app.status === "rejected" ? "bg-red-50 dark:bg-red-950/40 border-red-200 dark:border-red-900" :
+        "bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-900"
       }>
         <div className="flex items-start gap-3">
           {isInternshipEnded ? (
-            <CheckCircle2 className="w-6 h-6 text-teal-600 shrink-0 mt-0.5" />
+            <CheckCircle2 className="w-6 h-6 text-teal-600 dark:text-teal-400 shrink-0 mt-0.5" />
           ) : app.status === "accepted" ? (
-            <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0 mt-0.5" />
+            <CheckCircle2 className="w-6 h-6 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
           ) : app.status === "rejected" ? (
-            <XCircle className="w-6 h-6 text-red-600 shrink-0 mt-0.5" />
+            <XCircle className="w-6 h-6 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
           ) : (
-            <Info className="w-6 h-6 text-blue-600 shrink-0 mt-0.5" />
+            <Info className="w-6 h-6 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
           )}
           <div className="flex-1 min-w-0">
             <h3 className={`text-base font-semibold ${
-              isInternshipEnded ? "text-teal-900" :
-              app.status === "accepted" ? "text-emerald-800" :
-              app.status === "rejected" ? "text-red-800" :
-              "text-blue-800"
+              isInternshipEnded ? "text-teal-900 dark:text-white" :
+              app.status === "accepted" ? "text-emerald-800 dark:text-white" :
+              app.status === "rejected" ? "text-red-800 dark:text-white" :
+              "text-blue-800 dark:text-white"
             }`}>
               {isInternshipEnded ? "Masa Magang Telah Selesai 🎓" :
                app.status === "accepted" ? "Pengajuan Diterima! 🎉" :
@@ -234,7 +234,7 @@ export default function StatusPage() {
 
             {/* Info Penempatan */}
             {app.status === "accepted" && app.recommended_division && (
-              <div className="flex items-center gap-1.5 mt-2 text-sm text-emerald-700">
+              <div className="flex items-center gap-1.5 mt-2 text-sm text-emerald-700 dark:text-emerald-300">
                 <MapPin className="w-4 h-4" />
                 <span>Penempatan: <strong>{app.recommended_division.name}</strong></span>
               </div>
@@ -242,7 +242,7 @@ export default function StatusPage() {
 
             {/* Info Periode Magang */}
             {app.status === "accepted" && app.internship_start && app.internship_end && (
-              <div className="flex items-center gap-1.5 mt-1 text-sm text-surface-600">
+              <div className="flex items-center gap-1.5 mt-1 text-sm text-surface-600 dark:text-slate-200">
                 <Calendar className="w-4 h-4" />
                 <span>Periode: <strong>{formatDate(app.internship_start)}</strong> s/d <strong>{formatDate(app.internship_end)}</strong></span>
               </div>
@@ -250,8 +250,8 @@ export default function StatusPage() {
 
             {/* Status Selesai / Alumni Message & Re-apply button */}
             {isInternshipEnded && (
-              <div className="mt-3 pt-3 border-t border-teal-200/60">
-                <p className="text-xs text-teal-800 leading-relaxed">
+              <div className="mt-3 pt-3 border-t border-teal-200/60 dark:border-teal-800/60">
+                <p className="text-xs text-teal-800 dark:text-teal-200 leading-relaxed">
                   Selamat atas terselesaikannya seluruh rangkaian kegiatan magang di Suara Surabaya Media. Anda dipersilakan mendaftar kembali untuk periode selanjutnya jika ingin mengikuti program magang baru.
                 </p>
                 <div className="mt-3">
@@ -268,17 +268,17 @@ export default function StatusPage() {
 
             {/* Rejection Message & Re-apply to other division button */}
             {app.status === "rejected" && (
-              <div className="mt-2 text-sm text-red-700">
+              <div className="mt-2 text-sm text-red-700 dark:text-red-300">
                 {app.rejection_reason && (
                   <div>
-                    <p className="font-medium">Alasan Penolakan:</p>
-                    <p className="mt-0.5 text-xs text-red-600">{app.rejection_reason}</p>
+                    <p className="font-medium text-red-800 dark:text-red-200">Alasan Penolakan:</p>
+                    <p className="mt-0.5 text-xs text-red-600 dark:text-red-300">{app.rejection_reason}</p>
                   </div>
                 )}
                 <div className="mt-3">
                   <Link
                     href="/apply"
-                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-primary-700 hover:bg-primary-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-primary-600 hover:bg-primary-700 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors"
                   >
                     Ajukan ke Divisi Lain
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -288,7 +288,7 @@ export default function StatusPage() {
             )}
 
             {(app.status === "pending" || app.status === "reviewing") && (
-              <p className="mt-1 text-sm text-blue-700">
+              <p className="mt-1 text-sm text-blue-700 dark:text-blue-300">
                 Sedang diproses oleh admin. Harap tunggu notifikasi selanjutnya.
               </p>
             )}
