@@ -19,10 +19,10 @@ import {
   MessageCircle,
 } from "lucide-react";
 
-export default function AdminApplicationsPage() {
+function AdminApplicationsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   const [apps, setApps] = useState<Application[]>([]);
   const [divisions, setDivisions] = useState<Division[]>([]);
   const [loading, setLoading] = useState(true);
@@ -57,12 +57,12 @@ export default function AdminApplicationsPage() {
   }, [page, search, filterDivision, filterStatus, filterType]);
 
   useEffect(() => {
-    api.get("/admin/divisions").then((res) => setDivisions(res.data.data || [])).catch(() => {});
+    api.get("/admin/divisions").then((res) => setDivisions(res.data.data || [])).catch(() => { });
     // Fetch unread chat counts
     const fetchUnread = () => {
       api.get("/messages/unread-counts").then((res) => {
         if (res.data.success) setUnreadCounts(res.data.data.per_user || {});
-      }).catch(() => {});
+      }).catch(() => { });
     };
     fetchUnread();
     const interval = setInterval(fetchUnread, 10000);
@@ -192,5 +192,13 @@ export default function AdminApplicationsPage() {
         )}
       </Card>
     </div>
+  );
+}
+
+export default function AdminApplicationsPage() {
+  return (
+    <React.Suspense fallback={<div className="h-64 flex items-center justify-center text-surface-400">Memuat data pelamar...</div>}>
+      <AdminApplicationsContent />
+    </React.Suspense>
   );
 }

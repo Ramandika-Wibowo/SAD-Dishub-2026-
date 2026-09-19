@@ -36,7 +36,7 @@ class AuthController extends Controller
         sendNotification(
             $user->id,
             'Selamat Datang!',
-            'Akun Anda berhasil didaftarkan di E-Internship Dishub Surabaya. Silakan lengkapi profil dan ajukan magang.'
+            'Akun Anda berhasil didaftarkan di E-Internship Suara Surabaya Media. Silakan lengkapi profil dan ajukan magang.'
         );
 
         return response()->json([
@@ -56,11 +56,22 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request): JsonResponse
     {
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Email atau password salah.',
-            ], 401);
+        $credentials = $request->only('email', 'password');
+
+        if (!Auth::attempt($credentials)) {
+            // Graceful fallback: map between @dishub-surabaya.go.id and @suarasurabaya.net
+            if (str_ends_with($credentials['email'], '@dishub-surabaya.go.id')) {
+                $credentials['email'] = str_replace('@dishub-surabaya.go.id', '@suarasurabaya.net', $credentials['email']);
+            } elseif (str_ends_with($credentials['email'], '@suarasurabaya.net')) {
+                $credentials['email'] = str_replace('@suarasurabaya.net', '@dishub-surabaya.go.id', $credentials['email']);
+            }
+
+            if (!Auth::attempt($credentials)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Email atau password salah.',
+                ], 401);
+            }
         }
 
         $user  = Auth::user();

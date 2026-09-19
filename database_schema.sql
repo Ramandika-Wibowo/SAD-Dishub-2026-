@@ -1,5 +1,5 @@
 -- ===================================================================
--- E-Internship Dishub
+-- E-Internship Suara Surabaya Media
 -- PostgreSQL Schema Definitions (DDL)
 -- ===================================================================
 

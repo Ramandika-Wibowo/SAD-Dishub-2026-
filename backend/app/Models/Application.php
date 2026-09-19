@@ -26,6 +26,10 @@ class Application extends Model
         'admin_note',
     ];
 
+    protected $appends = [
+        'is_completed',
+    ];
+
     protected function casts(): array
     {
         return [
@@ -97,6 +101,13 @@ class Application extends Model
     public function isRejected(): bool
     {
         return $this->status === 'rejected';
+    }
+
+    public function getIsCompletedAttribute(): bool
+    {
+        return $this->status === 'accepted'
+            && $this->internship_end
+            && $this->internship_end->isPast();
     }
 
     /**

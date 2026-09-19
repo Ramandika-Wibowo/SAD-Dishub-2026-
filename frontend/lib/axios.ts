@@ -7,7 +7,8 @@ const api = axios.create({
     "Content-Type": "application/json",
     Accept: "application/json",
   },
-  withCredentials: true,
+  // Tidak perlu withCredentials karena auth pakai Bearer token (Sanctum)
+  // withCredentials: true menyebabkan CORS preflight OPTIONS sebelum setiap request
 });
 
 // ─── Request Interceptor: Attach Bearer Token ──────

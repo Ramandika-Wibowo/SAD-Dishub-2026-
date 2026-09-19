@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { updateSession } from "@/utils/supabase/middleware";
 
 // ─── Route Protection Configuration ────────────────
 const protectedRoutes: Record<string, string[]> = {
@@ -28,16 +27,13 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // ─── Refresh Supabase session ────────────────────
-  const supabaseResponse = updateSession(request);
-
   // ─── Public routes: redirect if already authenticated ──
   if (publicRoutes.some((route) => pathname.startsWith(route))) {
     if (token && role) {
       const dashboardPath = getDashboardPath(role);
       return NextResponse.redirect(new URL(dashboardPath, request.url));
     }
-    return supabaseResponse;
+    return NextResponse.next();
   }
 
   // ─── Protected routes: check auth ────────────────
@@ -69,7 +65,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  return supabaseResponse;
+  return NextResponse.next();
 }
 
 function getDashboardPath(role: string): string {

@@ -15,8 +15,8 @@ class DatabaseSeeder extends Seeder
     {
         // ─── Admin User ────────────────────────────────
         User::create([
-            'name'     => 'Admin Sekretariat',
-            'email'    => 'admin@dishub-surabaya.go.id',
+            'name'     => 'Admin Suara Surabaya',
+            'email'    => 'admin@suarasurabaya.net',
             'password' => 'password123',
             'role'     => 'admin',
             'phone'    => '031-1234567',
@@ -24,8 +24,8 @@ class DatabaseSeeder extends Seeder
 
         // ─── Head / Pimpinan ───────────────────────────
         User::create([
-            'name'     => 'Kepala Bidang',
-            'email'    => 'pimpinan@dishub-surabaya.go.id',
+            'name'     => 'Pimpinan Redaksi',
+            'email'    => 'pimpinan@suarasurabaya.net',
             'password' => 'password123',
             'role'     => 'head',
             'phone'    => '031-7654321',

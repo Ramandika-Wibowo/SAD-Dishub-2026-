@@ -52,6 +52,7 @@ export default function AdminApplicationDetailPage() {
   const [adminNote, setAdminNote] = useState("");
   const [deciding, setDeciding] = useState(false);
   const [previewDoc, setPreviewDoc] = useState<{ url: string; title: string } | null>(null);
+  const [previewLoading, setPreviewLoading] = useState(false);
   const cachedUser = getCachedUser();
   const adminId = cachedUser?.id || 0;
 
@@ -70,6 +71,24 @@ export default function AdminApplicationDetailPage() {
 
   const app = detail?.application;
   const rules = detail?.rule_results;
+
+  // ─── Document Preview (via API proxy to avoid CORS/Supabase issues) ───
+  const handlePreviewDoc = async (docId: number, docType: string) => {
+    setPreviewLoading(true);
+    setPreviewDoc({ url: "", title: formatDocumentType(docType as any) });
+    try {
+      const res = await api.get(`/admin/documents/${docId}/stream`, {
+        responseType: "blob",
+      });
+      const blobUrl = URL.createObjectURL(res.data);
+      setPreviewDoc({ url: blobUrl, title: formatDocumentType(docType as any) });
+    } catch {
+      setPreviewDoc(null);
+      toastError("Gagal memuat dokumen. File mungkin tidak tersedia.");
+    } finally {
+      setPreviewLoading(false);
+    }
+  };
 
   // ─── Execute Sort Algorithm (Decision Support) ──
   const executeSort = async () => {
@@ -190,10 +209,17 @@ export default function AdminApplicationDetailPage() {
                     <p className="text-[11px] text-surface-400 truncate">{doc?.file_name || "Belum diunggah"}</p>
                   </div>
                   {doc && (
-                    <button onClick={() => setPreviewDoc({ url: doc.file_url || doc.file_path, title: formatDocumentType(type) })}
-                      className="p-1.5 rounded-md hover:bg-emerald-100 text-emerald-600"
-                      title="Lihat Dokumen">
-                      <Eye className="w-4 h-4" />
+                    <button
+                      onClick={() => handlePreviewDoc(doc.id, type)}
+                      className="p-1.5 rounded-md hover:bg-emerald-100 text-emerald-600 disabled:opacity-50"
+                      title="Lihat Dokumen"
+                      disabled={previewLoading}
+                    >
+                      {previewLoading ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Eye className="w-4 h-4" />
+                      )}
                     </button>
                   )}
                 </div>
@@ -233,8 +259,8 @@ export default function AdminApplicationDetailPage() {
             {/* Recommendation Banner */}
             {rules?.recommendation && (
               <div className={`flex items-start gap-3 p-4 rounded-xl border ${rules.all_passed
-                  ? "border-emerald-200 bg-emerald-50/60"
-                  : "border-amber-200 bg-amber-50/60"
+                ? "border-emerald-200 bg-emerald-50/60"
+                : "border-amber-200 bg-amber-50/60"
                 }`}>
                 <Lightbulb className={`w-5 h-5 mt-0.5 shrink-0 ${rules.all_passed ? "text-emerald-600" : "text-amber-600"
                   }`} />
@@ -268,8 +294,8 @@ export default function AdminApplicationDetailPage() {
               { label: "R4 — Kesesuaian Kata Kunci", passed: app.r4_passed, detail: rules?.r4_detail },
             ].map((rule) => (
               <div key={rule.label} className={`flex items-center gap-3 p-3 rounded-lg border ${rule.passed ? "border-emerald-200 bg-emerald-50/50" :
-                  rule.passed === false ? "border-amber-200 bg-amber-50/50" :
-                    "border-surface-200 bg-surface-50"
+                rule.passed === false ? "border-amber-200 bg-amber-50/50" :
+                  "border-surface-200 bg-surface-50"
                 }`}>
                 {rule.passed ? <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" /> :
                   rule.passed === false ? <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0" /> :
@@ -332,7 +358,7 @@ export default function AdminApplicationDetailPage() {
           <div className="flex items-start gap-3">
             {app.status === "accepted" ? <CheckCircle className="w-6 h-6 text-emerald-600 mt-0.5" /> : <XCircle className="w-6 h-6 text-red-600 mt-0.5" />}
             <div>
-              <p className={`text-base font-semibold ${app.status === "accepted" ? "text-emerald-800" : "text-red-800"}`}>
+              <p className={`text-base font-semibold ${app.status === "accepted" ? "text-white" : "text-white"}`}>
                 {app.status === "accepted" ? "Pengajuan Diterima" : "Pengajuan Ditolak"}
               </p>
               {app.status === "accepted" && app.recommended_division && (
@@ -396,15 +422,31 @@ export default function AdminApplicationDetailPage() {
         </div>
       </Modal>
 
-      {/* ═══ Document Preview Modal ═══ */}
-      <Modal isOpen={!!previewDoc} onClose={() => setPreviewDoc(null)} title={`Preview Dokumen: ${previewDoc?.title}`} size="xl">
+      <Modal
+        isOpen={!!previewDoc}
+        onClose={() => {
+          if (previewDoc?.url) URL.revokeObjectURL(previewDoc.url);
+          setPreviewDoc(null);
+        }}
+        title={`Preview Dokumen: ${previewDoc?.title}`}
+        size="xl"
+      >
         {previewDoc && (
           <div className="w-full h-[70vh] bg-surface-100 rounded-lg overflow-hidden border border-surface-200">
-            <iframe
-              src={previewDoc.url}
-              className="w-full h-full"
-              title={previewDoc.title}
-            />
+            {previewDoc.url ? (
+              <iframe
+                src={previewDoc.url}
+                className="w-full h-full"
+                title={previewDoc.title}
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <div className="text-center">
+                  <Loader2 className="w-8 h-8 animate-spin text-primary-400 mx-auto mb-2" />
+                  <p className="text-sm text-surface-500">Memuat dokumen...</p>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </Modal>

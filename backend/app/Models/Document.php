@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Document extends Model
 {
@@ -18,16 +19,18 @@ class Document extends Model
 
     protected $appends = ['file_url'];
 
-    public function getFileUrlAttribute()
+    public function getFileUrlAttribute(): string
     {
-        if (str_starts_with($this->file_path, 'http')) {
-            return $this->file_path;
+        $path = $this->file_path ?? '';
+
+        // Already a full URL
+        if (str_starts_with($path, 'http')) {
+            return $path;
         }
 
-        $supabaseUrl = rtrim(config('services.supabase.url'), '/');
-        $bucket = config('services.supabase.storage_bucket');
-        
-        return "{$supabaseUrl}/storage/v1/object/public/{$bucket}/{$this->file_path}";
+        // Normalize local storage path (with or without 'local:' prefix)
+        $cleanPath = str_starts_with($path, 'local:') ? substr($path, 6) : $path;
+        return Storage::disk('public')->url('documents/' . $cleanPath);
     }
 
     // ─── Relationships ─────────────────────────────────

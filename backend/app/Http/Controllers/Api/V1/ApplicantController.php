@@ -43,7 +43,7 @@ class ApplicantController extends Controller
         return response()->json([
             'success' => true,
             'data'    => $divisions,
-        ]);
+        ])->header('Cache-Control', 'public, max-age=60');
     }
 
     /**
@@ -55,21 +55,37 @@ class ApplicantController extends Controller
     {
         $user = $request->user();
 
-        // Check if user already has an application for this division
-        $existing = Application::where('user_id', $user->id)
-            ->where('division_id', $request->division_id)
-            ->first();
+        // 1. Check if user has an ongoing/active application or ongoing internship
+        $hasActiveApp = Application::where('user_id', $user->id)
+            ->where(function ($query) {
+                $query->whereIn('status', ['pending', 'reviewing'])
+                    ->orWhere(function ($q) {
+                        $q->where('status', 'accepted')
+                            ->where(function ($sub) {
+                                $sub->whereNull('internship_end')
+                                    ->orWhere('internship_end', '>=', now()->toDateString());
+                            });
+                    });
+            })
+            ->exists();
 
-        if ($existing) {
-            if ($existing->status === 'rejected') {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Anda sudah pernah mengajukan ke divisi ini dan ditolak. Silakan pilih divisi lain.',
-                ], 422);
-            }
+        if ($hasActiveApp) {
             return response()->json([
                 'success' => false,
-                'message' => 'Anda sudah memiliki pengajuan aktif untuk divisi ini.',
+                'message' => 'Anda masih memiliki pengajuan aktif atau masa magang yang sedang berjalan.',
+            ], 422);
+        }
+
+        // 2. Check if user was previously rejected in this specific division
+        $rejectedOnThisDivision = Application::where('user_id', $user->id)
+            ->where('division_id', $request->division_id)
+            ->where('status', 'rejected')
+            ->exists();
+
+        if ($rejectedOnThisDivision) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda sudah pernah mengajukan ke divisi ini dan ditolak. Silakan pilih divisi lain.',
             ], 422);
         }
 
@@ -247,6 +263,7 @@ class ApplicantController extends Controller
                     'study_program'         => $app->study_program,
                     'internship_start'      => $app->internship_start?->format('Y-m-d'),
                     'internship_end'        => $app->internship_end?->format('Y-m-d'),
+                    'is_completed'          => $app->is_completed,
                     'r1_passed'             => $app->r1_passed,
                     'r3_passed'             => $app->r3_passed,
                     'r4_passed'             => $app->r4_passed,

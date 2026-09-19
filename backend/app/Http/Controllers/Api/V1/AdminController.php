@@ -7,8 +7,12 @@ use App\Http\Requests\Admin\DecideApplicationRequest;
 use App\Http\Requests\Admin\UpdateDivisionRequest;
 use App\Models\Application;
 use App\Models\Division;
+use App\Models\Document;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -608,5 +612,33 @@ class AdminController extends Controller
         });
 
         return array_values($keywords);
+    }
+
+    /**
+     * GET /api/v1/admin/documents/{id}/stream
+     *
+     * Proxy/stream a document file to the browser from local storage.
+     */
+    public function streamDocument(int $id): Response
+    {
+        $document = Document::findOrFail($id);
+        $filePath = $document->file_path;
+
+        // Normalize path: strip 'local:' if present
+        $cleanPath = str_starts_with($filePath, 'local:') ? substr($filePath, 6) : $filePath;
+        $localPath = 'documents/' . $cleanPath;
+
+        if (!Storage::disk('public')->exists($localPath)) {
+            abort(404, 'File tidak ditemukan di penyimpanan lokal.');
+        }
+
+        $content  = Storage::disk('public')->get($localPath);
+        $mimeType = Storage::disk('public')->mimeType($localPath) ?: 'application/octet-stream';
+
+        return response($content, 200, [
+            'Content-Type'        => $mimeType,
+            'Content-Disposition' => 'inline; filename="' . $document->file_name . '"',
+            'Cache-Control'       => 'no-store',
+        ]);
     }
 }

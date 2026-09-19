@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { login } from "@/lib/auth";
@@ -9,7 +9,7 @@ import { toastSuccess, toastError } from "@/components/ui/Toast";
 import Button from "@/components/ui/Button";
 import { Building2, Mail, Lock, Eye, EyeOff } from "lucide-react";
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect");
@@ -51,7 +51,7 @@ export default function LoginPage() {
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         {/* Email */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-surface-700">Alamat Email</label>
+          <label className="label-base">Alamat Email</label>
           <div className="relative">
             <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400" />
             <input
@@ -68,7 +68,7 @@ export default function LoginPage() {
 
         {/* Password */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-surface-700">Kata Sandi</label>
+          <label className="label-base">Kata Sandi</label>
           <div className="relative">
             <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400" />
             <input
@@ -91,16 +91,18 @@ export default function LoginPage() {
           {errors.password && <p className="text-xs text-red-500">{errors.password}</p>}
         </div>
 
-        <div className="flex justify-end mt-[-8px]">
-          <Link href="#" className="text-sm font-medium text-primary-600 hover:text-primary-700 hover:underline">
-            Lupa Kata Sandi?
-          </Link>
-        </div>
-
         <Button type="submit" fullWidth loading={loading} size="lg" className="mt-2">
           Masuk
         </Button>
       </form>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="h-64 flex items-center justify-center text-surface-400">Memuat...</div>}>
+      <LoginForm />
+    </Suspense>
   );
 }

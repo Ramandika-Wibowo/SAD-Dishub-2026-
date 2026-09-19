@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes — E-Internship Dishub Surabaya
+| API Routes — E-Internship Suara Surabaya Media
 |--------------------------------------------------------------------------
 |
 | All routes are prefixed with /api/v1
@@ -24,7 +24,7 @@ Route::prefix('v1')->group(function () {
     // ═══════════════════════════════════════════════════
     Route::prefix('auth')->group(function () {
         Route::post('/register', [AuthController::class, 'register']);
-        Route::post('/login',    [AuthController::class, 'login']);
+        Route::post('/login',    [AuthController::class, 'login'])->name('login');
 
         // Protected auth routes
         Route::middleware('auth:sanctum')->group(function () {
@@ -65,6 +65,9 @@ Route::prefix('v1')->group(function () {
         // Divisions management
         Route::get('/divisions',              [AdminController::class, 'listDivisions']);
         Route::patch('/divisions/{division}', [AdminController::class, 'updateDivision']);
+
+        // Document proxy (stream file to browser regardless of storage driver)
+        Route::get('/documents/{id}/stream', [AdminController::class, 'streamDocument']);
     });
 
     // ═══════════════════════════════════════════════════
@@ -96,7 +99,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/health', function () {
         return response()->json([
             'status'  => 'ok',
-            'service' => 'E-Internship Dishub API',
+            'service' => 'E-Internship Suara Surabaya API',
             'version' => 'v1',
             'time'    => now()->toISOString(),
         ]);

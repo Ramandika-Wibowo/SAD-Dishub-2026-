@@ -1,34 +1,37 @@
 ====================================================
-           E-INTERNSHIP DISHUB SURABAYA
+         E-INTERNSHIP SUARA SURABAYA MEDIA
 ====================================================
 
 1. TENTANG PROYEK
-Aplikasi E-Internship adalah sebuah sistem informasi berbasis web yang dikembangkan untuk Dinas Perhubungan (Dishub) Kota Surabaya. Tujuan utama dari aplikasi ini adalah untuk mendigitalisasi, mempermudah, dan mempercepat proses pendaftaran, seleksi, dan pengelolaan peserta magang/PKL (Praktik Kerja Lapangan) dari berbagai instansi pendidikan.
+Aplikasi E-Internship adalah sebuah sistem informasi berbasis web yang dikembangkan untuk Suara Surabaya Media (Radio Suara Surabaya FM 100). Tujuan utama dari aplikasi ini adalah untuk mendigitalisasi, mempermudah, dan mempercepat proses pendaftaran, seleksi, dan pengelolaan peserta magang/PKL (Praktik Kerja Lapangan) dari berbagai instansi pendidikan ke berbagai divisi di Suara Surabaya Media.
 
 2. TEKNOLOGI YANG DIGUNAKAN
 - Backend: Laravel 11 (PHP)
-- Frontend: Next.js 14 (React, TypeScript) dengan Tailwind CSS
+- Frontend: Next.js 14 (React, TypeScript) dengan Tailwind CSS & Mode Gelap/Terang
 - Database Utama: PostgreSQL (Lokal)
-- Penyimpanan File (Storage): Supabase Storage (Cloud) untuk dokumen pelamar
+- Penyimpanan File (Storage): Local Public Storage (Laravel Storage) di server lokal
+- Standar Desain: Impeccable Design Craftmanship dengan palet brand Merah Khas Suara Surabaya
 
 3. HAK AKSES (ROLES)
 Aplikasi ini memiliki 3 jenis peran pengguna:
 a. Pelamar (Applicant): Siswa SLTA, Mahasiswa, Fresh Graduate, atau perwakilan Instansi yang mengajukan permohonan magang.
-b. Admin Sekretariat (Admin): Staf Dishub yang bertugas menyeleksi, memverifikasi dokumen, dan mengelola data pengajuan.
-c. Pimpinan (Head): Kepala Dinas atau pejabat berwenang yang dapat melihat laporan analitik dan mengunduh data (export).
+b. Admin Redaksi & HRD (Admin): Staf Suara Surabaya yang bertugas menyeleksi, memverifikasi dokumen, dan mengelola data pengajuan.
+c. Direksi & Pimpinan (Head): Pemimpin Redaksi atau Pejabat Direksi yang dapat melihat laporan analitik dan mengunduh data (export).
 
 4. FITUR-FITUR UTAMA
-- Autentikasi & Manajemen Akun: Registrasi pelamar dan login dengan keamanan berbasis token (Laravel Sanctum).
-- Pengajuan Magang (Apply): Pelamar dapat mengisi form pengajuan dan mengunggah dokumen persyaratan (CV, Surat Lamaran, KTP, dan Proposal).
+- Autentikasi & Manajemen Akun: Registrasi pelamar dan login dengan keamanan berbasis token (Laravel Sanctum), dilengkapi hero slider interaktif berdurasi 5 detik.
+- Mode Tampilan Ganda: Dukungan penuh Light Mode dan Dark Mode yang dapat diaktifkan kapan saja dengan penyimpanan preferensi lokal.
+- Pengajuan Magang (Apply): Pelamar dapat mengisi form pengajuan dan mengunggah dokumen persyaratan (CV, Surat Pengantar, KTP, dan Proposal).
+- Pendaftaran Ulang Alumni: Pelamar yang telah menyelesaikan masa magang dapat mendaftar kembali untuk periode berikutnya.
 - Dashboard Pelamar: Memantau status pengajuan (Menunggu, Ditinjau, Diterima, Ditolak).
 - Manajemen Pengajuan (Admin): Admin dapat melihat daftar antrean, memfilter, dan melihat detail pelamar beserta dokumennya.
-- Algoritma Seleksi Otomatis: Fitur Decision Support System (DSS) yang membantu admin menyeleksi pelamar dengan memberikan skor dan rekomendasi penempatan divisi berdasarkan algoritma tertentu.
+- Algoritma Seleksi Otomatis: Fitur Decision Support System (DSS) yang membantu admin menyeleksi pelamar dengan memberikan skor dan rekomendasi penempatan divisi berdasarkan kriteria kelengkapan dan kecocokan jurusan.
 - Keputusan (Accept/Reject): Admin dapat menerima (dengan menentukan penempatan divisi) atau menolak pengajuan (dengan memberikan alasan).
 - Notifikasi: Sistem pemberitahuan kepada pelamar terkait perubahan status pengajuan mereka.
-- Live Chat Admin-Pelamar: Fitur komunikasi langsung (chat) antara pelamar dan admin yang terhubung secara kontekstual dengan pengajuan masing-masing pelamar.
 - Analitik & Pelaporan (Pimpinan): Dashboard statistik untuk melihat tren pendaftar dan fitur Export data dalam format Excel/PDF.
 
 5. STATUS PENGEMBANGAN TERAKHIR
-- Sistem telah berhasil dipindahkan dari database cloud (Supabase) ke database lokal (PostgreSQL) untuk mengatasi masalah latensi dan meningkatkan kecepatan secara drastis (<1ms).
-- Fitur chat interaktif (floating bubble di sisi pelamar dan panel chat di dashboard admin) dengan indikator pesan belum dibaca telah berhasil diimplementasikan.
-- Optimasi query database untuk perhitungan statistik divisi telah dilakukan.
+- Rebranding visual dan teks penuh dari Dinas Perhubungan Kota Surabaya ke Suara Surabaya Media.
+- Implementasi carousel otomatis 5 detik pada halaman login dengan foto resmi Gedung Suara Surabaya Centre, Studio On-Air FM 100, dan Kunjungan Industri Mahasiswa UINSA.
+- Penambahan ThemeToggle untuk beralih instan antara Light Mode dan Dark Mode.
+- Seluruh infrastruktur basis data dan penyimpanan file beroperasi 100% mandiri pada PostgreSQL lokal dan disk lokal.

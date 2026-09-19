@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════
-// E-Internship Dishub — TypeScript Type Definitions
+// E-Internship Suara Surabaya — TypeScript Type Definitions
 // ═══════════════════════════════════════════════════
 
 // ─── Enums ─────────────────────────────────────────
@@ -57,6 +57,8 @@ export interface Application {
   algorithm_score: number | null;
   recommended_division_id: number | null;
   rejection_reason: string | null;
+  admin_note: string | null;
+  is_completed?: boolean;
   created_at: string;
   updated_at: string;
   // Loaded relationships
@@ -201,6 +203,8 @@ export interface RuleResults {
   r4_detail?: string;
   algorithm_score: number | null;
   all_passed?: boolean;
+  recommendation?: string;
+  warnings?: string[];
 }
 
 export interface ApplicationDetail {

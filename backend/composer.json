@@ -1,8 +1,8 @@
 {
-    "name": "dishub-surabaya/e-internship-backend",
+    "name": "suarasurabaya/e-internship-backend",
     "type": "project",
-    "description": "E-Internship Dishub Surabaya - Backend REST API",
-    "keywords": ["laravel", "internship", "government"],
+    "description": "E-Internship Suara Surabaya Media - Backend REST API",
+    "keywords": ["laravel", "internship", "media", "radio", "suarasurabaya"],
     "license": "MIT",
     "require": {
         "php": "^8.2",

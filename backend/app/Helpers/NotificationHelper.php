@@ -40,14 +40,14 @@ if (!function_exists('notifyStatusChange')) {
         ];
 
         $dateString = $startDate ? " pada tanggal {$startDate}" : "";
-        $acceptedMsg = "Selamat, Anda diterima di divisi {$detail}. Silakan menunggu informasi selanjutnya. Anda dapat mengunjungi Kantor Dinas Perhubungan Kota Surabaya{$dateString} di Jl. Dukuh Menanggal No.1, Surabaya, dan menuju bagian Umum dan Kepegawaian untuk informasi lebih lanjut dengan membawa hardfile proposal dan surat pengantar dari instansi.";
+        $acceptedMsg = "Selamat, Anda diterima di divisi {$detail}. Silakan menunggu informasi selanjutnya. Anda dapat mengunjungi Kantor Suara Surabaya Media (Suara Surabaya Centre){$dateString} di Jl. Raya Bukit Darmo No.22-24, Surabaya, dan menuju bagian Human Resource / Manajemen untuk informasi lebih lanjut dengan membawa hardfile proposal dan surat pengantar dari instansi.";
         
         if ($status === 'accepted' && trim($note) !== '') {
             $acceptedMsg .= " Catatan Admin: " . trim($note);
         }
 
         $messages = [
-            'reviewing' => 'Pengajuan magang Anda sedang dalam proses peninjauan oleh Admin Sekretariat.',
+            'reviewing' => 'Pengajuan magang Anda sedang dalam proses peninjauan oleh Tim HR & Redaksi Suara Surabaya Media.',
             'accepted'  => $acceptedMsg,
             'rejected'  => "Pengajuan Anda ditolak: {$detail}",
         ];

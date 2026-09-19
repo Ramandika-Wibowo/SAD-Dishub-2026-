@@ -85,7 +85,7 @@ export default function HeadDashboardPage() {
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
         <div className="page-header mb-0">
           <h1 className="page-title">Dasbor Analitik</h1>
-          <p className="page-subtitle">Ringkasan statistik pendaftaran magang Dinas Perhubungan.</p>
+          <p className="page-subtitle">Ringkasan statistik pendaftaran magang Suara Surabaya Media.</p>
         </div>
         <Button
           variant="outline"

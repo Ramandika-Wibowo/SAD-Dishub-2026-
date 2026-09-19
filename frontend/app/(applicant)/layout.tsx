@@ -1,11 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Topbar from "@/components/ui/Topbar";
 import BottomNav from "@/components/ui/BottomNav";
-import ChatBubble from "@/components/ui/ChatBubble";
-import api from "@/lib/axios";
-import Cookies from "js-cookie";
+import { getCachedUser } from "@/lib/auth";
 
 export default function ApplicantLayout({
   children,
@@ -15,26 +13,16 @@ export default function ApplicantLayout({
   const [userId, setUserId] = useState<number>(0);
 
   useEffect(() => {
-    // Get user ID from auth
-    const fetchUserAndApp = async () => {
-      try {
-        const token = Cookies.get("auth_token");
-        if (!token) return;
-
-        const userRes = await api.get("/auth/me");
-        if (userRes.data.success && userRes.data.data?.user) {
-          setUserId(userRes.data.data.user.id);
-        }
-      } catch {
-        // silent
-      }
-    };
-    fetchUserAndApp();
+    // Gunakan cache lokal — tidak perlu hit API /auth/me setiap navigasi
+    const cached = getCachedUser();
+    if (cached?.id) {
+      setUserId(cached.id);
+    }
   }, []);
 
   return (
-    <div className="min-h-screen bg-surface-50">
-      <Topbar title="E-Internship" subtitle="Dinas Perhubungan Kota Surabaya" />
+    <div className="min-h-screen bg-surface-50 dark:bg-slate-950 transition-colors duration-200">
+      <Topbar title="E-Internship" subtitle="Suara Surabaya Media" />
       <main className="container-main py-6 pb-4">
         {children}
       </main>

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import api from "@/lib/axios";
 import type { Application } from "@/types";
 import Card from "@/components/ui/Card";
@@ -14,21 +15,27 @@ import {
   XCircle,
   Clock,
   MapPin,
-  AlertTriangle,
+  Calendar,
+  ArrowRight,
   Info,
+  History,
 } from "lucide-react";
 
 export default function StatusPage() {
-  const [app, setApp] = useState<Application | null>(null);
+  const [apps, setApps] = useState<Application[]>([]);
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [empty, setEmpty] = useState(false);
 
   useEffect(() => {
     api.get("/applications/my")
       .then((res) => {
-        const apps = res.data.data?.data || res.data.data || [];
-        if (Array.isArray(apps) && apps.length > 0) setApp(apps[0]);
-        else setEmpty(true);
+        const list: Application[] = res.data.data?.data || res.data.data || [];
+        if (Array.isArray(list) && list.length > 0) {
+          setApps(list);
+        } else {
+          setEmpty(true);
+        }
       })
       .catch(() => setEmpty(true))
       .finally(() => setLoading(false));
@@ -40,19 +47,27 @@ export default function StatusPage() {
     </div>
   );
 
+  const app = apps[selectedIndex] || null;
+
   if (empty || !app) return (
     <div className="max-w-2xl mx-auto text-center py-16 animate-fade-in">
       <FileCheck className="w-16 h-16 text-surface-200 mx-auto mb-4" />
       <h2 className="text-lg font-semibold text-surface-700">Belum Ada Pengajuan</h2>
       <p className="text-sm text-surface-400 mt-1 mb-6">Anda belum mengajukan magang. Mulai sekarang!</p>
-      <a href="/apply" className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-700 text-white rounded-lg font-medium text-sm hover:bg-primary-800 transition-colors">
+      <Link href="/apply" className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-700 text-white rounded-lg font-medium text-sm hover:bg-primary-800 transition-colors">
         Ajukan Magang
-      </a>
+      </Link>
     </div>
   );
 
   const isEvaluated = app.r1_passed !== null;
   const isDecided = app.status === "accepted" || app.status === "rejected";
+
+  const isInternshipEnded =
+    app.status === "accepted" &&
+    (Boolean(app.is_completed) ||
+      (app.internship_end &&
+        new Date(app.internship_end).getTime() < new Date().setHours(0, 0, 0, 0)));
 
   // Timeline nodes
   const nodes = [
@@ -74,9 +89,19 @@ export default function StatusPage() {
     },
     {
       key: "decided",
-      icon: app.status === "accepted" ? CheckCircle2 : app.status === "rejected" ? XCircle : Clock,
-      title: "Keputusan Akhir",
-      time: isDecided ? formatDateTime(app.updated_at) : "Belum diputuskan",
+      icon: isInternshipEnded
+        ? CheckCircle2
+        : app.status === "accepted"
+        ? CheckCircle2
+        : app.status === "rejected"
+        ? XCircle
+        : Clock,
+      title: isInternshipEnded ? "Masa Magang Selesai" : "Keputusan Akhir",
+      time: isInternshipEnded
+        ? `Selesai pada ${formatDate(app.internship_end)}`
+        : isDecided
+        ? formatDateTime(app.updated_at)
+        : "Belum diputuskan",
       active: isDecided,
       completed: isDecided,
     },
@@ -84,9 +109,43 @@ export default function StatusPage() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-6 animate-fade-in">
-      <div className="page-header">
-        <h1 className="page-title">Status Pengajuan</h1>
-        <p className="page-subtitle">Pantau perkembangan pengajuan magang Anda.</p>
+      <div className="page-header flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="page-title">Status Pengajuan</h1>
+          <p className="page-subtitle">Pantau perkembangan pengajuan magang Anda.</p>
+        </div>
+
+        {/* History Switcher if multiple applications exist */}
+        {apps.length > 1 && (
+          <div className="flex items-center gap-2 bg-surface-100 p-1 rounded-xl text-xs">
+            <History className="w-3.5 h-3.5 text-surface-500 ml-2" />
+            <span className="font-semibold text-surface-600">Riwayat:</span>
+            <div className="flex gap-1 overflow-x-auto">
+              {apps.map((item, idx) => {
+                const isSelected = idx === selectedIndex;
+                const ended =
+                  item.status === "accepted" &&
+                  (Boolean(item.is_completed) ||
+                    (item.internship_end &&
+                      new Date(item.internship_end).getTime() < new Date().setHours(0, 0, 0, 0)));
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setSelectedIndex(idx)}
+                    className={`px-2.5 py-1 rounded-lg font-medium transition-all ${
+                      isSelected
+                        ? "bg-white text-primary-700 shadow-xs font-semibold"
+                        : "text-surface-500 hover:text-surface-800"
+                    }`}
+                  >
+                    #{apps.length - idx} {item.division?.name?.replace("Bidang ", "") || "Divisi"}
+                    {ended ? " (Alumni)" : idx === 0 ? " (Terbaru)" : ""}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Timeline */}
@@ -145,40 +204,89 @@ export default function StatusPage() {
 
       {/* Decision Card */}
       <Card padding="lg" className={
+        isInternshipEnded ? "bg-teal-50 border-teal-200" :
         app.status === "accepted" ? "bg-emerald-50 border-emerald-200" :
         app.status === "rejected" ? "bg-red-50 border-red-200" :
         "bg-blue-50 border-blue-200"
       }>
         <div className="flex items-start gap-3">
-          {app.status === "accepted" ? (
+          {isInternshipEnded ? (
+            <CheckCircle2 className="w-6 h-6 text-teal-600 shrink-0 mt-0.5" />
+          ) : app.status === "accepted" ? (
             <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0 mt-0.5" />
           ) : app.status === "rejected" ? (
             <XCircle className="w-6 h-6 text-red-600 shrink-0 mt-0.5" />
           ) : (
             <Info className="w-6 h-6 text-blue-600 shrink-0 mt-0.5" />
           )}
-          <div>
+          <div className="flex-1 min-w-0">
             <h3 className={`text-base font-semibold ${
+              isInternshipEnded ? "text-teal-900" :
               app.status === "accepted" ? "text-emerald-800" :
               app.status === "rejected" ? "text-red-800" :
               "text-blue-800"
             }`}>
-              {app.status === "accepted" ? "Pengajuan Diterima! 🎉" :
+              {isInternshipEnded ? "Masa Magang Telah Selesai 🎓" :
+               app.status === "accepted" ? "Pengajuan Diterima! 🎉" :
                app.status === "rejected" ? "Pengajuan Ditolak" :
                "Pengajuan Sedang Diproses"}
             </h3>
+
+            {/* Info Penempatan */}
             {app.status === "accepted" && app.recommended_division && (
               <div className="flex items-center gap-1.5 mt-2 text-sm text-emerald-700">
                 <MapPin className="w-4 h-4" />
                 <span>Penempatan: <strong>{app.recommended_division.name}</strong></span>
               </div>
             )}
-            {app.status === "rejected" && app.rejection_reason && (
-              <div className="mt-2 text-sm text-red-700">
-                <p className="font-medium">Alasan:</p>
-                <p className="mt-0.5">{app.rejection_reason}</p>
+
+            {/* Info Periode Magang */}
+            {app.status === "accepted" && app.internship_start && app.internship_end && (
+              <div className="flex items-center gap-1.5 mt-1 text-sm text-surface-600">
+                <Calendar className="w-4 h-4" />
+                <span>Periode: <strong>{formatDate(app.internship_start)}</strong> s/d <strong>{formatDate(app.internship_end)}</strong></span>
               </div>
             )}
+
+            {/* Status Selesai / Alumni Message & Re-apply button */}
+            {isInternshipEnded && (
+              <div className="mt-3 pt-3 border-t border-teal-200/60">
+                <p className="text-xs text-teal-800 leading-relaxed">
+                  Selamat atas terselesaikannya seluruh rangkaian kegiatan magang di Suara Surabaya Media. Anda dipersilakan mendaftar kembali untuk periode selanjutnya jika ingin mengikuti program magang baru.
+                </p>
+                <div className="mt-3">
+                  <Link
+                    href="/apply"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-teal-700 hover:bg-teal-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors"
+                  >
+                    Ajukan Magang Baru
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+            )}
+
+            {/* Rejection Message & Re-apply to other division button */}
+            {app.status === "rejected" && (
+              <div className="mt-2 text-sm text-red-700">
+                {app.rejection_reason && (
+                  <div>
+                    <p className="font-medium">Alasan Penolakan:</p>
+                    <p className="mt-0.5 text-xs text-red-600">{app.rejection_reason}</p>
+                  </div>
+                )}
+                <div className="mt-3">
+                  <Link
+                    href="/apply"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-primary-700 hover:bg-primary-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors"
+                  >
+                    Ajukan ke Divisi Lain
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+            )}
+
             {(app.status === "pending" || app.status === "reviewing") && (
               <p className="mt-1 text-sm text-blue-700">
                 Sedang diproses oleh admin. Harap tunggu notifikasi selanjutnya.

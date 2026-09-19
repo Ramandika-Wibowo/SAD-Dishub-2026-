@@ -27,15 +27,13 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Supabase Configuration
+    | File Storage Configuration (Lokal)
     |--------------------------------------------------------------------------
     */
 
-    'supabase' => [
-        'url'            => env('SUPABASE_URL'),
-        'key'            => env('SUPABASE_KEY'),
-        'service_key'    => env('SUPABASE_SERVICE_KEY'),
-        'storage_bucket' => env('SUPABASE_STORAGE_BUCKET', 'e-internship-documents'),
+    'local_storage' => [
+        'disk'   => env('FILESYSTEM_DISK', 'public'),
+        'folder' => 'documents',
     ],
 
     /*

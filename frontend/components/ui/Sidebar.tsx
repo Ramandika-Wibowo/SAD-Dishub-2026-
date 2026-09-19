@@ -78,20 +78,20 @@ export default function Sidebar({ className }: SidebarProps) {
   };
 
   const sidebarContent = (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-white dark:bg-slate-900 transition-colors duration-200">
       {/* Logo Header */}
-      <div className="flex items-center gap-3 px-4 h-16 border-b border-surface-200 shrink-0">
+      <div className="flex items-center gap-3 px-4 h-16 border-b border-surface-200 dark:border-slate-800 shrink-0">
         <div className="flex items-center shrink-0">
           <img 
-            alt="Logo Dishub Surabaya" 
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBaTQGre1sH5C4WcwF8xJY000hAkbjBVO-WicCWICUAmc6TbSWRxWe_7QSxo8eA2mb0jVjZZXXX9aary7QztfmGSakJpRUrVFu32Mib_nHK-dr0NcUH_Ir6vXSbTafbOlDl35XHp2854LbHd7aVX1H5mGJN5VOV3SSQjxBYq7WTwxIYdot0irn6TdSz8P-JiifIETMa7Iu2YdvoKGkbiQSDev4-3UdPfK0QAtqunArnIR9hFeXYohSafUBn9pyuF35wnAllUI6Y69k" 
-            className="h-9 w-auto object-contain"
+            alt="Logo Suara Surabaya FM 100" 
+            src="/images/logo.png" 
+            className="h-8 w-auto object-contain dark:filter dark:brightness-125"
           />
         </div>
         {!collapsed && (
           <div className="min-w-0">
-            <p className="text-sm font-bold text-surface-900 truncate">E-Internship</p>
-            <p className="text-[11px] text-surface-400 truncate">Dishub Surabaya</p>
+            <p className="text-sm font-bold text-surface-900 dark:text-white truncate">E-Internship</p>
+            <p className="text-[11px] text-surface-400 dark:text-slate-400 truncate">Suara Surabaya</p>
           </div>
         )}
       </div>
@@ -109,8 +109,8 @@ export default function Sidebar({ className }: SidebarProps) {
                 "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium",
                 "transition-all duration-150",
                 isActive
-                  ? "bg-primary-50 text-primary-700 border-l-[3px] border-primary-700"
-                  : "text-surface-600 hover:bg-surface-100 hover:text-surface-800"
+                  ? "bg-primary-50 dark:bg-primary-950/40 text-primary-700 dark:text-primary-400 border-l-[3px] border-primary-600 dark:border-primary-500"
+                  : "text-surface-600 dark:text-slate-300 hover:bg-surface-100 dark:hover:bg-slate-800 hover:text-surface-800 dark:hover:text-white"
               )}
             >
               <span className="shrink-0">{item.icon}</span>
@@ -121,18 +121,18 @@ export default function Sidebar({ className }: SidebarProps) {
       </nav>
 
       {/* User Section */}
-      <div className="border-t border-surface-200 p-3 space-y-2 shrink-0">
+      <div className="border-t border-surface-200 dark:border-slate-800 p-3 space-y-2 shrink-0">
         {user && (
           <div className={cn("flex items-center gap-3 px-2 py-2", collapsed && "justify-center")}>
-            <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center shrink-0">
-              <span className="text-xs font-bold text-primary-700">
+            <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-950/80 flex items-center justify-center shrink-0 border border-primary-200 dark:border-primary-800">
+              <span className="text-xs font-bold text-primary-700 dark:text-primary-300">
                 {getInitials(user.name)}
               </span>
             </div>
             {!collapsed && (
               <div className="min-w-0">
-                <p className="text-sm font-medium text-surface-800 truncate">{user.name}</p>
-                <p className="text-xs text-surface-400 truncate capitalize">{user.role}</p>
+                <p className="text-sm font-medium text-surface-800 dark:text-slate-100 truncate">{user.name}</p>
+                <p className="text-xs text-surface-400 dark:text-slate-400 truncate capitalize">{user.role}</p>
               </div>
             )}
           </div>
@@ -141,7 +141,7 @@ export default function Sidebar({ className }: SidebarProps) {
           onClick={handleLogout}
           className={cn(
             "flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium",
-            "text-red-600 hover:bg-red-50 transition-colors",
+            "text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors",
             collapsed && "justify-center"
           )}
         >
@@ -153,7 +153,7 @@ export default function Sidebar({ className }: SidebarProps) {
       {/* Collapse Button (desktop only) */}
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="hidden lg:flex items-center justify-center h-10 border-t border-surface-200 text-surface-400 hover:text-surface-600 hover:bg-surface-50 transition-colors"
+        className="hidden lg:flex items-center justify-center h-10 border-t border-surface-200 dark:border-slate-800 text-surface-400 hover:text-surface-600 dark:hover:text-slate-200 hover:bg-surface-50 dark:hover:bg-slate-800 transition-colors"
         aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
       >
         <ChevronLeft
@@ -168,7 +168,7 @@ export default function Sidebar({ className }: SidebarProps) {
       {/* Mobile toggle button */}
       <button
         onClick={() => setMobileOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-40 p-2 rounded-lg bg-white shadow-card border border-surface-200 text-surface-600"
+        className="lg:hidden fixed top-4 left-4 z-40 p-2 rounded-lg bg-white dark:bg-slate-900 shadow-card border border-surface-200 dark:border-slate-800 text-surface-600 dark:text-slate-300"
         aria-label="Open menu"
       >
         <Menu className="w-5 h-5" />
@@ -177,7 +177,7 @@ export default function Sidebar({ className }: SidebarProps) {
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
-          className="lg:hidden fixed inset-0 z-40 bg-surface-900/50 backdrop-blur-sm"
+          className="lg:hidden fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-sm"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -185,7 +185,7 @@ export default function Sidebar({ className }: SidebarProps) {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed top-0 left-0 z-50 h-full bg-white border-r border-surface-200",
+          "fixed top-0 left-0 z-50 h-full bg-white dark:bg-slate-900 border-r border-surface-200 dark:border-slate-800",
           "transition-all duration-300 ease-out",
           // Desktop
           "hidden lg:flex lg:flex-col",

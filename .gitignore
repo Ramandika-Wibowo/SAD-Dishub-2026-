@@ -9,6 +9,10 @@
 /backend/storage/framework/testing/*
 /backend/storage/framework/views/*
 /backend/storage/logs/*
+/backend/storage/app/public/documents/*
+!/backend/storage/app/public/documents/.gitignore
+/backend/bootstrap/cache/*.php
+!/backend/bootstrap/cache/.gitignore
 /backend/.env
 /backend/.env.backup
 /backend/.phpunit.result.cache
@@ -30,6 +34,16 @@
 /frontend/yarn-debug.log*
 /frontend/yarn-error.log*
 /frontend/.eslintcache
+/frontend/tsconfig.tsbuildinfo
+
+# Local chat archives & temporary files
+backup chat/
+read_excel.py
+*.tmp
+*.bak
+
+# Impeccable engine binaries
+.agents/skills/impeccable/scripts/bin/
 
 .DS_Store
 Thumbs.db

@@ -68,23 +68,24 @@ export default function Badge({
 
 interface StatusBadgeProps {
   status: ApplicationStatus | "locked";
+  variant?: "default" | "light";
   className?: string;
 }
 
-export function StatusBadge({ status, className }: StatusBadgeProps) {
+export function StatusBadge({ status, variant = "default", className }: StatusBadgeProps) {
   const colors = getStatusColor(status);
   const label = status === "locked" ? "Terkunci" : formatStatus(status as ApplicationStatus);
+  const isLight = variant === "light";
 
   return (
     <span
       className={cn(
         "inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full whitespace-nowrap",
-        colors.bg,
-        colors.text,
+        isLight ? "bg-white/15 text-white border border-white/30" : [colors.bg, colors.text],
         className
       )}
     >
-      <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", colors.dot)} />
+      <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", isLight ? "bg-white" : colors.dot)} />
       {label}
     </span>
   );

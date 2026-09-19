@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getCachedUser } from "@/lib/auth";
 import api from "@/lib/axios";
-import type { Division } from "@/types";
+import type { Division, Application } from "@/types";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Modal from "@/components/ui/Modal";
@@ -39,6 +39,8 @@ export default function ApplyPage() {
   const [divLoading, setDivLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [checkingEligibility, setCheckingEligibility] = useState(true);
+  const [rejectedDivisionIds, setRejectedDivisionIds] = useState<number[]>([]);
 
   // Form state
   const [selectedDivision, setSelectedDivision] = useState<number | null>(null);
@@ -55,6 +57,44 @@ export default function ApplyPage() {
     proposal: null,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Cek apakah pelamar boleh mengajukan magang
+  useEffect(() => {
+    api.get("/applications/my")
+      .then((res) => {
+        const apps: Application[] = res.data.data?.data || res.data.data || [];
+        if (Array.isArray(apps) && apps.length > 0) {
+          // Check if user has an active pending/reviewing application or ongoing accepted internship
+          const hasActive = apps.some((a) => {
+            if (a.status === "pending" || a.status === "reviewing") return true;
+            if (a.status === "accepted") {
+              const isEnded =
+                Boolean(a.is_completed) ||
+                (a.internship_end &&
+                  new Date(a.internship_end).getTime() < new Date().setHours(0, 0, 0, 0));
+              return !isEnded;
+            }
+            return false;
+          });
+
+          if (hasActive) {
+            toastError("Anda masih memiliki pengajuan aktif atau masa magang yang sedang berjalan.");
+            router.push("/dashboard");
+            return;
+          }
+
+          // Catat ID divisi yang pernah ditolak
+          const rejectedIds = apps
+            .filter((a) => a.status === "rejected" && a.division?.id)
+            .map((a) => a.division!.id);
+          setRejectedDivisionIds(rejectedIds);
+        }
+      })
+      .catch(() => {
+        // Jika gagal cek, tetap lanjutkan
+      })
+      .finally(() => setCheckingEligibility(false));
+  }, [router]);
 
   useEffect(() => {
     api.get("/divisions")
@@ -136,6 +176,15 @@ export default function ApplyPage() {
 
   const selectedDiv = divisions.find((d) => d.id === selectedDivision);
 
+  if (checkingEligibility) {
+    return (
+      <div className="max-w-3xl mx-auto space-y-6 animate-fade-in">
+        <SkeletonCard />
+        <SkeletonCard />
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-3xl mx-auto space-y-6 animate-fade-in">
       {/* Header */}
@@ -166,35 +215,53 @@ export default function ApplyPage() {
               {divisions.map((div) => {
                 const isSelected = selectedDivision === div.id;
                 const isFull = div.is_locked || div.active_applicants >= div.max_quota;
+                const isRejectedBefore = rejectedDivisionIds.includes(div.id);
+                const isDisabled = isFull || isRejectedBefore;
+
                 return (
                   <Card
                     key={div.id}
                     padding="md"
-                    hover={!isFull}
-                    onClick={isFull ? undefined : () => setSelectedDivision(div.id)}
+                    hover={!isDisabled}
+                    onClick={isDisabled ? undefined : () => setSelectedDivision(div.id)}
                     className={cn(
                       "transition-all",
-                      isFull && "opacity-60 cursor-not-allowed",
+                      isDisabled && "opacity-60 cursor-not-allowed bg-surface-50",
                       isSelected && "ring-2 ring-primary-500 border-primary-400"
                     )}
                   >
                     <div className="flex items-start gap-3">
                       <div className={cn(
                         "w-10 h-10 rounded-lg flex items-center justify-center shrink-0",
-                        isFull ? "bg-surface-100" : isSelected ? "bg-primary-100" : "bg-primary-50"
+                        isDisabled ? "bg-surface-100" : isSelected ? "bg-primary-100" : "bg-primary-50"
                       )}>
-                        {isFull ? <Lock className="w-5 h-5 text-surface-400" /> : <Building2 className="w-5 h-5 text-primary-600" />}
+                        {isFull ? (
+                          <Lock className="w-5 h-5 text-surface-400" />
+                        ) : isRejectedBefore ? (
+                          <AlertCircle className="w-5 h-5 text-red-400" />
+                        ) : (
+                          <Building2 className="w-5 h-5 text-primary-600" />
+                        )}
                       </div>
                       <div className="flex-1 min-w-0">
                         <h4 className="text-sm font-semibold text-surface-900 truncate">{div.name}</h4>
                         <div className="flex items-center gap-1.5 mt-1.5">
-                          <Users className="w-3.5 h-3.5 text-surface-400" />
-                          {isFull ? (
-                            <span className="text-xs font-medium text-red-500 bg-red-50 px-2 py-0.5 rounded-full">Penuh</span>
-                          ) : (
-                            <span className="text-xs text-surface-500">
-                              Sisa kuota: <span className="font-semibold text-primary-700">{div.max_quota - div.active_applicants}</span>/{div.max_quota}
+                          {isRejectedBefore ? (
+                            <span className="text-xs font-medium text-red-600 bg-red-50 px-2 py-0.5 rounded-full">
+                              Pernah Ditolak (Pilih divisi lain)
                             </span>
+                          ) : isFull ? (
+                            <>
+                              <Users className="w-3.5 h-3.5 text-surface-400" />
+                              <span className="text-xs font-medium text-red-500 bg-red-50 px-2 py-0.5 rounded-full">Penuh</span>
+                            </>
+                          ) : (
+                            <>
+                              <Users className="w-3.5 h-3.5 text-surface-400" />
+                              <span className="text-xs text-surface-500">
+                                Sisa kuota: <span className="font-semibold text-primary-700">{div.max_quota - div.active_applicants}</span>/{div.max_quota}
+                              </span>
+                            </>
                           )}
                         </div>
                       </div>
