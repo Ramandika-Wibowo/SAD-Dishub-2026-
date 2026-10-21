@@ -336,7 +336,7 @@ export default function ApplyPage() {
           <div className="mb-4">
             <h3 className="text-base font-semibold text-surface-900">Detail CV & Kualifikasi</h3>
             <p className="text-xs text-surface-500 mt-0.5">
-              Informasi ini digunakan oleh algoritma penilaian Suara Surabaya Media untuk mengukur kecocokan keahlian Anda dengan divisi tujuan.
+              Informasi ini digunakan oleh algoritma penilaian Suara Surabaya Media untuk mengukur kecocokan keahlian Anda dengan divisi tujuan. Harap isi sesuai dokumen CV anda.
             </p>
           </div>
 

@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { getInitials } from "@/lib/utils";
+import { cn, getInitials } from "@/lib/utils";
 import { logout, getCachedUser, getRole } from "@/lib/auth";
+import api from "@/lib/axios";
 import {
   LayoutDashboard,
   FileText,
@@ -17,6 +17,7 @@ import {
   ChevronLeft,
   Menu,
   Building2,
+  AlertCircle,
 } from "lucide-react";
 import type { UserRole } from "@/types";
 
@@ -31,8 +32,7 @@ interface NavItem {
 const adminNavItems: NavItem[] = [
   { label: "Dashboard", href: "/admin/dashboard", icon: <LayoutDashboard className="w-5 h-5" /> },
   { label: "Pengajuan", href: "/admin/applications", icon: <FileText className="w-5 h-5" /> },
-  { label: "Kuota Divisi", href: "/admin/quotas", icon: <Building2 className="w-5 h-5" /> },
-  { label: "Analitik", href: "/admin/analytics", icon: <BarChart3 className="w-5 h-5" /> },
+  { label: "Manajemen Divisi", href: "/admin/quotas", icon: <Building2 className="w-5 h-5" /> },
   { label: "Ekspor Data", href: "/admin/export", icon: <Download className="w-5 h-5" /> },
 ];
 
@@ -58,13 +58,37 @@ export default function Sidebar({ className }: SidebarProps) {
   const [user, setUser] = useState<any>(null);
   const [role, setRole] = useState<UserRole | undefined>(undefined);
   const [mounted, setMounted] = useState(false);
+  const [hasUndecided, setHasUndecided] = useState(false);
+  const [undecidedCount, setUndecidedCount] = useState(0);
   const pathname = usePathname();
+
+  const checkUndecided = useCallback(async () => {
+    const currentRole = getRole();
+    if (currentRole !== "admin" && currentRole !== "head") return;
+    try {
+      const res = await api.get("/admin/analytics");
+      const pending = res.data.data?.total_pending || 0;
+      const reviewing = res.data.data?.total_reviewing || 0;
+      const total = pending + reviewing;
+      setUndecidedCount(total);
+      setHasUndecided(total > 0);
+    } catch {
+      // silent
+    }
+  }, []);
 
   useEffect(() => {
     setUser(getCachedUser());
     setRole(getRole());
     setMounted(true);
-  }, []);
+    checkUndecided();
+  }, [checkUndecided]);
+
+  useEffect(() => {
+    if (mounted) {
+      checkUndecided();
+    }
+  }, [pathname, mounted, checkUndecided]);
 
   const navItems = getNavItems(role);
 
@@ -96,21 +120,46 @@ export default function Sidebar({ className }: SidebarProps) {
       <nav className="flex-1 py-4 px-3 space-y-1 overflow-y-auto scrollbar-thin">
         {navItems.map((item) => {
           const isActive = pathname.startsWith(item.href);
+          const isPengajuan = item.href === "/admin/applications";
+          const showExclamation = isPengajuan && hasUndecided;
+
           return (
             <Link
               key={item.href}
               href={item.href}
               onClick={() => setMobileOpen(false)}
               className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium",
+                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium relative group",
                 "transition-all duration-150",
                 isActive
                   ? "bg-primary-50 dark:bg-primary-950/40 text-primary-700 dark:text-primary-400 border-l-[3px] border-primary-600 dark:border-primary-500"
                   : "text-surface-600 dark:text-slate-300 hover:bg-surface-100 dark:hover:bg-slate-800 hover:text-surface-800 dark:hover:text-white"
               )}
             >
-              <span className="shrink-0">{item.icon}</span>
-              {!collapsed && <span className="truncate">{item.label}</span>}
+              <div className="relative shrink-0 flex items-center justify-center">
+                {item.icon}
+                {showExclamation && collapsed && (
+                  <span
+                    className="absolute -top-1.5 -right-1.5 flex items-center justify-center w-4 h-4 rounded-full bg-amber-500 text-white text-[10px] font-black shadow-xs ring-2 ring-white dark:ring-slate-900 animate-pulse"
+                    title={`${undecidedCount} pelamar belum diputuskan`}
+                  >
+                    !
+                  </span>
+                )}
+              </div>
+              {!collapsed && (
+                <>
+                  <span className="truncate flex-1">{item.label}</span>
+                  {showExclamation && (
+                    <span
+                      className="ml-auto flex items-center justify-center w-5 h-5 rounded-full bg-amber-500 text-white text-xs font-black shadow-xs shrink-0 animate-pulse"
+                      title={`${undecidedCount} pelamar belum diputuskan`}
+                    >
+                      !
+                    </span>
+                  )}
+                </>
+              )}
             </Link>
           );
         })}

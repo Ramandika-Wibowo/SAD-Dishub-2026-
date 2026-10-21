@@ -34,6 +34,10 @@ export interface Division {
   active_applicants: number;
   remaining_quota: number;
   is_locked: boolean;
+  target_keywords?: string | null;
+  relevant_programs_high?: string | null;
+  relevant_programs_medium?: string | null;
+  passing_threshold?: number | null;
   // Admin-only stats (optional)
   pending_count?: number;
   reviewing_count?: number;

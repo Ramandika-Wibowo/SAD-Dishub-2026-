@@ -2,8 +2,8 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
-import type { ApplicationStatus } from "@/types";
-import { formatStatus, getStatusColor } from "@/lib/utils";
+import type { ApplicationStatus, Application } from "@/types";
+import { formatStatus, getStatusColor, getApplicationRecommendation } from "@/lib/utils";
 
 // ─── Generic Badge ─────────────────────────────────
 
@@ -94,17 +94,55 @@ export function StatusBadge({ status, variant = "default", className }: StatusBa
 // ─── Rule Badge ────────────────────────────────────
 
 interface RuleBadgeProps {
-  passed: boolean | null;
+  passed?: boolean | null;
   label: string;
   className?: string;
 }
 
 export function RuleBadge({ passed, label, className }: RuleBadgeProps) {
-  const variant = passed === null ? "default" : passed ? "success" : "danger";
+  const variant = passed == null ? "default" : passed ? "success" : "danger";
 
   return (
     <Badge variant={variant} dot size="sm" className={className}>
-      {label}: {passed === null ? "Pending" : passed ? "Lolos" : "Gagal"}
+      {label}: {passed == null ? "Pending" : passed ? "Lolos" : "Gagal"}
     </Badge>
+  );
+}
+
+// ─── Recommendation Badge (Decision Support) ───────
+
+interface RecommendationBadgeProps {
+  app: Application | undefined | null;
+  className?: string;
+}
+
+export function RecommendationBadge({ app, className }: RecommendationBadgeProps) {
+  const rec = getApplicationRecommendation(app);
+
+  if (rec.type === "unevaluated") {
+    return (
+      <span className={cn("text-xs text-surface-400 dark:text-slate-500 italic", className)}>
+        Belum dievaluasi
+      </span>
+    );
+  }
+
+  return (
+    <div className={cn("flex flex-col gap-1 items-start", className)}>
+      <Badge
+        variant={rec.type === "recommended" ? "success" : "warning"}
+        dot
+        size="sm"
+        className="font-semibold shadow-xs"
+      >
+        {rec.label}
+      </Badge>
+      <span
+        className="text-[11px] leading-tight text-surface-500 dark:text-slate-400 max-w-[210px] line-clamp-2"
+        title={rec.reason}
+      >
+        {rec.reason}
+      </span>
+    </div>
   );
 }

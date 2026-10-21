@@ -14,7 +14,11 @@ class UpdateDivisionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'max_quota' => ['required', 'integer', 'min:1'],
+            'max_quota'                => ['required', 'integer', 'min:1'],
+            'target_keywords'          => ['nullable', 'string'],
+            'relevant_programs_high'   => ['nullable', 'string'],
+            'relevant_programs_medium' => ['nullable', 'string'],
+            'passing_threshold'        => ['nullable', 'integer', 'min:1', 'max:100'],
         ];
     }
 

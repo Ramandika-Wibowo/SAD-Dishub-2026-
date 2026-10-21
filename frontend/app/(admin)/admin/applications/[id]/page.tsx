@@ -438,21 +438,44 @@ export default function AdminApplicationDetailPage() {
 
       {/* Result if already decided */}
       {isDecided && (
-        <Card padding="lg" className={app.status === "accepted" ? "bg-emerald-50 border-emerald-200" : "bg-red-50 border-red-200"}>
+        <Card
+          padding="lg"
+          className={
+            app.status === "accepted"
+              ? "bg-emerald-50 border-emerald-200 dark:bg-emerald-950/40 dark:border-emerald-800"
+              : "bg-red-50 border-red-200 dark:bg-red-950/40 dark:border-red-800"
+          }
+        >
           <div className="flex items-start gap-3">
-            {app.status === "accepted" ? <CheckCircle className="w-6 h-6 text-emerald-600 mt-0.5" /> : <XCircle className="w-6 h-6 text-red-600 mt-0.5" />}
+            {app.status === "accepted" ? (
+              <CheckCircle className="w-6 h-6 text-emerald-600 dark:text-emerald-400 mt-0.5 shrink-0" />
+            ) : (
+              <XCircle className="w-6 h-6 text-red-600 dark:text-red-400 mt-0.5 shrink-0" />
+            )}
             <div>
-              <p className={`text-base font-semibold ${app.status === "accepted" ? "text-white" : "text-white"}`}>
+              <p
+                className={`text-base font-semibold ${
+                  app.status === "accepted"
+                    ? "text-emerald-900 dark:text-emerald-200"
+                    : "text-red-900 dark:text-red-200"
+                }`}
+              >
                 {app.status === "accepted" ? "Pengajuan Diterima" : "Pengajuan Ditolak"}
               </p>
               {app.status === "accepted" && app.recommended_division && (
-                <p className="text-sm text-emerald-700 mt-1">Ditempatkan di: <strong>{app.recommended_division.name}</strong></p>
+                <p className="text-sm text-emerald-800 dark:text-emerald-300 mt-1">
+                  Ditempatkan di: <strong>{app.recommended_division.name}</strong>
+                </p>
               )}
               {app.status === "accepted" && app.admin_note && (
-                <p className="text-sm text-emerald-700 mt-1">Catatan Admin: {app.admin_note}</p>
+                <p className="text-sm text-emerald-800 dark:text-emerald-300 mt-1">
+                  Catatan Admin: {app.admin_note}
+                </p>
               )}
               {app.status === "rejected" && app.rejection_reason && (
-                <p className="text-sm text-red-700 mt-1">Alasan: {app.rejection_reason}</p>
+                <p className="text-sm text-red-800 dark:text-red-300 mt-1">
+                  Alasan: {app.rejection_reason}
+                </p>
               )}
             </div>
           </div>

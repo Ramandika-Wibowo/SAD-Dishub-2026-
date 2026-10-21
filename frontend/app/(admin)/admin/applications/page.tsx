@@ -6,9 +6,9 @@ import api from "@/lib/axios";
 import type { Application, Division, ApplicationStatus, ApplicantType } from "@/types";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
-import { StatusBadge } from "@/components/ui/Badge";
+import { StatusBadge, RecommendationBadge } from "@/components/ui/Badge";
 import { SkeletonCard } from "@/components/ui/Skeleton";
-import { formatApplicantType } from "@/lib/utils";
+import { formatApplicantType, cn } from "@/lib/utils";
 import {
   Search,
   Eye,
@@ -17,6 +17,9 @@ import {
   ChevronLeft,
   ChevronRight,
   MessageCircle,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react";
 
 function AdminApplicationsContent() {
@@ -37,11 +40,12 @@ function AdminApplicationsContent() {
   const [filterDivision, setFilterDivision] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
   const [filterType, setFilterType] = useState("");
+  const [sortBy, setSortBy] = useState("-created_at");
 
   const fetchApps = useCallback(async () => {
     setLoading(true);
     try {
-      const params: Record<string, string | number> = { page, per_page: 10, sort: "-created_at" };
+      const params: Record<string, string | number> = { page, per_page: 10, sort: sortBy };
       if (search) params.search = search;
       if (filterDivision) params.division_id = filterDivision;
       if (filterStatus) params.status = filterStatus;
@@ -54,7 +58,7 @@ function AdminApplicationsContent() {
       setTotal(d?.total || 0);
     } catch { /* silent */ }
     setLoading(false);
-  }, [page, search, filterDivision, filterStatus, filterType]);
+  }, [page, search, filterDivision, filterStatus, filterType, sortBy]);
 
   useEffect(() => {
     api.get("/admin/divisions").then((res) => setDivisions(res.data.data || [])).catch(() => { });
@@ -87,8 +91,8 @@ function AdminApplicationsContent() {
 
       {/* Filter Bar */}
       <Card padding="md">
-        <div className="flex flex-col sm:flex-row gap-3">
-          <div className="relative flex-1">
+        <div className="flex flex-col sm:flex-row flex-wrap gap-3">
+          <div className="relative flex-1 min-w-[200px]">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400" />
             <input value={searchInput} onChange={(e) => setSearchInput(e.target.value)}
               className="input-base pl-10" placeholder="Cari nama atau email..." />
@@ -99,7 +103,7 @@ function AdminApplicationsContent() {
             {divisions.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}
           </select>
           <select value={filterStatus} onChange={(e) => { setFilterStatus(e.target.value); setPage(1); }}
-            className="input-base sm:w-40">
+            className="input-base sm:w-36">
             <option value="">Semua Status</option>
             <option value="pending">Menunggu</option>
             <option value="reviewing">Ditinjau</option>
@@ -107,12 +111,19 @@ function AdminApplicationsContent() {
             <option value="rejected">Ditolak</option>
           </select>
           <select value={filterType} onChange={(e) => { setFilterType(e.target.value); setPage(1); }}
-            className="input-base sm:w-40">
+            className="input-base sm:w-36">
             <option value="">Semua Jenis</option>
             <option value="slta">SLTA</option>
             <option value="mahasiswa">Mahasiswa</option>
             <option value="fresh_graduate">Fresh Graduate</option>
             <option value="instansi">Instansi</option>
+          </select>
+          <select value={sortBy} onChange={(e) => { setSortBy(e.target.value); setPage(1); }}
+            className="input-base sm:w-48 font-medium">
+            <option value="-created_at">Urutkan: Terbaru</option>
+            <option value="-algorithm_score">Urutkan: Skor / Ranking Tertinggi</option>
+            <option value="algorithm_score">Urutkan: Skor / Ranking Terendah</option>
+            <option value="created_at">Urutkan: Terlama</option>
           </select>
         </div>
       </Card>
@@ -120,24 +131,48 @@ function AdminApplicationsContent() {
       {/* Table */}
       <Card padding="none">
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[700px]">
+          <table className="w-full min-w-[950px]">
             <thead>
               <tr className="bg-surface-50 border-b border-surface-200">
-                {["No", "Nama", "Jenis Pelamar", "Divisi", "Skor", "Status", "Aksi"].map((h) => (
-                  <th key={h} className="px-4 py-2.5 text-left text-xs font-semibold text-surface-500 uppercase tracking-wider">{h}</th>
-                ))}
+                <th className="px-4 py-2.5 text-left text-xs font-semibold text-surface-500 uppercase tracking-wider">No</th>
+                <th className="px-4 py-2.5 text-left text-xs font-semibold text-surface-500 uppercase tracking-wider">Nama</th>
+                <th className="px-4 py-2.5 text-left text-xs font-semibold text-surface-500 uppercase tracking-wider">Jenis Pelamar</th>
+                <th className="px-4 py-2.5 text-left text-xs font-semibold text-surface-500 uppercase tracking-wider">Divisi</th>
+                <th className="px-4 py-2.5 text-left text-xs font-semibold text-surface-500 uppercase tracking-wider">Skill</th>
+                <th
+                  onClick={() => {
+                    setSortBy((prev) => (prev === "-algorithm_score" ? "algorithm_score" : "-algorithm_score"));
+                    setPage(1);
+                  }}
+                  className="px-4 py-2.5 text-left text-xs font-semibold text-surface-500 uppercase tracking-wider cursor-pointer hover:text-primary-600 transition-colors select-none group"
+                  title="Klik untuk urutkan berdasarkan skor / ranking"
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span>Skor / Ranking</span>
+                    {sortBy === "-algorithm_score" ? (
+                      <ArrowDown className="w-3.5 h-3.5 text-primary-600" />
+                    ) : sortBy === "algorithm_score" ? (
+                      <ArrowUp className="w-3.5 h-3.5 text-primary-600" />
+                    ) : (
+                      <ArrowUpDown className="w-3.5 h-3.5 text-surface-400 group-hover:text-primary-500 opacity-70" />
+                    )}
+                  </div>
+                </th>
+                <th className="px-4 py-2.5 text-left text-xs font-semibold text-surface-500 uppercase tracking-wider">Rekomendasi / Pertimbangan</th>
+                <th className="px-4 py-2.5 text-left text-xs font-semibold text-surface-500 uppercase tracking-wider">Status</th>
+                <th className="px-4 py-2.5 text-left text-xs font-semibold text-surface-500 uppercase tracking-wider">Aksi</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-surface-100">
               {loading ? (
                 Array.from({ length: 5 }).map((_, i) => (
-                  <tr key={i}>{Array.from({ length: 7 }).map((_, j) => (
+                  <tr key={i}>{Array.from({ length: 9 }).map((_, j) => (
                     <td key={j} className="px-4 py-3.5"><div className="skeleton h-4 w-full rounded" /></td>
                   ))}</tr>
                 ))
               ) : apps.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-16 text-center">
+                  <td colSpan={9} className="px-4 py-16 text-center">
                     <FileText className="w-12 h-12 text-surface-200 mx-auto mb-3" />
                     <p className="text-sm font-medium text-surface-500">Tidak ada pengajuan ditemukan.</p>
                     <p className="text-xs text-surface-400 mt-1">Coba ubah filter pencarian Anda.</p>
@@ -153,18 +188,63 @@ function AdminApplicationsContent() {
                     </td>
                     <td className="px-4 py-3 text-sm text-surface-600">{formatApplicantType(a.user?.applicant_type)}</td>
                     <td className="px-4 py-3 text-sm text-surface-600">{a.division?.name || "-"}</td>
-                    <td className="px-4 py-3 text-sm font-semibold text-surface-700">{a.algorithm_score ?? "-"}</td>
+                    <td className="px-4 py-3 max-w-[200px]">
+                      {a.skills ? (
+                        <div className="flex flex-wrap gap-1">
+                          {a.skills
+                            .split(/[,;\n]+/)
+                            .map((s) => s.trim())
+                            .filter(Boolean)
+                            .slice(0, 3)
+                            .map((skill, idx) => (
+                              <span
+                                key={idx}
+                                className="inline-block px-2 py-0.5 text-xs font-medium bg-surface-100 text-surface-700 rounded border border-surface-200 truncate max-w-[150px]"
+                                title={a.skills || ""}
+                              >
+                                {skill}
+                              </span>
+                            ))}
+                          {a.skills.split(/[,;\n]+/).map((s) => s.trim()).filter(Boolean).length > 3 && (
+                            <span
+                              className="inline-block px-1.5 py-0.5 text-[10px] font-semibold bg-surface-100 text-surface-500 rounded"
+                              title={a.skills || ""}
+                            >
+                              +{a.skills.split(/[,;\n]+/).map((s) => s.trim()).filter(Boolean).length - 3}
+                            </span>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="text-sm text-surface-400">-</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-semibold text-surface-700">
+                          {a.algorithm_score !== null && a.algorithm_score !== undefined ? a.algorithm_score : "-"}
+                        </span>
+                        {sortBy === "-algorithm_score" && a.algorithm_score !== null && a.algorithm_score !== undefined && (
+                          <span className={cn(
+                            "px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wide",
+                            (page - 1) * 10 + i === 0
+                              ? "bg-amber-100 text-amber-800 border border-amber-300"
+                              : (page - 1) * 10 + i === 1
+                              ? "bg-slate-200 text-slate-800 border border-slate-300"
+                              : (page - 1) * 10 + i === 2
+                              ? "bg-amber-800/10 text-amber-900 border border-amber-600/30"
+                              : "bg-surface-100 text-surface-600 border border-surface-200"
+                          )}>
+                            Rank #{(page - 1) * 10 + i + 1}
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-4 py-3"><RecommendationBadge app={a} /></td>
                     <td className="px-4 py-3"><StatusBadge status={a.status} /></td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1.5">
                         <Button variant="ghost" size="sm" onClick={() => router.push(`/admin/applications/${a.id}`)}
                           icon={<Eye className="w-4 h-4" />}>Detail</Button>
-                        {/* {a.user?.id && unreadCounts[a.user.id] > 0 && (
-                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-red-50 text-red-600 text-[10px] font-bold rounded-full border border-red-200 animate-pulse" title="Pesan baru dari pelamar">
-                            <MessageCircle className="w-3 h-3" />
-                            {unreadCounts[a.user.id]}
-                          </span>
-                        )} */}
                       </div>
                     </td>
                   </tr>

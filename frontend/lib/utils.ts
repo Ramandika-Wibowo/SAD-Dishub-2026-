@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import type { ApplicationStatus, ApplicantType, DocumentType } from "@/types";
+import type { ApplicationStatus, ApplicantType, DocumentType, Application } from "@/types";
 
 /**
  * Merge Tailwind CSS classes with conflict resolution.
@@ -153,4 +153,63 @@ export function formatFileSize(bytes: number): string {
   const sizes = ["B", "KB", "MB", "GB"];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
+}
+
+/**
+ * Get algorithm evaluation recommendation / consideration details for an application.
+ */
+export function getApplicationRecommendation(app: Application | undefined | null): {
+  type: "recommended" | "consideration" | "unevaluated";
+  label: "Rekomendasi" | "Pertimbangan" | "Belum Dievaluasi";
+  reason: string;
+} {
+  if (!app || (app.r1_passed === null && app.algorithm_score === null)) {
+    return {
+      type: "unevaluated",
+      label: "Belum Dievaluasi",
+      reason: "Algoritma belum dijalankan",
+    };
+  }
+
+  const threshold = 60;
+  const r1Passed = app.r1_passed ?? true;
+  const r2Passed = app.r2_passed ?? (app.r2_score !== null && app.r2_score !== undefined ? app.r2_score >= threshold : true);
+  const r3Passed = app.r3_passed ?? true;
+  const r4Passed = app.r4_passed ?? (app.r4_score !== null && app.r4_score !== undefined ? app.r4_score >= threshold : true);
+  const scorePassed = app.algorithm_score !== null && app.algorithm_score !== undefined ? app.algorithm_score >= threshold : true;
+
+  const isRecommended = r1Passed && r2Passed && r3Passed && r4Passed && scorePassed;
+
+  if (isRecommended) {
+    const scoreText = app.algorithm_score !== null && app.algorithm_score !== undefined ? ` (Skor: ${app.algorithm_score}/100)` : "";
+    return {
+      type: "recommended",
+      label: "Rekomendasi",
+      reason: `Semua aturan terpenuhi${scoreText}`,
+    };
+  }
+
+  // Determine specific consideration reason
+  const reasons: string[] = [];
+  if (!r1Passed) {
+    reasons.push("Dokumen belum lengkap");
+  }
+  if (!r2Passed) {
+    reasons.push(`Kualifikasi CV rendah (${app.r2_score ?? 0}/100)`);
+  }
+  if (!r3Passed) {
+    reasons.push("Kuota divisi penuh/terkunci");
+  }
+  if (!r4Passed) {
+    reasons.push(`Kesesuaian prodi rendah (${app.r4_score ?? 0}/100)`);
+  }
+  if (!scorePassed && reasons.length === 0) {
+    reasons.push(`Skor di bawah batas (${app.algorithm_score}/100)`);
+  }
+
+  return {
+    type: "consideration",
+    label: "Pertimbangan",
+    reason: reasons.join(", ") || `Perlu tinjauan admin (${app.algorithm_score ?? 0}/100)`,
+  };
 }

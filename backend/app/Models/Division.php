@@ -14,6 +14,10 @@ class Division extends Model
         'max_quota',
         'active_applicants',
         'is_locked',
+        'target_keywords',
+        'relevant_programs_high',
+        'relevant_programs_medium',
+        'passing_threshold',
     ];
 
     protected function casts(): array
@@ -22,6 +26,7 @@ class Division extends Model
             'max_quota'         => 'integer',
             'active_applicants' => 'integer',
             'is_locked'         => 'boolean',
+            'passing_threshold' => 'integer',
         ];
     }
 

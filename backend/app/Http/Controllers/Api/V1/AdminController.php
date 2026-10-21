@@ -40,12 +40,14 @@ class AdminController extends Controller
             });
         }
 
-        // ─── Search (by applicant name or email) ───────
+        // ─── Search (by applicant name, email, or skills) ───
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->whereHas('user', function ($q) use ($search) {
-                $q->where('name', 'ilike', "%{$search}%")
-                  ->orWhere('email', 'ilike', "%{$search}%");
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('user', function ($uq) use ($search) {
+                    $uq->where('name', 'ilike', "%{$search}%")
+                      ->orWhere('email', 'ilike', "%{$search}%");
+                })->orWhere('skills', 'ilike', "%{$search}%");
             });
         }
 
@@ -60,8 +62,9 @@ class AdminController extends Controller
             $sortDirection = 'asc';
         }
 
-        $allowedSorts = ['created_at', 'status', 'algorithm_score', 'updated_at'];
-        if (in_array($sortField, $allowedSorts)) {
+        if (in_array($sortField, ['ranking', 'score', 'algorithm_score'])) {
+            $query->orderByRaw("algorithm_score {$sortDirection} NULLS LAST");
+        } elseif (in_array($sortField, ['created_at', 'status', 'updated_at'])) {
             $query->orderBy($sortField, $sortDirection);
         } else {
             $query->orderBy('created_at', 'desc');
@@ -82,7 +85,7 @@ class AdminController extends Controller
      */
     private function formatRuleResults(Application $application, ?array $warnings = null, ?bool $allPassed = null): array
     {
-        $threshold = (float) config('services.algorithm.score_threshold', 60);
+        $threshold = (float) ($application->division->passing_threshold ?? config('services.algorithm.score_threshold', 60));
 
         $r1Passed       = $application->r1_passed;
         $r2Passed       = $application->r2_passed;
@@ -230,7 +233,7 @@ class AdminController extends Controller
         }
 
         $warnings = [];
-        $threshold = (float) config('services.algorithm.score_threshold', 60);
+        $threshold = (float) ($division->passing_threshold ?? config('services.algorithm.score_threshold', 60));
 
         // ═══════════════════════════════════════════════
         // R1: Document Completeness
@@ -430,17 +433,21 @@ class AdminController extends Controller
             $rejected  = $divisionCounts->where('status', 'rejected')->first()->aggregate ?? 0;
             
             return [
-                'id'                => $division->id,
-                'name'              => $division->name,
-                'max_quota'         => $division->max_quota,
-                'active_applicants' => $division->active_applicants,
-                'remaining_quota'   => $division->remaining_quota,
-                'is_locked'         => $division->is_locked,
-                'pending_count'     => $pending,
-                'reviewing_count'   => $reviewing,
-                'accepted_count'    => $accepted,
-                'rejected_count'    => $rejected,
-                'total_count'       => $pending + $reviewing + $accepted + $rejected,
+                'id'                       => $division->id,
+                'name'                     => $division->name,
+                'max_quota'                => $division->max_quota,
+                'active_applicants'        => $division->active_applicants,
+                'remaining_quota'          => $division->remaining_quota,
+                'is_locked'                => $division->is_locked,
+                'target_keywords'          => $division->target_keywords,
+                'relevant_programs_high'   => $division->relevant_programs_high,
+                'relevant_programs_medium' => $division->relevant_programs_medium,
+                'passing_threshold'        => $division->passing_threshold ?? 60,
+                'pending_count'            => $pending,
+                'reviewing_count'          => $reviewing,
+                'accepted_count'           => $accepted,
+                'rejected_count'           => $rejected,
+                'total_count'              => $pending + $reviewing + $accepted + $rejected,
             ];
         });
 
@@ -457,23 +464,39 @@ class AdminController extends Controller
      */
     public function updateDivision(UpdateDivisionRequest $request, Division $division): JsonResponse
     {
-        $division->update([
-            'max_quota' => $request->max_quota,
-        ]);
+        $updateData = ['max_quota' => $request->max_quota];
+        if ($request->has('target_keywords')) {
+            $updateData['target_keywords'] = $request->target_keywords;
+        }
+        if ($request->has('relevant_programs_high')) {
+            $updateData['relevant_programs_high'] = $request->relevant_programs_high;
+        }
+        if ($request->has('relevant_programs_medium')) {
+            $updateData['relevant_programs_medium'] = $request->relevant_programs_medium;
+        }
+        if ($request->has('passing_threshold')) {
+            $updateData['passing_threshold'] = $request->passing_threshold;
+        }
+
+        $division->update($updateData);
 
         // Re-evaluate R5: unlock if quota increased
         $division->evaluateR5();
 
         return response()->json([
             'success' => true,
-            'message' => 'Kuota divisi berhasil diperbarui.',
+            'message' => 'Data dan rule base divisi berhasil diperbarui.',
             'data'    => [
-                'id'                => $division->id,
-                'name'              => $division->name,
-                'max_quota'         => $division->max_quota,
-                'active_applicants' => $division->active_applicants,
-                'remaining_quota'   => $division->remaining_quota,
-                'is_locked'         => $division->is_locked,
+                'id'                       => $division->id,
+                'name'                     => $division->name,
+                'max_quota'                => $division->max_quota,
+                'active_applicants'        => $division->active_applicants,
+                'remaining_quota'          => $division->remaining_quota,
+                'is_locked'                => $division->is_locked,
+                'target_keywords'          => $division->target_keywords,
+                'relevant_programs_high'   => $division->relevant_programs_high,
+                'relevant_programs_medium' => $division->relevant_programs_medium,
+                'passing_threshold'        => $division->passing_threshold ?? 60,
             ],
         ]);
     }
@@ -521,27 +544,49 @@ class AdminController extends Controller
         $expandedKeywords = $this->expandWithSynonyms($keywords);
 
         $divisionKeywords = $this->extractKeywords($division->name);
+        if (!empty(trim($division->target_keywords ?? ''))) {
+            $divisionKeywords = array_merge($divisionKeywords, $this->extractKeywords($division->target_keywords));
+        }
+        $divisionKeywords = array_unique(array_filter($divisionKeywords));
         $expandedDivisionKeywords = $this->expandWithSynonyms($divisionKeywords);
 
-        if (empty($expandedDivisionKeywords)) {
+        if (empty($divisionKeywords)) {
             return 50.0;
         }
 
-        $matches = 0;
-        $maxPossible = count($expandedDivisionKeywords) * 2;
-
-        foreach ($expandedDivisionKeywords as $divKeyword) {
-            foreach ($expandedKeywords as $appKeyword) {
-                if ($divKeyword === $appKeyword) {
-                    $matches += 2;
-                } elseif (str_contains($appKeyword, $divKeyword) || str_contains($divKeyword, $appKeyword)) {
-                    $matches += 1;
+        // Distinct matches of target keywords (directly or via synonym/sub-word)
+        $distinctMatches = 0;
+        foreach ($divisionKeywords as $targetKeyword) {
+            $targetSynonyms = $this->expandWithSynonyms([$targetKeyword]);
+            $isMatched = false;
+            foreach ($targetSynonyms as $syn) {
+                foreach ($expandedKeywords as $appKeyword) {
+                    if ($syn === $appKeyword || str_contains($appKeyword, $syn) || str_contains($syn, $appKeyword)) {
+                        $isMatched = true;
+                        break 2;
+                    }
                 }
+            }
+            if ($isMatched) {
+                $distinctMatches++;
             }
         }
 
-        $matchRatio = min($matches / max($maxPossible, 1), 1.0);
-        $cvScore = $matchRatio * 100.0;
+        // Score based on matched distinct qualifications
+        // 5+ matches = 90 - 100, 4 matches = 85, 3 matches = 75, 2 matches = 65, 1 match = 50, 0 = 20/0
+        if ($distinctMatches >= 5) {
+            $cvScore = min(100.0, 90.0 + (($distinctMatches - 5) * 2.0));
+        } elseif ($distinctMatches === 4) {
+            $cvScore = 85.0;
+        } elseif ($distinctMatches === 3) {
+            $cvScore = 75.0;
+        } elseif ($distinctMatches === 2) {
+            $cvScore = 65.0;
+        } elseif ($distinctMatches === 1) {
+            $cvScore = 50.0;
+        } else {
+            $cvScore = $hasDetails ? 20.0 : 0.0;
+        }
 
         return round(min($cvScore, 100.0), 2);
     }
@@ -555,7 +600,8 @@ class AdminController extends Controller
     {
         return round($this->getRelevanceMapScore(
             strtolower($application->study_program ?? ''),
-            strtolower($division->name)
+            strtolower($division->name),
+            $division
         ), 2);
     }
 
@@ -591,9 +637,35 @@ class AdminController extends Controller
      * Get relevance score based on study program ↔ division mapping.
      * Returns 0-100 score based on how relevant the study program is.
      */
-    private function getRelevanceMapScore(string $studyProgram, string $divisionName): float
+    private function getRelevanceMapScore(string $studyProgram, string $divisionName, ?Division $division = null): float
     {
-        // Mapping: divisi Suara Surabaya Media → daftar program studi relevan
+        // 1. If division has custom configured prodi rules, evaluate them
+        if ($division) {
+            $hasCustomHigh = !empty(trim($division->relevant_programs_high ?? ''));
+            $hasCustomMedium = !empty(trim($division->relevant_programs_medium ?? ''));
+
+            if ($hasCustomHigh || $hasCustomMedium) {
+                if ($hasCustomHigh) {
+                    $highPrograms = array_map('trim', explode(',', strtolower($division->relevant_programs_high)));
+                    foreach ($highPrograms as $program) {
+                        if (!empty($program) && (str_contains($studyProgram, $program) || (strlen($studyProgram) >= 3 && str_contains($program, $studyProgram)))) {
+                            return 95.0;
+                        }
+                    }
+                }
+                if ($hasCustomMedium) {
+                    $medPrograms = array_map('trim', explode(',', strtolower($division->relevant_programs_medium)));
+                    foreach ($medPrograms as $program) {
+                        if (!empty($program) && (str_contains($studyProgram, $program) || (strlen($studyProgram) >= 3 && str_contains($program, $studyProgram)))) {
+                            return 70.0;
+                        }
+                    }
+                }
+                return 35.0;
+            }
+        }
+
+        // 2. Mapping default divisi Suara Surabaya Media → daftar program studi relevan
         $relevanceMap = [
             'business' => [
                 'high' => [

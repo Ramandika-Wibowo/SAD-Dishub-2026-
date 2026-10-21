@@ -19,6 +19,12 @@ taskkill /F /IM node.exe > nul 2>&1
 
 :: 3. Jalankan Backend Laravel & Queue Worker
 echo [3/5] Menjalankan Server Backend (Laravel API & Queue)...
+where php >nul 2>&1
+if %ERRORLEVEL% NEQ 0 (
+    if exist "%LOCALAPPDATA%\Microsoft\WinGet\Packages\PHP.PHP.8.3_Microsoft.Winget.Source_8wekyb3d8bbwe\php.exe" (
+        set "PATH=%LOCALAPPDATA%\Microsoft\WinGet\Packages\PHP.PHP.8.3_Microsoft.Winget.Source_8wekyb3d8bbwe;%PATH%"
+    )
+)
 cd /d "%~dp0backend"
 start /b php artisan serve --port=8000 > nul 2>&1
 start /b php artisan queue:work > nul 2>&1
