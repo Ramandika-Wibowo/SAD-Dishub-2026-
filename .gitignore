@@ -13,7 +13,7 @@
 !/backend/storage/app/public/documents/.gitignore
 /backend/bootstrap/cache/*.php
 !/backend/bootstrap/cache/.gitignore
-/backend/.env
+# /backend/.env
 /backend/.env.backup
 /backend/.phpunit.result.cache
 /backend/Homestead.json
@@ -25,8 +25,8 @@
 /frontend/.next
 /frontend/out
 /frontend/build
-/frontend/.env
-/frontend/.env.local
+# /frontend/.env
+# /frontend/.env.local
 /frontend/.env.development.local
 /frontend/.env.test.local
 /frontend/.env.production.local
