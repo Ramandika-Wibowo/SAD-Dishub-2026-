@@ -312,32 +312,28 @@ export default function AdminApplicationDetailPage() {
         </div>
       </Card>
 
-      {/* Algorithm Sort (Decision Support) */}
-      {canDecide && (
-        <Card padding="lg">
-          <div className="text-center">
-            <Cpu className="w-10 h-10 text-primary-400 mx-auto mb-3" />
-            <h3 className="text-base font-semibold text-surface-900 mb-1">
-              {rulesEvaluated ? "Jalankan Ulang Algoritma Sortir" : "Jalankan Algoritma Sortir"}
-            </h3>
-            <p className="text-sm text-surface-500 mb-4">
-              Evaluasi kelengkapan dokumen (R1), kualifikasi CV (R2), kuota divisi (R3), dan kesesuaian program studi (R4).
-              <br />
-              <span className="text-xs text-surface-400 italic">
-                Hasil hanya sebagai pendukung keputusan — keputusan akhir ada di tangan Admin.
-              </span>
-            </p>
-            <Button onClick={executeSort} loading={sorting} icon={<Cpu className="w-4 h-4" />} size="lg">
-              {rulesEvaluated ? "Evaluasi Ulang" : "Eksekusi Algoritma Sortir"}
-            </Button>
-          </div>
-        </Card>
-      )}
-
       {/* Rule Results */}
       {rulesEvaluated && (
         <Card padding="lg">
-          <CardHeader><CardTitle>Hasil Evaluasi Algoritma (Pendukung Keputusan)</CardTitle></CardHeader>
+          <div className="flex items-center justify-between mb-4 pb-2 border-b border-surface-100 flex-wrap gap-2">
+            <div>
+              <CardTitle>Hasil Evaluasi Algoritma (Pendukung Keputusan)</CardTitle>
+              <p className="text-xs text-surface-400 mt-0.5">
+                Evaluasi otomatis: kelengkapan dokumen (R1), kualifikasi CV (R2), kuota divisi (R3), dan relevansi prodi (R4).
+              </p>
+            </div>
+            {canDecide && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={executeSort}
+                loading={sorting}
+                icon={<Cpu className="w-4 h-4 text-primary-600" />}
+              >
+                Eksekusi Ulang
+              </Button>
+            )}
+          </div>
           <div className="space-y-4">
             {/* Recommendation Banner */}
             {rules?.recommendation && (
@@ -410,6 +406,8 @@ export default function AdminApplicationDetailPage() {
           </div>
         </Card>
       )}
+
+
 
       {/* Decision Section — available for pending & reviewing */}
       {canDecide && (

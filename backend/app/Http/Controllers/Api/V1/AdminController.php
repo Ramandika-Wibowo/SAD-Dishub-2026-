@@ -72,6 +72,14 @@ class AdminController extends Controller
 
         $applications = $query->paginate($request->input('per_page', 15));
 
+        // Auto-evaluate applications that haven't been evaluated yet
+        foreach ($applications->items() as $app) {
+            if ($app->r1_passed === null || $app->algorithm_score === null) {
+                $this->evaluateApplicationAlgorithm($app, false);
+                $app->refresh();
+            }
+        }
+
         return response()->json([
             'success' => true,
             'data'    => $applications,
@@ -200,6 +208,12 @@ class AdminController extends Controller
             'documents',
         ])->findOrFail($id);
 
+        // Auto-evaluate if not yet evaluated
+        if ($application->r1_passed === null || $application->algorithm_score === null) {
+            $this->evaluateApplicationAlgorithm($application, false);
+            $application->refresh();
+        }
+
         return response()->json([
             'success' => true,
             'data'    => [
@@ -210,30 +224,19 @@ class AdminController extends Controller
     }
 
     /**
-     * POST /api/v1/admin/applications/{id}/execute-sort
-     *
      * Run the rule-based sorting algorithm on a single application.
-     * This is for DECISION SUPPORT only — it does NOT auto-reject.
-     * Admin makes the final accept/reject decision.
+     * Evaluates R1 (documents), R2 (CV/qualifications), R3 (quota), R4 (study program relevance).
      *
-     * R1: Document completeness check
-     * R2: CV Details & Qualifications matching (Skills, Pengalaman, Projek)
-     * R3: Division quota availability check
-     * R4: Study program & academic relevance check
+     * @param Application $application
+     * @param bool $updateStatus Whether to transition status from pending to reviewing
+     * @return array ['warnings' => array, 'all_passed' => bool]
      */
-    public function executeSort(int $id): JsonResponse
+    public function evaluateApplicationAlgorithm(Application $application, bool $updateStatus = false): array
     {
-        $application = Application::with(['documents', 'division', 'user'])->findOrFail($id);
-
-        if (!in_array($application->status, ['pending', 'reviewing'])) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Algoritma hanya dapat dijalankan pada pengajuan berstatus pending atau reviewing.',
-            ], 422);
-        }
-
-        $warnings = [];
+        $application->loadMissing(['documents', 'division', 'user']);
+        $division = $application->division;
         $threshold = (float) ($division->passing_threshold ?? config('services.algorithm.score_threshold', 60));
+        $warnings = [];
 
         // ═══════════════════════════════════════════════
         // R1: Document Completeness
@@ -256,7 +259,6 @@ class AdminController extends Controller
         // ═══════════════════════════════════════════════
         // R2: CV Details & Qualifications (Skills, Pengalaman, Projek)
         // ═══════════════════════════════════════════════
-        $division = $application->division;
         $hasCvDetails = !empty(trim($application->skills ?? ''))
             || !empty(trim($application->experience ?? ''))
             || !empty(trim($application->projects ?? ''));
@@ -313,7 +315,7 @@ class AdminController extends Controller
         // ═══════════════════════════════════════════════
         $allPassed = $r1Passed && $r2Passed && $r3Passed && $r4Passed && ($finalScore >= $threshold);
 
-        $application->update([
+        $updateData = [
             'r1_passed'       => $r1Passed,
             'r2_passed'       => $r2Passed,
             'r2_score'        => $r2Score,
@@ -321,24 +323,52 @@ class AdminController extends Controller
             'r4_passed'       => $r4Passed,
             'r4_score'        => $r4Score,
             'algorithm_score' => $finalScore,
-            'status'          => 'reviewing',
-        ]);
+        ];
 
-        // ─── Notification ─────────────────────────────
-        notifyStatusChange($application->user_id, 'reviewing');
+        if ($updateStatus && $application->status === 'pending') {
+            $updateData['status'] = 'reviewing';
+            notifyStatusChange($application->user_id, 'reviewing');
+        }
 
+        $application->update($updateData);
+
+        return [
+            'warnings'   => $warnings,
+            'all_passed' => $allPassed,
+        ];
+    }
+
+    /**
+     * POST /api/v1/admin/applications/{id}/execute-sort
+     *
+     * Run or re-run the rule-based sorting algorithm on a single application.
+     * This is for DECISION SUPPORT only — it does NOT auto-reject.
+     * Admin makes the final accept/reject decision.
+     */
+    public function executeSort(int $id): JsonResponse
+    {
+        $application = Application::with(['documents', 'division', 'user'])->findOrFail($id);
+
+        if (!in_array($application->status, ['pending', 'reviewing'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Algoritma hanya dapat dijalankan pada pengajuan berstatus pending atau reviewing.',
+            ], 422);
+        }
+
+        $res = $this->evaluateApplicationAlgorithm($application, true);
         $application->load(['user', 'division', 'documents', 'recommendedDivision']);
 
-        $recommendation = $allPassed
+        $recommendation = $res['all_passed']
             ? 'Semua aturan terpenuhi. Disarankan untuk MENERIMA pengajuan ini.'
             : 'Terdapat catatan yang perlu diperhatikan. Silakan tinjau sebelum mengambil keputusan.';
 
         return response()->json([
             'success' => true,
-            'message' => 'Evaluasi algoritma selesai. ' . $recommendation,
+            'message' => 'Evaluasi ulang algoritma selesai. ' . $recommendation,
             'data'    => [
                 'application'  => $application,
-                'rule_results' => $this->formatRuleResults($application, $warnings, $allPassed),
+                'rule_results' => $this->formatRuleResults($application, $res['warnings'], $res['all_passed']),
             ],
         ]);
     }

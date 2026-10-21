@@ -114,6 +114,11 @@ class ApplicantController extends Controller
 
         $application->load(['division', 'documents']);
 
+        try {
+            app(AdminController::class)->evaluateApplicationAlgorithm($application, false);
+            $application->refresh();
+        } catch (\Throwable $e) {}
+
         // Send notification
         sendNotification(
             $user->id,
@@ -188,6 +193,11 @@ class ApplicantController extends Controller
         }
 
         $application->load('documents');
+
+        try {
+            app(AdminController::class)->evaluateApplicationAlgorithm($application, false);
+            $application->refresh();
+        } catch (\Throwable $e) {}
 
         return response()->json([
             'success' => true,

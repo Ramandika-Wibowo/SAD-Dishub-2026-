@@ -143,6 +143,31 @@ export function RecommendationBadge({ app, className }: RecommendationBadgeProps
       >
         {rec.reason}
       </span>
+      {app?.r1_passed !== undefined && app?.r1_passed !== null && (
+        <div className="flex items-center gap-1 mt-0.5" title="Nilai Aturan Rule-Base (R1: Dokumen, R2: CV/Kualifikasi, R3: Kuota, R4: Relevansi)">
+          {[
+            { label: "R1", passed: app.r1_passed, title: "R1: Kelengkapan Dokumen" },
+            { label: "R2", passed: app.r2_passed, title: `R2: Detail CV & Kualifikasi (${app.r2_score ?? 0}/100)` },
+            { label: "R3", passed: app.r3_passed, title: "R3: Ketersediaan Kuota Divisi" },
+            { label: "R4", passed: app.r4_passed, title: `R4: Relevansi Program Studi (${app.r4_score ?? 0}/100)` },
+          ].map((r) => (
+            <span
+              key={r.label}
+              title={r.title}
+              className={cn(
+                "px-1 py-0.5 text-[10px] font-semibold rounded leading-none select-none",
+                r.passed === true
+                  ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"
+                  : r.passed === false
+                  ? "bg-amber-100 text-amber-800 dark:bg-amber-950/70 dark:text-amber-300 border border-amber-200 dark:border-amber-800"
+                  : "bg-surface-100 text-surface-500 dark:bg-slate-800 dark:text-slate-400 border border-surface-200 dark:border-slate-700"
+              )}
+            >
+              {r.label}:{r.passed === true ? "✓" : r.passed === false ? "✗" : "-"}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

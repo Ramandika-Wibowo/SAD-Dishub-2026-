@@ -20,6 +20,7 @@ import {
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
+  Info,
 } from "lucide-react";
 
 function AdminApplicationsContent() {
@@ -271,6 +272,47 @@ function AdminApplicationsContent() {
           </div>
         )}
       </Card>
+
+      {/* Keterangan Aturan Rule-Base (R1 - R4) */}
+      <div className="p-4 rounded-xl border border-surface-200 bg-surface-50/70 dark:bg-slate-900/40 dark:border-slate-800 text-xs">
+        <div className="flex items-center gap-2 mb-2.5 text-surface-700 dark:text-slate-200 font-semibold">
+          <Info className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+          <span>Keterangan Evaluasi Aturan Rule-Based (R1 — R4):</span>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-surface-600 dark:text-slate-400">
+          <div className="flex items-start gap-2 bg-white dark:bg-slate-800/80 p-2.5 rounded-lg border border-surface-200/80 dark:border-slate-700">
+            <span className="font-bold text-primary-700 dark:text-primary-400 shrink-0">R1:</span>
+            <div>
+              <p className="font-semibold text-surface-800 dark:text-slate-200">Kelengkapan Dokumen</p>
+              <p className="text-[11px] text-surface-500 dark:text-slate-400 mt-0.5">Memeriksa kelengkapan berkas wajib (CV, Surat Pengantar, Kartu Identitas).</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-2 bg-white dark:bg-slate-800/80 p-2.5 rounded-lg border border-surface-200/80 dark:border-slate-700">
+            <span className="font-bold text-primary-700 dark:text-primary-400 shrink-0">R2:</span>
+            <div>
+              <p className="font-semibold text-surface-800 dark:text-slate-200">Kualifikasi & Detail CV</p>
+              <p className="text-[11px] text-surface-500 dark:text-slate-400 mt-0.5">Kesesuaian keahlian (skills), pengalaman, dan projek dengan target divisi.</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-2 bg-white dark:bg-slate-800/80 p-2.5 rounded-lg border border-surface-200/80 dark:border-slate-700">
+            <span className="font-bold text-primary-700 dark:text-primary-400 shrink-0">R3:</span>
+            <div>
+              <p className="font-semibold text-surface-800 dark:text-slate-200">Ketersediaan Kuota</p>
+              <p className="text-[11px] text-surface-500 dark:text-slate-400 mt-0.5">Ketersediaan kapasitas kuota divisi aktif dan status divisi tidak terkunci.</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-2 bg-white dark:bg-slate-800/80 p-2.5 rounded-lg border border-surface-200/80 dark:border-slate-700">
+            <span className="font-bold text-primary-700 dark:text-primary-400 shrink-0">R4:</span>
+            <div>
+              <p className="font-semibold text-surface-800 dark:text-slate-200">Kesesuaian Program Studi</p>
+              <p className="text-[11px] text-surface-500 dark:text-slate-400 mt-0.5">Relevansi latar belakang program studi akademik terhadap divisi tujuan.</p>
+            </div>
+          </div>
+        </div>
+        <p className="mt-2.5 text-[11px] text-surface-500 dark:text-slate-400">
+          <span className="font-medium text-surface-700 dark:text-slate-300">Status Aturan:</span> Simbol <span className="inline-block px-1 py-0.2 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300 font-bold border border-emerald-200 dark:border-emerald-800">✓</span> berarti memenuhi kriteria / lolos ambang batas, sedangkan <span className="inline-block px-1 py-0.2 rounded bg-amber-100 text-amber-800 dark:bg-amber-950/70 dark:text-amber-300 font-bold border border-amber-200 dark:border-amber-800">✗</span> berarti di bawah ambang batas (menjadi bahan pertimbangan Admin). Keputusan akhir tetap di tangan Admin.
+        </p>
+      </div>
     </div>
   );
 }
