@@ -1,0 +1,5 @@
+{
+  "artifactType":  "ARTIFACT_TYPE_WALKTHROUGH",
+  "summary":  "Complete documentation for the E-Internship Dishub Laravel 11 backend API. Covers project structure (30+ files), database schema (6 tables), all API endpoints organized by role (auth/applicant/admin/head), the rule-based sorting algorithm (R1-R5), setup instructions with Supabase integration, and default seeded accounts for testing.",
+  "updatedAt":  "2026-05-23T22:10:29.514552800Z"
+}

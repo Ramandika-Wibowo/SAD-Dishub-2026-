@@ -9,8 +9,8 @@
 /backend/storage/framework/testing/*
 /backend/storage/framework/views/*
 /backend/storage/logs/*
-/backend/storage/app/public/documents/*
-!/backend/storage/app/public/documents/.gitignore
+# /backend/storage/app/public/documents/*
+# !/backend/storage/app/public/documents/.gitignore
 /backend/bootstrap/cache/*.php
 !/backend/bootstrap/cache/.gitignore
 # /backend/.env
@@ -37,8 +37,8 @@
 /frontend/tsconfig.tsbuildinfo
 
 # Local chat archives & temporary files
-backup chat/
-read_excel.py
+# backup chat/
+# read_excel.py
 *.tmp
 *.bak
 

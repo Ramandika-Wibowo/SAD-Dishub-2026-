@@ -1,0 +1,8 @@
+# Task: Verify Login Page Design
+
+## Plan
+1. [ ] Navigate to http://localhost:3000/login
+2. [ ] Wait 4 seconds for the page to load
+3. [ ] Take a screenshot of the login page
+4. [ ] Describe the page content (Sura & Baya background, right side form, layout)
+5. [ ] Write summary of findings

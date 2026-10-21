@@ -1,0 +1,5 @@
+{
+  "artifactType":  "ARTIFACT_TYPE_OTHER",
+  "summary":  "Detailed comparison table of 12 discrepancies between the existing software architecture diagram and the actual E-Internship codebase, plus 4 corrected PlantUML diagrams (Level 1 Context, Level 2 Container, Level 3 Component, Level 4 Code/Entity) based on the real implementation.",
+  "updatedAt":  "2026-06-03T05:50:24.085254300Z"
+}

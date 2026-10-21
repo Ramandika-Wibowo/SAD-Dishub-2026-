@@ -1,0 +1,94 @@
+<current_dom_explanation>
+This is a temporary snapshot of the current page's DOM structure. The DOM will change if you navigate to or interact with another page. Use a tool like browser_get_dom to capture and preserve the DOM in your trajectory if needed for later reference.
+</current_dom_explanation>
+<current_dom>
+Version
+Operating system
+Description
+File size
+[0] (482,51)<a href='https://www.python.org/download/sigstore/'>Sigstore />
+[1] (543,51)<a href='https://www.python.org/download/sbom/'>SBOM />
+[2] (590,51)<a href='https://www.python.org/downloads/#gpg'>GPG />
+SHA-256 checksum
+[3] (98,136)<a href='https://www.python.org/ftp/python/3.12.13/Python-3.12.13.tgz'>Gzipped source tarball />
+Source release
+26.0 MB
+[4] (483,136)<a href='https://www.python.org/ftp/python/3.12.13/Python-3.12.13.tgz.sigstore'>.sigstore />
+[5] (540,136)<a href='https://www.python.org/ftp/python/3.12.13/Python-3.12.13.tgz.spdx.json'>SPDX />
+[6] (587,136)<a href='https://www.python.org/ftp/python/3.12.13/Python-3.12.13.tgz.asc'>SIG />
+0816c4761c97ecdb
+3f50a3924de0a93f
+d78cb63ee8e6c042
+01ddfaedca500b0b
+[7] (98,230)<a href='https://www.python.org/ftp/python/3.12.13/Python-3.12.13.tar.xz'>XZ compressed source tarball />
+Source release
+19.8 MB
+[8] (483,211)<a href='https://www.python.org/ftp/python/3.12.13/Python-3.12.13.tar.xz.sigstore'>.sigstore />
+[9] (540,211)<a href='https://www.python.org/ftp/python/3.12.13/Python-3.12.13.tar.xz.spdx.json'>SPDX />
+[10] (587,211)<a href='https://www.python.org/ftp/python/3.12.13/Python-3.12.13.tar.xz.asc'>SIG />
+c08bc65a81971c1d
+d578318282650336
+9466c7e67374d164
+6519adf05207b684
+[11] (93,439)<a href='/about/'>About />
+[12] (93,490)<a href='/about/apps/'>Applications />
+[13] (93,537)<a href='/about/quotes/'>Quotes />
+[14] (93,584)<a href='/about/gettingstarted/'>Getting Started />
+[15] (93,631)<a href='/about/help/'>Help />
+[16] (93,678)<a href='http://brochure.getpython.info/'>Python Brochure />
+[17] (253,439)<a href='/downloads/'>Downloads />
+[18] (253,490)<a href='/downloads/'>All releases />
+[19] (253,537)<a href='/downloads/source/'>Source code />
+[20] (253,584)<a href='/downloads/windows/'>Windows />
+[21] (253,631)<a href='/downloads/macos/'>macOS />
+[22] (253,678)<a href='/downloads/android/'>Android />
+[23] (253,725)<a href='/download/other/'>Other Platforms />
+[24] (253,772)<a href='https://docs.python.org/3/license.html'>License />
+[25] (253,835)<a href='/download/alternatives'>Alternative Implementations />
+[26] (413,439)<a href='/doc/'>Documentation />
+[27] (413,490)<a href='/doc/'>Docs />
+[28] (413,537)<a href='/doc/av'>Audio/Visual Talks />
+[29] (413,584)<a href='https://wiki.python.org/moin/BeginnersGuide'>Beginner's Guide />
+[30] (413,631)<a href='https://docs.python.org/3/faq/'>FAQ />
+[31] (413,678)<a href='https://translations.python.org/'>Non-English Docs />
+[32] (413,725)<a href='https://peps.python.org'>PEP Index />
+[33] (413,772)<a href='https://wiki.python.org/moin/PythonBooks'>Python Books />
+[34] (413,819)<a href='/doc/essays/'>Python Essays />
+[35] (574,439)<a href='/community/'>Community />
+[36] (574,490)<a href='/community/diversity/'>Diversity />
+[37] (574,537)<a href='/community/lists/'>Mailing Lists />
+[38] (574,584)<a href='/community/irc/'>IRC />
+[39] (574,631)<a href='/community/forums/'>Forums />
+[40] (574,693)<a href='/psf/annual-report/2024/'>PSF Annual Impact Report />
+[41] (574,756)<a href='/community/workshops/'>Python Conferences />
+[42] (574,803)<a href='/community/sigs/'>Special Interest Groups />
+[43] (574,850)<a href='/community/logos/'>Python Logo />
+[44] (574,897)<a href='https://wiki.python.org/moin/'>Python Wiki />
+[45] (574,944)<a href='/psf/conduct/'>Code of Conduct />
+Community Awards
+[46] (734,439)<a href='/success-stories/' title='success-stories'>Success Stories />
+[47] (734,490)<a href='/success-stories/category/arts/'>Arts />
+[48] (734,537)<a href='/success-stories/category/business/'>Business />
+[49] (734,584)<a href='/success-stories/category/education/'>Education />
+[50] (734,631)<a href='/success-stories/category/engineering/'>Engineering />
+[51] (734,678)<a href='/success-stories/category/government/'>Government />
+[52] (734,725)<a href='/success-stories/category/scientific/'>Scientific />
+[53] (734,772)<a href='/success-stories/category/software-development/'>Software Development />
+[54] (894,439)<a href='/blogs/' title='News from around the Python world'>News />
+[55] (894,490)<a href='/blogs/' title='Python Insider Blog Posts'>Python News />
+[56] (894,537)<a href='/psf/newsletter/' title='Python Software Foundation Newsletter'>PSF Newsletter />
+[57] (894,584)<a href='http://pyfound.blogspot.com/' title='PSF Blog'>PSF News />
+[58] (894,631)<a href='http://pycon.blogspot.com/' title='PyCon Blog'>PyCon US News />
+[59] (894,693)<a href='http://planetpython.org/' title='Planet Python'>News from the Community />
+[60] (93,774)<a href='/events/'>Events />
+[61] (93,824)<a href='/events/python-events/'>Python Events />
+[62] (93,871)<a href='/events/python-user-group/'>User Group Events />
+[63] (93,918)<a href='/events/python-events/past/'>Python Events Archive />
+[64] (93,980)<a href='/events/python-user-group/past/'>User Group Events Archive />
+[65] (894,803)<a href='/dev/'>Contributing />
+[66] (894,853)<a href='https://devguide.python.org/'>Developer's Guide />
+[67] (894,900)<a href='https://github.com/python/cpython/issues'>Issue Tracker />
+[68] (894,948)<a href='https://mail.python.org/mailman/listinfo/python-dev'>python-dev list />
+[69] (894,995)<a href='/dev/core-mentorship/'>Core Mentorship />
+
+</current_dom>

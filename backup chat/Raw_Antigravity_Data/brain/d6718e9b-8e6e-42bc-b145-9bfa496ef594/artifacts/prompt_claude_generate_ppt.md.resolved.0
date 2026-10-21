@@ -1,0 +1,300 @@
+# Prompt untuk Claude AI Web — Generate PPT
+
+> [!IMPORTANT]
+> Copy-paste seluruh teks di bawah garis `---` ke Claude AI di web (claude.ai).
+> Claude akan menghasilkan **kode Python (python-pptx)** sebagai artifact yang bisa kamu download dan jalankan untuk menghasilkan file `.pptx`.
+
+---
+
+```
+Buatkan saya kode Python lengkap menggunakan library `python-pptx` untuk membuat file presentasi PowerPoint (.pptx) seminar hasil magang MBKM dengan spesifikasi berikut:
+
+## INFORMASI UMUM
+- Judul: "Analisis dan Perancangan Ulang SOP Operasional Aplikasi SCATS Dinas Perhubungan Pemerintah Kota Surabaya Berbasis ISO 31000:2018"
+- Penyusun: Ramandika Arya Wibowo (NIM: 09020623045)
+- Program Studi: Sistem Informasi, Fakultas Sains dan Teknologi, UIN Sunan Ampel Surabaya
+- Dosen Pembimbing: Yunita Ardilla, S.Kom., M.MT.
+- Pembimbing Lapangan: Raden Ajeng Mumtaz Sakinah, A.Md.
+- Tempat Magang: SITS (Surabaya Intelligent Transport System) Dinas Perhubungan Kota Surabaya
+- Periode: 12 Januari - 15 Mei 2026
+
+## DESAIN PPT
+- Widescreen 16:9
+- Tema warna: Biru tua (#1B3A5C) sebagai warna utama, kuning emas (#D4A843) sebagai aksen, putih untuk teks di background gelap, abu-abu gelap (#2D2D2D) untuk teks di background terang
+- Font: Calibri atau Arial
+- Setiap slide harus punya header strip berwarna biru tua di atas
+- Gunakan shape, tabel, dan elemen visual sebanyak mungkin (bukan hanya bullet point teks)
+- Tambahkan nomor halaman di pojok kanan bawah
+
+## ISI SLIDE (27 SLIDE)
+
+### SLIDE 1 — Cover
+- Judul laporan (font besar, bold)
+- Nama, NIM, Prodi, Fakultas, Universitas
+- Dosen Pembimbing & Pembimbing Lapangan
+- Tahun: 2026
+- Placeholder text "[Logo UINSA]" dan "[Logo Dishub]" di kiri dan kanan atas
+
+### SLIDE 2 — Outline Presentasi
+Daftar isi:
+1. Latar Belakang & Rumusan Masalah
+2. Dasar Teori & Kerangka Kerja
+3. Metodologi Penelitian
+4. Evaluasi SOP Eksisting (ISO 37301:2021)
+5. Identifikasi & Penilaian Risiko (ISO 31000:2018)
+6. Usulan Perancangan Ulang SOP
+7. Kesimpulan & Saran
+
+### SLIDE 3 — Latar Belakang (1/2)
+Poin-poin:
+- Kota Surabaya menggunakan SCATS (Sydney Coordinated Adaptive Traffic System) untuk mengendalikan 137 persimpangan secara otomatis
+- SITS didukung 953 unit CCTV dan 454 sensor TraffiCam
+- Dalam kondisi insidental (kecelakaan, unjuk rasa, cuaca buruk, VVIP), operator harus melakukan intervensi manual terhadap SCATS
+- Catatan kaki: "[Saran Gambar: Screenshot antarmuka SCATS + Foto CC Room SITS]"
+
+### SLIDE 4 — Latar Belakang (2/2): Masalah Inti
+Poin-poin:
+- Langkah Kerja No. 7 SOP lama: "mengidentifikasi kendala dan melakukan optimalisasi pengaturan Traffic Light menggunakan SCATS" — tampilkan sebagai quote box
+- Instruksi terlalu makro, tidak ada parameter batas waktu (SLA)
+- Operator mengandalkan intuisi → memicu human error
+- Risiko: operator lupa mengembalikan mode manual ke otomatis → spillback (kemacetan sekunder)
+- Ditemukan kesalahan simbol flowchart (symbolic error) pada diagram alir SOP
+
+### SLIDE 5 — Rumusan Masalah
+Tabel 3 baris:
+| No | Rumusan Masalah |
+| 1 | Bagaimana tingkat kepatuhan operator terhadap SOP eksisting? |
+| 2 | Apa saja potensi risiko operasional dalam intervensi manual SCATS berdasarkan ISO 31000:2018? |
+| 3 | Bagaimana usulan perancangan ulang SOP yang mengintegrasikan mitigasi risiko & BPMN? |
+
+### SLIDE 6 — Tujuan Penelitian
+3 poin dengan ikon angka:
+1. Mengevaluasi tingkat kepatuhan operator menggunakan gap analysis
+2. Mengidentifikasi & menganalisis risiko operasional berdasarkan ISO 31000:2018
+3. Menghasilkan dokumen SOP baru yang terukur, ber-SLA, dan sesuai Permenpan RB No. 35/2012
+
+### SLIDE 7 — Justifikasi ISO 37301:2021
+Judul: "Mengapa ISO 37301:2021 untuk Evaluasi Kepatuhan?"
+Tabel perbandingan:
+| Aspek | ISO 37301:2021 | COBIT / ITIL |
+| Fokus | Budaya kepatuhan & perilaku personel | Infrastruktur TI & tata kelola |
+| Tujuan | Mengukur bagaimana instruksi dipahami & dijalankan | Menilai kapabilitas proses TI |
+| Integrasi | HLS identik dengan ISO 31000 → temuan langsung jadi input mitigasi | Tidak terintegrasi langsung |
+
+Tambahkan 2 box kesimpulan:
+- "Fokus spesifik pada budaya kepatuhan operator"
+- "Integrasi struktural — temuan non-compliance langsung → risk treatment ISO 31000"
+
+### SLIDE 8 — Cara Kerja ISO 37301:2021
+Judul: "Mekanisme Evaluasi Kepatuhan"
+4 langkah berurutan (buat sebagai process flow shapes):
+1. Identifikasi Kewajiban Kepatuhan → Bedah SOP eksisting
+2. Evaluasi Kinerja Aktual → Kuesioner 10 operator
+3. Pengukuran Kesenjangan → Expected State vs Current State
+4. Analisis Akar Masalah (Klausul 10) → Input perancangan ulang
+
+### SLIDE 9 — Justifikasi ISO 31000:2018
+Judul: "Mengapa ISO 31000:2018 untuk Perancangan SOP?"
+Tabel perbandingan 3 framework:
+| Framework | Kelebihan | Keterbatasan untuk SITS |
+| COSO ERM | Kuat di audit keuangan | Terlalu condong sektor finansial |
+| NIST CSF | Spesifik keamanan siber | Hanya fokus cybersecurity |
+| ISO 31000:2018 | Generik, fleksibel, adaptif | — (Cocok) |
+
+3 alasan pemilihan:
+- Fleksibel untuk sektor pemerintahan/pelayanan publik
+- Fokus pada sasaran (kelancaran lalu lintas)
+- Terbukti efektif meningkatkan akuntabilitas instansi pemerintah daerah
+
+### SLIDE 10 — Mengapa Fokus Klausul 6?
+Judul: "Fokus pada Klausul 6 — Proses Manajemen Risiko"
+3 pilar ISO 31000 (buat sebagai 3 kotak/pillar shapes):
+- Prinsip (Principles) → fondasi filosofis
+- Kerangka Kerja (Framework) → tata kelola manajerial
+- ★ Proses (Klausul 6) → langkah taktis & operasional ← FOKUS (highlight box ini)
+
+2 alasan:
+- Klausul 6 bersifat aplikatif → langsung diturunkan jadi instruksi kerja teknis SOP
+- Klausul 6.5 (Risk Treatment) selaras dengan tujuan redesain: menetapkan SLA mitigasi
+
+### SLIDE 11 — Tahapan Klausul 6
+Judul: "Tahapan Proses Manajemen Risiko (Klausul 6)"
+Tabel:
+| Klausul | Tahapan | Implementasi di SITS |
+| 6.2 | Komunikasi & Konsultasi | Koordinasi operator ↔ CC 112, Satlantas |
+| 6.3 | Ruang Lingkup & Kriteria | Penetapan area terimbas, batas wewenang |
+| 6.4.2 | Identifikasi Risiko | Pantau CCTV, deteksi kemacetan awal |
+| 6.4.3 | Analisis Risiko | Evaluasi dampak spillback |
+| 6.4.4 | Evaluasi Risiko | Keputusan: intervensi SCATS atau monitoring |
+| 6.5 | Perlakuan Risiko | Intervensi (Dwell, Lock CT, Plan Lock) |
+| 6.6 | Pemantauan & Tinjauan | Monitoring pasca-intervensi via CCTV |
+| 6.7 | Pencatatan & Pelaporan | Logbook intervensi |
+
+### SLIDE 12 — Metodologi Penelitian
+Judul: "Alur Penelitian"
+5 tahap sebagai process flow (panah horizontal):
+1. Pra-Lapangan → Studi literatur
+2. Pengumpulan Data → Observasi, kuesioner, wawancara
+3. Analisis Data → Gap analysis + Risk assessment
+4. Perancangan Produk → Draf SOP + Flowchart BPMN
+5. Tahap Akhir → Kesimpulan & laporan
+
+### SLIDE 13 — Metode Pengumpulan Data
+Tabel:
+| Metode | Tujuan |
+| Observasi | Pengamatan langsung interaksi operator ↔ SCATS |
+| Kuesioner | Mengukur kepatuhan SOP (10 responden) |
+| Wawancara | Membedah tacit knowledge operator senior |
+| Studi Dokumen | Kajian SOP eksisting & regulasi |
+
+### SLIDE 14 — Temuan Gap Analysis Kepatuhan
+Judul: "Temuan Analisis Kesenjangan Kepatuhan (ISO 37301:2021)"
+Tabel data empiris 10 operator (buat tabel dengan warna baris bergantian):
+| Temuan | Persentase |
+| SOP lama tidak memiliki batas waktu intervensi | 50% |
+| Operator mengandalkan intuisi saat menahan fase hijau | 90% |
+| Pernah lupa mengembalikan mode ke otomatis | 70% |
+| Dampak spillback/merah abadi dinilai parah (skor 4-5) | 100% |
+| Setuju SOP baru dengan SLA akan mengurangi risiko | 90% |
+
+Tambahkan callout box merah: "90% operator terpaksa mengandalkan intuisi!"
+
+### SLIDE 15 — Evaluasi Sintaksis Visual
+Judul: "Kesalahan Sintaksis Visual Flowchart SOP Lama"
+Buat 2 kotak berdampingan:
+- Kotak KIRI (merah, label "SALAH"): "Langkah 12: 'Apakah rekayasa lalin masih diperlukan?' → Digambar dengan simbol KOTAK (Process)"
+- Kotak KANAN (hijau, label "BENAR"): "Seharusnya digambar dengan simbol BELAH KETUPAT (Decision) sesuai BPMN & Permenpan RB 35/2012"
+Catatan: "Dampak: Ambiguitas alur → operator bingung di mana titik keputusan"
+
+### SLIDE 16 — Identifikasi Risiko
+Judul: "Identifikasi Risiko — ISO 31000:2018 (Klausul 6.4.2)"
+Tabel:
+| No | Aktivitas | Risiko | Penyebab |
+| 1 | Lock Cycle Time | Spillback di simpang hulu | Operator mengunci siklus terlalu lama |
+| 2 | Dwell (Tahan Hijau) | Merah Abadi di arah lawan | Lupa mematikan Dwell |
+| 3 | Peralihan Mode | Data sensor error | Sensor kotor / jaringan tidak stabil |
+
+### SLIDE 17 — Risk Register
+Judul: "Risk Register — Penilaian Risiko"
+Tabel dengan warna level risiko:
+| No | Risiko | L | I | Skor | Level | Keputusan |
+| 1 | Spillback | 4 | 4 | 16 | EKSTREM (merah) | Wajib Mitigasi → SOP Ketat |
+| 2 | Merah Abadi | 3 | 3 | 9 | TINGGI (oranye) | Kontrol Manajemen → Revisi SOP |
+| 3 | Sensor Error | 3 | 2 | 6 | SEDANG (kuning) | Pemantauan Berkala |
+
+### SLIDE 18 — Matriks Risiko Visual
+Judul: "Matriks Analisis Risiko 5×5"
+Buat tabel matriks 5×5 dengan warna:
+- Hijau: Rendah (1-3)
+- Kuning: Sedang (4-7)
+- Oranye: Tinggi (8-14)
+- Merah: Ekstrem (15-25)
+Baris: Likelihood 1-5, Kolom: Impact 1-5
+Tandai posisi R1(4,4), R2(3,3), R3(3,2) dengan teks "R1", "R2", "R3"
+
+### SLIDE 19 — Dekomposisi Langkah 7
+Judul: "Inti Perancangan Ulang — Dekomposisi Langkah 7"
+Buat 2 bagian:
+KIRI - "SOP LAMA" (1 kotak besar merah): "Mengidentifikasi kendala dan melakukan optimalisasi pengaturan menggunakan SCATS"
+KANAN - "SOP BARU" (6 kotak kecil hijau bertingkat):
+| Sub | Langkah | SLA | Klausul ISO |
+| 7.1 | Cek Live Traffic + CCTV | 2 menit | 6.4.2 |
+| 7.2 | Identifikasi simpang terimbas | 2 menit | 6.4.3 |
+| 7.3 | Koordinasi patroli | 1 menit | 6.2 |
+| 7.4 | Analisis jenis hambatan | 1 menit | 6.4.4 |
+| 7.5 | Koordinasi CC 112 | 2 menit | 6.2 |
+| 7.6 | Intervensi SCATS | Maks. 3 Siklus | 6.5 |
+
+### SLIDE 20 — SOP Skenario 1: Hambatan Lalu Lintas
+Judul: "Usulan SOP Penanganan Hambatan Lalu Lintas"
+Fokus: Mencegah spillback akibat durasi intervensi berlebihan
+Tabel 7 langkah:
+| No | Langkah | SLA | Klausul ISO 31000 |
+| 1 | Cek Live Traffic Google Maps + CCTV | 2 Menit | 6.4.2 (Identifikasi Risiko) |
+| 2 | Identifikasi simpang & ruas terimbas | 2 Menit | 6.4.3 (Analisis Risiko) |
+| 3 | Koordinasi patroli (jika Major Alarm) | 1 Menit | 6.2 (Komunikasi) |
+| 4 | Analisis jenis hambatan samping | 1 Menit | 6.4.4 (Evaluasi Risiko) |
+| 5 | Koordinasi CC 112 & petugas lapangan | 2 Menit | 6.2 (Komunikasi) |
+| 6 | Intervensi SCATS (Plan Lock/Lock CT/Dwell) | Maks. 3 Siklus | 6.5 (Perlakuan Risiko) |
+| 7 | Pastikan lalu lintas normal via CCTV | 2 Menit | 6.6 (Pemantauan) |
+
+### SLIDE 21 — SOP Skenario 2: Cuaca Buruk
+Judul: "Usulan SOP Penanganan Kondisi Cuaca Buruk"
+Fokus: Percepatan koordinasi saat jarak pandang CCTV menurun
+Tabel 6 langkah:
+| No | Langkah | SLA | Klausul |
+| 1 | Pantau sebaran hujan & genangan via CCTV | 5 Menit | 6.4.2 |
+| 2 | Laporkan imbas (pohon tumbang dll) ke CC 112 | Kondisional | 6.2 |
+| 3 | Teruskan ke patroli lapangan | 3 Menit | 6.2 |
+| 4 | Optimalisasi SCATS | Maks. 3 Siklus | 6.5 |
+| 5 | Informasikan ke masyarakat via medsos | 2 Menit | 6.2 |
+| 6 | Monitoring sampai normal | Kondisional | 6.6 |
+
+### SLIDE 22 — SOP Skenario 3: Unjuk Rasa
+Judul: "Usulan SOP Penanganan Unjuk Rasa & Pawai Massa"
+Fokus: Mencegah gridlock pada rute pengalihan
+Tabel 6 langkah:
+| No | Langkah | SLA | Klausul |
+| 1 | Kumpulkan info detail (tujuan, jumlah massa, rute) | 10 Menit | 6.3 |
+| 2 | Pantau pergerakan massa via CCTV, lapor CC 112 | Kondisional | 6.2 |
+| 3 | Pantau & laporkan pengalihan/penutupan jalan | 3 Menit | 6.6 |
+| 4 | Informasikan ke masyarakat via medsos SITS | 2 Menit | 6.2 |
+| 5 | Optimalisasi SCATS jalur buangan | Maks. 3 Siklus | 6.5 |
+| 6 | Laporkan ke CC 112 jika massa ricuh | 1 Menit | 6.2 |
+
+### SLIDE 23 — SOP Skenario 4: Pengawalan VVIP/Damkar/Ambulans
+Judul: "Usulan SOP Pengawalan Lalu Lintas"
+Fokus: Presisi Green Wave tanpa mengorbankan jalur lawan
+Tabel 7 langkah:
+| No | Langkah | SLA | Klausul |
+| 1 | Komunikasi dengan Kenari (tujuan & rute) | 2 Menit | 6.2 |
+| 2 | Pantau pergerakan rombongan via CCTV | Kondisional | 6.6 |
+| 3 | Urai kepadatan awal dengan Dwell | Maks. 3 Siklus | 6.5 |
+| 4 | Pengawalan dengan Dwell (tambah durasi hijau) | 3 Menit | 6.5 |
+| 5 | Pantau imbas kepadatan kaki simpang lain | Kondisional | 6.6 |
+| 6 | Lapor Kenari jika rombongan berhenti | 1 Menit | 6.2 |
+| 7 | Normalkan kembali ke mode otomatis | 1 Mnt/Simpang | 6.5 |
+
+### SLIDE 24 — Implikasi Manajerial
+Judul: "Implikasi Manajerial & Rencana Implementasi"
+3 box rekomendasi:
+1. "Sosialisasi & Simulasi (Tabletop Exercise)" — Bangun budaya risk-aware, drill batas maks 3 siklus
+2. "Visualisasi Ruang Kendali" — Cetak & tempel flowchart BPMN di CC Room sebagai visual cue
+3. "Pembaruan Format Logbook" — Tambah kolom durasi intervensi manual → implementasi Klausul 6.7
+
+### SLIDE 25 — Kesimpulan
+Judul: "Kesimpulan"
+Tabel 3 baris menjawab rumusan masalah:
+| RQ | Kesimpulan |
+| RQ1 | Compliance gap signifikan: 90% operator mengandalkan intuisi, 70% pernah lupa mengembalikan mode, 100% dampak parah. Ditemukan pula symbolic error pada flowchart. |
+| RQ2 | 3 risiko teridentifikasi: 1 Ekstrem (Spillback, skor 16), 1 Tinggi (Merah Abadi, skor 9), 1 Sedang (Sensor error, skor 6) |
+| RQ3 | 4 SOP baru berbasis ISO 31000 Klausul 6 — dekomposisi Langkah 7 → 6 sub-langkah ber-SLA (maks. 3 siklus), sesuai Permenpan RB 35/2012 & BPMN |
+
+### SLIDE 26 — Saran
+Judul: "Saran"
+2 kategori:
+Bagi SITS Dishub Surabaya:
+- Segera sosialisasikan draf SOP mitigasi risiko
+- Tinjau ulang batas SLA (3 siklus) minimal 1 tahun sekali
+
+Bagi Peneliti Selanjutnya:
+- Perluas ke risiko hardware failure & keamanan siber
+- Gunakan simulasi kuantitatif (VISSIM/PTV Visum)
+
+### SLIDE 27 — Terima Kasih
+Judul: "Terima Kasih"
+Subtitle: "Sesi Diskusi & Tanya Jawab"
+Nama, NIM, dan informasi kontak
+
+## INSTRUKSI TEKNIS
+1. Gunakan python-pptx versi terbaru
+2. Semua tabel harus rapi dengan header berwarna biru tua dan teks putih
+3. Ukuran font judul slide: 28-32pt, body: 16-18pt, tabel: 12-14pt
+4. Setiap slide harus memiliki layout yang berbeda-beda (tidak monoton)
+5. Untuk matriks risiko 5×5 (slide 18), beri warna cell sesuai level risiko
+6. File output: "PPT_Seminar_Hasil_Magang_MBKM.pptx"
+7. Pastikan kode bisa langsung dijalankan tanpa error
+8. Tambahkan catatan "[Saran Gambar: ...]" pada notes section setiap slide yang membutuhkan gambar tambahan
+
+Buatkan kode Python lengkap yang langsung bisa dijalankan.
+```

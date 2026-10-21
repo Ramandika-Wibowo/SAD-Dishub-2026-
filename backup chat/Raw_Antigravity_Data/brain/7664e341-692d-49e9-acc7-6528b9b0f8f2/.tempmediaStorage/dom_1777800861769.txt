@@ -1,0 +1,82 @@
+<current_dom_explanation>
+This is a temporary snapshot of the current page's DOM structure. The DOM will change if you navigate to or interact with another page. Use a tool like browser_get_dom to capture and preserve the DOM in your trajectory if needed for later reference.
+</current_dom_explanation>
+<current_dom>
+[0] (93,144)<a href='/about/'>About />
+[1] (93,195)<a href='/about/apps/'>Applications />
+[2] (93,242)<a href='/about/quotes/'>Quotes />
+[3] (93,289)<a href='/about/gettingstarted/'>Getting Started />
+[4] (93,336)<a href='/about/help/'>Help />
+[5] (93,383)<a href='http://brochure.getpython.info/'>Python Brochure />
+[6] (253,144)<a href='/downloads/'>Downloads />
+[7] (253,195)<a href='/downloads/'>All releases />
+[8] (253,242)<a href='/downloads/source/'>Source code />
+[9] (253,289)<a href='/downloads/windows/'>Windows />
+[10] (253,336)<a href='/downloads/macos/'>macOS />
+[11] (253,383)<a href='/downloads/android/'>Android />
+[12] (253,430)<a href='/download/other/'>Other Platforms />
+[13] (253,477)<a href='https://docs.python.org/3/license.html'>License />
+[14] (253,539)<a href='/download/alternatives'>Alternative Implementations />
+[15] (413,144)<a href='/doc/'>Documentation />
+[16] (413,195)<a href='/doc/'>Docs />
+[17] (413,242)<a href='/doc/av'>Audio/Visual Talks />
+[18] (413,289)<a href='https://wiki.python.org/moin/BeginnersGuide'>Beginner's Guide />
+[19] (413,336)<a href='https://docs.python.org/3/faq/'>FAQ />
+[20] (413,383)<a href='https://translations.python.org/'>Non-English Docs />
+[21] (413,430)<a href='https://peps.python.org'>PEP Index />
+[22] (413,477)<a href='https://wiki.python.org/moin/PythonBooks'>Python Books />
+[23] (413,524)<a href='/doc/essays/'>Python Essays />
+[24] (574,144)<a href='/community/'>Community />
+[25] (574,195)<a href='/community/diversity/'>Diversity />
+[26] (574,242)<a href='/community/lists/'>Mailing Lists />
+[27] (574,289)<a href='/community/irc/'>IRC />
+[28] (574,336)<a href='/community/forums/'>Forums />
+[29] (574,398)<a href='/psf/annual-report/2024/'>PSF Annual Impact Report />
+[30] (574,460)<a href='/community/workshops/'>Python Conferences />
+[31] (574,508)<a href='/community/sigs/'>Special Interest Groups />
+[32] (574,555)<a href='/community/logos/'>Python Logo />
+[33] (574,602)<a href='https://wiki.python.org/moin/'>Python Wiki />
+[34] (574,649)<a href='/psf/conduct/'>Code of Conduct />
+[35] (574,696)<a href='/community/awards'>Community Awards />
+[36] (574,743)<a href='/psf/get-involved/'>Get Involved />
+[37] (574,790)<a href='/psf/community-stories/'>Shared Stories />
+[38] (734,144)<a href='/success-stories/' title='success-stories'>Success Stories />
+[39] (734,195)<a href='/success-stories/category/arts/'>Arts />
+[40] (734,242)<a href='/success-stories/category/business/'>Business />
+[41] (734,289)<a href='/success-stories/category/education/'>Education />
+[42] (734,336)<a href='/success-stories/category/engineering/'>Engineering />
+[43] (734,383)<a href='/success-stories/category/government/'>Government />
+[44] (734,430)<a href='/success-stories/category/scientific/'>Scientific />
+[45] (734,477)<a href='/success-stories/category/software-development/'>Software Development />
+[46] (894,144)<a href='/blogs/' title='News from around the Python world'>News />
+[47] (894,195)<a href='/blogs/' title='Python Insider Blog Posts'>Python News />
+[48] (894,242)<a href='/psf/newsletter/' title='Python Software Foundation Newsletter'>PSF Newsletter />
+[49] (894,289)<a href='http://pyfound.blogspot.com/' title='PSF Blog'>PSF News />
+[50] (894,336)<a href='http://pycon.blogspot.com/' title='PyCon Blog'>PyCon US News />
+[51] (894,398)<a href='http://planetpython.org/' title='Planet Python'>News from the Community />
+[52] (93,478)<a href='/events/'>Events />
+[53] (93,529)<a href='/events/python-events/'>Python Events />
+[54] (93,576)<a href='/events/python-user-group/'>User Group Events />
+[55] (93,623)<a href='/events/python-events/past/'>Python Events Archive />
+[56] (93,685)<a href='/events/python-user-group/past/'>User Group Events Archive />
+[57] (93,748)<a href='https://wiki.python.org/moin/PythonEventsCalendar#Submitting_an_Event'>Submit an Event />
+[58] (894,508)<a href='/dev/'>Contributing />
+[59] (894,558)<a href='https://devguide.python.org/'>Developer's Guide />
+[60] (894,605)<a href='https://github.com/python/cpython/issues'>Issue Tracker />
+[61] (894,652)<a href='https://mail.python.org/mailman/listinfo/python-dev'>python-dev list />
+[62] (894,700)<a href='/dev/core-mentorship/'>Core Mentorship />
+[63] (894,747)<a href='/dev/security/'>Report a Security Issue />
+[64] (295,912)<a href='/about/help/'>Help &
+Contact />
+	[65] (292,912)<span >General />
+[66] (468,912)<a href='/community/diversity/'>Diversity />
+	[67] (500,912)<span >Initiatives />
+[68] (629,912)<a href='https://github.com/python/pythondotorg/issues'>Submit Website Bug />
+[69] (755,912)<a href='https://status.python.org/' title='All Systems Operational'>Status />
+	[70] (779,910)<span  />
+Copyright ©2001-2026.
+Python Software Foundation
+Legal Statements
+[71] (672,965)<a href='https://policies.python.org/python.org/Privacy-Notice/'>Privacy Notice />
+
+</current_dom>

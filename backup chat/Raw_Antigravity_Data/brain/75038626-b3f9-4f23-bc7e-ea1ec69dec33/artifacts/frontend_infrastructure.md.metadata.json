@@ -1,0 +1,5 @@
+{
+  "artifactType":  "ARTIFACT_TYPE_WALKTHROUGH",
+  "summary":  "Complete documentation for the E-Internship Dishub Next.js 14 frontend infrastructure. Covers 39 files including 15 reusable components (UI, charts, forms), 3 lib modules (axios, auth, utils), TypeScript types (30+ interfaces), middleware route protection, 4 route group layouts, Tailwind design system, and 11 page placeholders. Includes component usage examples and setup instructions.",
+  "updatedAt":  "2026-05-23T22:26:55.970524100Z"
+}

@@ -1,0 +1,8 @@
+# Task: Check Login Page Background Image
+
+## Checklist
+- [ ] Open http://localhost:3000/login
+- [ ] Wait for 3 seconds for the page to fully load
+- [ ] Take a screenshot of the login page
+- [ ] Verify if there is a background image on the left side or a plain color
+- [ ] Describe the left side of the page in detail in the final response

@@ -1,0 +1,77 @@
+<current_dom_explanation>
+This is a temporary snapshot of the current page's DOM structure. The DOM will change if you navigate to or interact with another page. Use a tool like browser_get_dom to capture and preserve the DOM in your trajectory if needed for later reference.
+</current_dom_explanation>
+<current_dom>
+[0] (122,9)<a href='https://www.python.org/psf/donations/python-dev/'>Help fund Python directly />
+or
+[1] (279,9)<a href='https://github.com/sponsors/python'>via GitHub Sponsors />
+, and support
+[2] (493,9)<a href='https://www.python.org/psf/donations/'>the Python community />
+.
+[3] (68,71)<a href='https://docs.python.org/release/3.12.10/whatsnew/changelog.html#python-3-12-10'>Full Changelog />
+Files
+macOS
+[4] (175,391)<a class='button' href='https://www.python.org/ftp/python/3.12.10/python-3.12.10-macos11.pkg'>Download macOS 64-bit universal2 installer />
+Windows
+[5] (500,372)<a class='button' href='https://www.python.org/downloads/latest/pymanager/'>Download Python install manager />
+Source release
+[6] (825,372)<a class='button' href='https://www.python.org/ftp/python/3.12.10/Python-3.12.10.tar.xz'>Download XZ compressed source tarball />
+Version
+Operating system
+Description
+File size
+[7] (631,536)<a href='https://www.python.org/download/sigstore/'>Sigstore />
+[8] (692,536)<a href='https://www.python.org/download/sbom/'>SBOM />
+[9] (739,536)<a href='https://www.python.org/downloads/#gpg'>GPG />
+MD5 checksum
+[10] (98,620)<a href='https://www.python.org/ftp/python/3.12.10/Python-3.12.10.tgz'>Gzipped source tarball />
+Source release
+25.9 MB
+[11] (632,620)<a href='https://www.python.org/ftp/python/3.12.10/Python-3.12.10.tgz.sigstore'>.sigstore />
+[12] (690,620)<a href='https://www.python.org/ftp/python/3.12.10/Python-3.12.10.tgz.spdx.json'>SPDX />
+[13] (736,620)<a href='https://www.python.org/ftp/python/3.12.10/Python-3.12.10.tgz.asc'>SIG />
+35c03f014408e26e
+2b06d576c19cac54
+[14] (119,696)<a href='https://www.python.org/ftp/python/3.12.10/Python-3.12.10.tar.xz'>XZ compressed source tarball />
+Source release
+19.6 MB
+[15] (632,696)<a href='https://www.python.org/ftp/python/3.12.10/Python-3.12.10.tar.xz.sigstore'>.sigstore />
+[16] (690,696)<a href='https://www.python.org/ftp/python/3.12.10/Python-3.12.10.tar.xz.spdx.json'>SPDX />
+[17] (736,696)<a href='https://www.python.org/ftp/python/3.12.10/Python-3.12.10.tar.xz.asc'>SIG />
+0c0a6cce86d7611a
+ed691d61e0599de0
+[18] (130,771)<a href='https://www.python.org/ftp/python/3.12.10/python-3.12.10-macos11.pkg'>macOS 64-bit universal2 installer />
+macOS
+for macOS 10.13 and later
+43.6 MB
+[19] (632,771)<a href='https://www.python.org/ftp/python/3.12.10/python-3.12.10-macos11.pkg.sigstore'>.sigstore />
+[20] (736,771)<a href='https://www.python.org/ftp/python/3.12.10/python-3.12.10-macos11.pkg.asc'>SIG />
+8f4989592c9412e5
+1fcad70273442c22
+[21] (108,855)<a href='https://www.python.org/ftp/python/3.12.10/python-3.12.10-amd64.exe'>Windows installer (64-bit) />
+Windows
+Recommended
+25.7 MB
+[22] (632,855)<a href='https://www.python.org/ftp/python/3.12.10/python-3.12.10-amd64.exe.sigstore'>.sigstore />
+[23] (690,855)<a href='https://www.python.org/ftp/python/3.12.10/python-3.12.10-amd64.exe.spdx.json'>SPDX />
+[24] (736,855)<a href='https://www.python.org/ftp/python/3.12.10/python-3.12.10-amd64.exe.asc'>SIG />
+5eddb0b6f12c8527
+25de071ae681dde4
+[25] (108,930)<a href='https://www.python.org/ftp/python/3.12.10/python-3.12.10.exe'>Windows installer (32-bit) />
+Windows
+24.5 MB
+[26] (632,930)<a href='https://www.python.org/ftp/python/3.12.10/python-3.12.10.exe.sigstore'>.sigstore />
+[27] (690,930)<a href='https://www.python.org/ftp/python/3.12.10/python-3.12.10.exe.spdx.json'>SPDX />
+[28] (736,930)<a href='https://www.python.org/ftp/python/3.12.10/python-3.12.10.exe.asc'>SIG />
+ff3e7e2582811ade
+44916d9c3d2a64b2
+Windows installer (ARM64)
+Windows
+Experimental
+25.0 MB
+.sigstore
+SPDX
+SIG
+37df52717faa6c51
+
+</current_dom>

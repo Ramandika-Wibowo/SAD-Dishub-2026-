@@ -1,0 +1,53 @@
+Skip to content
+[0] (82,31)<a class='current_branch selected' href='/' title='The Python Programming Language'>Python />
+[1] (246,31)<a href='https://www.python.org/psf/' title='The Python Software Foundation'>PSF />
+[2] (411,31)<a href='https://docs.python.org' title='Python Documentation'>Docs />
+[3] (575,31)<a href='https://pypi.org/' title='Python Package Index'>PyPI />
+[4] (739,31)<a href='/jobs/' title='Python Job Board'>Jobs />
+[5] (903,31)<a href='/community/'>Community />
+[6] (155,138)<a href='/' />
+	[7] (155,138)<img  />
+[8] (507,144)<a class='donate-button' href='https://donate.python.org/'>Donate />
+[9] (715,145)<fieldset >Search This Site />
+	Search This Site
+	[10] (710,142)<input class='search-field' id='id-search-field' placeholder='Search' />
+	[11] (851,141)<button class='search-button' id='submit' title='Submit this Search'>GO />
+[12] (925,145)<li  />
+	[13] (925,145)<a class='action-trigger' href='#'>Socialize />
+[14] (120,248)<li  />
+	[15] (119,248)<a href='/about/'>About />
+[16] (227,248)<li  />
+	[17] (227,248)<a class=' selected' href='/downloads/'>Downloads />
+[18] (370,248)<li  />
+	[19] (370,248)<a href='/doc/'>Documentation />
+[20] (515,248)<li  />
+	[21] (515,248)<a href='/community/'>Community />
+[22] (659,248)<li  />
+	[23] (659,248)<a href='/success-stories/' title='success-stories'>Success Stories />
+[24] (779,248)<li  />
+	[25] (779,248)<a href='/blogs/' title='News from around the Python world'>News />
+[26] (868,248)<li  />
+	[27] (868,248)<a href='/events/'>Events />
+Download the latest version for Windows
+[28] (153,411)<a class='button' href='https://www.python.org/ftp/python/pymanager/python-manager-26.1.msix'>Download Python install manager />
+Or get the standalone installer for
+[29] (294,464)<a href='https://www.python.org/ftp/python/3.14.4/python-3.14.4-amd64.exe'>Python 3.14.4 />
+Looking for Python with a different OS? Python for
+[30] (386,498)<a href='/downloads/windows/'>Windows />
+,
+[31] (457,498)<a href='/downloads/source/'>Linux/Unix />
+,
+[32] (54,533)<a href='/downloads/macos/'>macOS />
+,
+[33] (110,533)<a href='/downloads/android/'>Android />
+,
+[34] (160,533)<a href='/download/other/'>other />
+Want to help test development versions of Python 3.15?
+[35] (431,575)<a href='/downloads/latest/prerelease/'>Pre-releases />
+,
+[36] (78,609)<a href='https://gitlab.com/python-devs/ci-images'>Docker images />
+LAST CHANCE FOR PYCON US HOTELS! Final deadline to reserve a room in the conference block is Thursday April 30th.
+[37] (478,830)<a class='button button--dark button--small button--primary' href='https://us.pycon.org/2026/accounts/dashboard/'>BOOK YOUR HOTEL NOW />
+Active Python releases
+[38] (223,950)<a href='https://devguide.python.org/versions/#versions'>For more information visit the Python Developer's Guide />
+.

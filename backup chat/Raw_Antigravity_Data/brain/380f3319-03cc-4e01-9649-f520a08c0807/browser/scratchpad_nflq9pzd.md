@@ -1,0 +1,12 @@
+# Scratchpad
+
+## Task Checklist
+- [/] Open http://localhost:3001/dashboard (or http://localhost:3000/dashboard) - Redirects to /login
+- [ ] Take a full-page screenshot
+- [ ] Analyze the layout, elements, issues, and any error messages
+- [ ] Update scratchpad with findings
+- [ ] Report back to the user
+
+## Findings
+- Accessing `http://localhost:3001/dashboard` or `http://localhost:3000/dashboard` redirects to `/login`.
+- Need to log in or register.

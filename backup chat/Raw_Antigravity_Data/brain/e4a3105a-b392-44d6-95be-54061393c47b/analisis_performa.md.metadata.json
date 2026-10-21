@@ -1,0 +1,5 @@
+{
+  "artifactType":  "ARTIFACT_TYPE_OTHER",
+  "summary":  "Laporan analisis performa aplikasi E-Internship Dishub. Mengidentifikasi 7 penyebab kelambatan utama yang menyebabkan response time ~10 detik (target SRS < 3 detik), beserta solusi dan estimasi dampak masing-masing.",
+  "updatedAt":  "2026-06-09T07:32:16.339055800Z"
+}

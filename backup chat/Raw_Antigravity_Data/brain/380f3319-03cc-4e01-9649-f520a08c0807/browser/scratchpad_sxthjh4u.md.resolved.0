@@ -1,0 +1,6 @@
+# Task: Navigate to http://localhost:3001/login and take a screenshot
+
+## Checklist
+- [ ] Navigate to http://localhost:3001/login <!-- id: 0 -->
+- [ ] Take screenshot of the page and save it <!-- id: 1 -->
+- [ ] Verify screenshot file is saved and find its path <!-- id: 2 -->

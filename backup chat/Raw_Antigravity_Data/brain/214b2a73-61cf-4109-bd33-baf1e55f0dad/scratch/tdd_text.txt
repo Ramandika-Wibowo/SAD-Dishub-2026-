@@ -1,0 +1,197 @@
+Technical Design Document — GEMATI
+GEMATI
+Gerakan Mangunharjo Anti Stunting
+Technical Design Document (TDD) / Software Architecture Document (SAD)
+Versi Dokumen
+1.0
+Penulis
+Muhammad Ilham Nurcahyo, Ramandika Arya Wibowo
+Program Studi
+Sistem Informasi, Fakultas Sains dan Teknologi, UIN Sunan Ampel Surabaya
+Dokumen Terkait
+Product Requirements Document (PRD) GEMATI; Software Requirements Specification (SRS) GEMATI
+Riwayat Revisi
+Versi
+Tanggal
+Penanggung Jawab
+Catatan Revisi
+1.0
+—
+—
+Penyusunan awal TDD/SAD; memuat tech stack, ERD, dan diagram desain yang sebelumnya berada di SRS.
+1. Pendahuluan
+1.1 Tujuan Dokumen
+Dokumen ini menjelaskan rancangan teknis dan arsitektur perangkat lunak sistem GEMATI (Gerakan Mangunharjo Anti Stunting), mencakup pemilihan teknologi, struktur basis data, serta diagram desain (Use Case, Activity, Sequence, Class, Deployment, dan Data Flow Diagram). Dokumen ini menjadi acuan teknis bagi tim pengembang dalam membangun sistem sesuai kebutuhan yang telah didefinisikan pada PRD dan SRS.
+1.2 Lingkup Dokumen
+TDD ini melengkapi Product Requirements Document (PRD) yang memuat tujuan bisnis dan kebutuhan pengguna, serta Software Requirements Specification (SRS) yang memuat kebutuhan fungsional dan non-fungsional, dengan detail implementasi: bagaimana sistem dibangun, struktur datanya, dan bagaimana komponen-komponennya saling berinteraksi.
+1.3 Referensi
+Product Requirements Document (PRD) GEMATI.
+Software Requirements Specification (SRS) GEMATI — REQ-F-01 s.d. REQ-F-17, REQ-NF-01 s.d. REQ-NF-12.
+2. Arsitektur Sistem
+GEMATI menggunakan arsitektur client-server dengan API terpisah (decoupled architecture), yang memisahkan secara jelas antara antarmuka pengguna (frontend) dan logika bisnis (backend):
+[ Next.js / React Frontend ]  ⇄  (REST API · HTTPS/JSON)  ⇄  [ Django Backend ]  ⇄  [ PostgreSQL Database (lokal) ]
+Frontend (Next.js/React) menangani seluruh tampilan antarmuka pengguna (dasbor, formulir input, portal edukasi publik) dan berkomunikasi ke backend melalui REST API.
+Backend (Django + Django REST Framework) menangani business logic: autentikasi & otorisasi berbasis role, kalkulasi Z-Score otomatis, deteksi early warning, dan endpoint API untuk seluruh operasi CRUD.
+Database (PostgreSQL, di-hosting secara lokal pada lingkungan pengembangan) menyimpan seluruh data persisten: pengguna, balita, data antropometri, riwayat Z-Score, dan log intervensi PMT.
+Pemisahan frontend dan backend ini memudahkan pengembangan paralel oleh tim sesuai pembagian peran proyek, dan memungkinkan API yang sama dikonsumsi oleh klien lain di masa depan (misalnya aplikasi mobile) tanpa mengubah backend.
+3. Tech Stack
+Layer
+Teknologi
+Keterangan
+Frontend
+Next.js (React)
+SSR/CSR hybrid, konsumsi REST API
+Backend
+Django + Django REST Framework (DRF)
+REST API, ORM, Auth
+Database
+PostgreSQL (lokal)
+Diakses melalui Django ORM
+Autentikasi
+Django Auth (role-based: Kader, Bidan/Perangkat Desa)
+Sesuai REQ-F-01, REQ-F-03
+Komunikasi
+HTTP/HTTPS, format JSON
+Sesuai SRS §3.4
+Environment Pengembangan
+Local development (localhost)
+Frontend & backend dijalankan di lingkungan lokal untuk tahap pengembangan dan pengujian
+Deployment Produksi
+Belum ditentukan
+Akan direncanakan pada fase selanjutnya — lihat catatan di bawah
+Catatan deployment: Pada tahap pengembangan KKN ini, sistem dijalankan dan diuji di lingkungan lokal (local development server). Strategi hosting/deployment ke server produksi (VPS, cloud, atau infrastruktur kampus) akan ditentukan kemudian dan didokumentasikan sebagai pembaruan pada bagian ini. Spesifikasi minimal server mengacu pada SRS §2.4 (RAM minimal 1 GB, penyimpanan 10 GB) sebagai baseline ketika deployment sudah direncanakan.
+3.1 Struktur Direktori Proyek
+Proyek GEMATI menggunakan struktur monorepo, yaitu frontend dan backend disimpan dalam satu repository yang sama namun pada folder terpisah. Pendekatan ini dipilih karena ukuran tim yang kecil (dua anggota) sehingga memudahkan koordinasi dan menjaga keselarasan versi antara frontend dan backend dalam satu riwayat commit.
+Pada sisi backend, struktur aplikasi Django dipecah per modul/fitur (app-based), mengikuti pengelompokan kebutuhan fungsional yang telah didefinisikan pada SRS (Autentikasi, Data Posyandu, Data Balita, Input Antropometri, Kalkulasi Z-Score, Peringatan Dini, Log PMT, dan Pelaporan).
+gemati/
+├── frontend/                  # Aplikasi Next.js (React)
+│   ├── app/                   # App router (halaman & layout)
+│   ├── components/            # Komponen UI yang dapat digunakan ulang
+│   ├── lib/                   # API client, fungsi utilitas
+│   ├── public/                # Aset statis
+│   ├── package.json
+│   └── next.config.js
+│
+├── backend/                   # Aplikasi Django
+│   ├── config/                # settings.py, urls.py, wsgi.py
+│   ├── apps/
+│   │   ├── users/             # Autentikasi & role (REQ-F-01, -03)
+│   │   ├── posyandu/          # Data posyandu
+│   │   ├── balita/            # Data identitas balita
+│   │   ├── antropometri/      # Input data antropometri
+│   │   ├── zscore/            # Kalkulasi & log Z-Score
+│   │   ├── early_warning/     # Deteksi & log peringatan dini
+│   │   ├── pmt/               # Log intervensi PMT
+│   │   └── reports/           # Pelaporan & ekspor data
+│   ├── manage.py
+│   └── requirements.txt
+│
+├── docs/                      # Dokumen proyek (PRD, SRS, TDD)
+└── README.md
+Setiap app pada folder apps/ memiliki struktur internal standar Django, yaitu models.py (definisi struktur data), serializers.py (transformasi data ke/dari format JSON menggunakan Django REST Framework), views.py (logika request-response/endpoint API), dan urls.py (routing endpoint untuk app tersebut).
+4. Entity Relationship Diagram (ERD)
+ERD berikut menggambarkan struktur basis data PostgreSQL yang digunakan oleh sistem GEMATI, mencakup entitas pengguna, posyandu, balita, data antropometri, hasil kalkulasi Z-Score, peringatan dini, dan log intervensi PMT.
+Catatan desain: relasi DATA_ANTROPOMETRI ke ZSCORE_LOG bersifat satu-ke-banyak (1-to-many) — satu baris input antropometri (berat badan & tinggi badan) menghasilkan tiga baris pada ZSCORE_LOG, masing-masing untuk indikator BB/U (berat badan menurut umur), TB/U (tinggi badan menurut umur), dan BB/TB (berat badan menurut tinggi badan).
+4.1 Deskripsi Entitas
+Entitas
+Deskripsi
+USER
+Pengguna sistem dengan role tertentu (kader posyandu, bidan desa/perangkat desa). Menjadi aktor yang menginput data antropometri dan mencatat log intervensi PMT.
+POSYANDU
+Mewakili 8 posyandu di Desa Mangunharjo yang menaungi data balita.
+BALITA
+Data identitas anak balita yang dipantau pertumbuhannya, terhubung ke posyandu asal.
+DATA_ANTROPOMETRI
+Catatan hasil pengukuran berat badan dan tinggi badan balita pada satu waktu input tertentu.
+ZSCORE_LOG
+Hasil kalkulasi otomatis Z-Score dari satu data antropometri, untuk tiga indikator (BB/U, TB/U, BB/TB) beserta kategori status gizinya.
+EARLY_WARNING
+Catatan peringatan dini yang dihasilkan sistem ketika terdeteksi tren stagnasi atau penurunan status gizi balita.
+PMT_LOG
+Catatan riwayat pemberian makanan tambahan (PMT) atau intervensi gizi lain terhadap balita, termasuk perbandingan Z-Score sebelum dan sesudah intervensi.
+5. Use Case Diagram
+Use Case Diagram berikut menggambarkan interaksi antara aktor pengguna sistem (Kader Posyandu, Bidan Desa/Perangkat Desa, dan Masyarakat) dengan fungsi-fungsi utama yang disediakan oleh sistem GEMATI. Relasi <<include>> digunakan untuk menunjukkan use case yang secara otomatis dijalankan sebagai bagian dari use case lain.
+5.1 Daftar Aktor
+Aktor
+Deskripsi
+Kader Posyandu
+Petugas lapangan yang melakukan pencatatan data antropometri balita di tingkat posyandu.
+Bidan Desa / Perangkat Desa
+Pengguna dengan akses lebih luas untuk pemantauan, verifikasi data, pengelolaan akun kader, dan pelaporan tingkat desa.
+Masyarakat
+Pengunjung publik yang mengakses informasi edukasi dan statistik stunting tanpa perlu login.
+5.2 Daftar Use Case
+Kode
+Nama Use Case
+Aktor
+Deskripsi
+UC-01
+Manajemen Autentikasi
+Kader Posyandu
+Proses login dan pengelolaan sesi akun pengguna kader.
+UC-02
+Input Data Antropometri
+Kader Posyandu
+Mencatat hasil pengukuran berat badan, tinggi badan, dan lingkar kepala balita. Meng-include UC-03.
+UC-03
+Hitung Status Gizi
+Sistem (include dari UC-02)
+Kalkulasi otomatis Z-Score (BB/U, TB/U, BB/TB) dan penentuan kategori status gizi berdasarkan data antropometri yang diinput. Meng-include UC-04.
+UC-04
+Analisis Risiko Stunting
+Sistem (include dari UC-03)
+Evaluasi otomatis terhadap hasil status gizi untuk mendeteksi indikasi risiko stunting pada balita.
+UC-05
+Lihat Riwayat Pertumbuhan Balita
+Kader Posyandu
+Menampilkan grafik dan riwayat hasil pengukuran serta status gizi balita dari waktu ke waktu.
+UC-06
+Lihat Dashboard Pemantauan
+Bidan Desa/Perangkat Desa
+Menampilkan ringkasan dan visualisasi data stunting di seluruh posyandu desa.
+UC-07
+Kelola Data Posyandu
+Bidan Desa/Perangkat Desa
+Menambah, mengubah, atau menonaktifkan data posyandu yang berada di bawah desa.
+UC-08
+Verifikasi Data Balita
+Bidan Desa/Perangkat Desa
+Memeriksa dan mengoreksi data balita maupun data antropometri yang telah diinput oleh kader.
+UC-09
+Catat Intervensi PMT
+Bidan Desa/Perangkat Desa
+Mencatat pemberian makanan tambahan (PMT) atau intervensi gizi lain terhadap balita.
+UC-10
+Kelola Akun Kader
+Bidan Desa/Perangkat Desa
+Menambah, menonaktifkan, atau mengatur ulang akses akun kader posyandu.
+UC-11
+Ekspor Laporan
+Bidan Desa/Perangkat Desa
+Menghasilkan dan mengunduh laporan rekapitulasi data stunting dalam format tertentu.
+UC-12
+Akses Portal Edukasi
+Masyarakat
+Mengakses konten edukasi seputar pencegahan dan penanganan stunting. Meng-include UC-13.
+UC-13
+Lihat Statistik Stunting Desa
+Sistem (include dari UC-12)
+Menampilkan statistik agregat stunting desa secara publik tanpa menampilkan data balita individu.
+6. Activity Diagram
+Activity Diagram berikut menggambarkan alur kerja (workflow) sistem GEMATI untuk masing-masing kelompok aktor, mencakup urutan aktivitas, titik percabangan keputusan, dan perulangan proses.
+6.1 Activity Diagram — Kader Posyandu
+Diagram ini menggambarkan alur kerja Kader Posyandu mulai dari login, input data antropometri, hingga proses otomatis kalkulasi status gizi (UC-03) dan analisis risiko stunting (UC-04) yang dilanjutkan dengan penyimpanan data. Apabila hasil koreksi data dinyatakan tidak valid, alur diarahkan ke proses verifikasi/koreksi data balita (UC-08); apabila valid, Kader dapat melihat riwayat pertumbuhan balita (UC-05).
+6.2 Activity Diagram — Bidan Desa / Perangkat Desa
+Diagram ini menggambarkan alur kerja Bidan Desa/Perangkat Desa mulai dari login, melihat dashboard pemantauan, hingga analisis risiko stunting yang menentukan apakah diperlukan intervensi PMT (UC-09) atau tidak. Bidan juga memiliki akses untuk mengelola data posyandu (UC-07), mengelola akun kader (UC-10), dan mengekspor laporan (UC-11).
+6.3 Activity Diagram — Masyarakat
+Diagram ini menggambarkan alur akses publik tanpa login, yaitu mengakses portal edukasi (UC-12), melihat statistik stunting desa (UC-13), dan membaca materi edukasi seputar stunting, gizi, dan sanitasi.
+7. Sequence Diagram
+Sequence Diagram berikut menggambarkan interaksi antar objek (boundary, control, entity, dan database) dalam menjalankan skenario utama sistem GEMATI, mengikuti pola arsitektur Boundary-Control-Entity (BCE).
+7.1 SD-01 — Login
+Diagram ini menggambarkan proses autentikasi pengguna (Kader atau Bidan Desa), mulai dari akses halaman login, validasi kredensial oleh Auth Controller terhadap data pada tabel USER, hingga dua kemungkinan hasil: login berhasil (diarahkan ke dashboard) atau login gagal (ditampilkan pesan kesalahan).
+7.2 SD-02 — Input Data Antropometri, Hitung Status Gizi, dan Analisis Risiko Stunting
+Diagram ini menggambarkan alur Kader Posyandu menginput data antropometri balita, yang kemudian diproses oleh Antropometri Controller: validasi data, penyimpanan ke basis data, kalkulasi status gizi (BB/U, TB/U, BB/TB), dan analisis risiko stunting. Hasil status gizi dan risiko stunting ditampilkan kembali kepada Kader. Apabila data tidak valid, sistem menampilkan pesan kesalahan/validasi tanpa menyimpan data.
+7.3 SD-03 — Dashboard Pemantauan, Verifikasi Data, dan Catat Intervensi PMT
+Diagram ini menggambarkan alur Bidan Desa/Perangkat Desa membuka dashboard pemantauan yang menampilkan data balita beserta hasil analisis risiko. Terdapat dua titik percabangan: pertama, apakah data balita perlu dikoreksi atau sudah benar; kedua, apakah balita berisiko stunting sehingga memerlukan pencatatan intervensi PMT (UC-09) atau tidak.
+7.4 SD-04 — Portal Edukasi dan Statistik Stunting
+Diagram ini menggambarkan alur Masyarakat/pengunjung mengakses portal edukasi tanpa memerlukan login. Pengunjung dapat melihat konten edukasi umum, dan secara opsional memilih menu statistik stunting desa untuk melihat data agregat secara publik.

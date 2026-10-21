@@ -1,0 +1,103 @@
+<current_dom_explanation>
+This is a temporary snapshot of the current page's DOM structure. The DOM will change if you navigate to or interact with another page. Use a tool like browser_get_dom to capture and preserve the DOM in your trajectory if needed for later reference.
+</current_dom_explanation>
+<current_dom>
+Download
+[0] (252,8)<a href='https://www.python.org/ftp/python/3.13.10/python-3.13.10-embed-arm64.zip'>Windows embeddable package (ARM64) />
+Download
+[1] (210,47)<a href='https://www.python.org/ftp/python/3.13.10/windows-3.13.10.json'>Windows release manifest />
+[2] (130,85)<a href='/downloads/release/python-3139/'>Python 3.13.9 - Oct. 14, 2025 />
+Note that Python 3.13.9
+cannot
+be used on Windows 7 or earlier.
+Download
+[3] (208,181)<a href='https://www.python.org/ftp/python/3.13.9/python-3.13.9-amd64.exe'>Windows installer (64-bit) />
+Download
+[4] (208,220)<a href='https://www.python.org/ftp/python/3.13.9/python-3.13.9.exe'>Windows installer (32-bit) />
+Download
+[5] (211,258)<a href='https://www.python.org/ftp/python/3.13.9/python-3.13.9-arm64.exe'>Windows installer (ARM64) />
+Download
+[6] (249,296)<a href='https://www.python.org/ftp/python/3.13.9/python-3.13.9-embed-amd64.zip'>Windows embeddable package (64-bit) />
+Download
+[7] (249,334)<a href='https://www.python.org/ftp/python/3.13.9/python-3.13.9-embed-win32.zip'>Windows embeddable package (32-bit) />
+Download
+[8] (252,372)<a href='https://www.python.org/ftp/python/3.13.9/python-3.13.9-embed-arm64.zip'>Windows embeddable package (ARM64) />
+Download
+[9] (210,411)<a href='https://www.python.org/ftp/python/3.13.9/windows-3.13.9.json'>Windows release manifest />
+[10] (169,449)<a href='/downloads/release/pymanager-250/'>Python install manager 25.0 - Oct. 8, 2025 />
+Download
+[11] (176,487)<a href='https://www.python.org/ftp/python/pymanager/python-manager-25.0.msix'>Installer (MSIX) />
+Download
+[12] (169,525)<a href='https://www.python.org/ftp/python/pymanager/python-manager-25.0.msi'>MSI package />
+[13] (126,563)<a href='/downloads/release/python-3140/'>Python 3.14.0 - Oct. 7, 2025 />
+Download using the
+[14] (238,600)<a href='/downloads/release/pymanager-261/'>Python install manager />
+.
+Download
+[15] (208,660)<a href='https://www.python.org/ftp/python/3.14.0/python-3.14.0-amd64.exe'>Windows installer (64-bit) />
+Download
+[16] (208,698)<a href='https://www.python.org/ftp/python/3.14.0/python-3.14.0.exe'>Windows installer (32-bit) />
+Download
+[17] (211,736)<a href='https://www.python.org/ftp/python/3.14.0/python-3.14.0-arm64.exe'>Windows installer (ARM64) />
+Download
+[18] (249,775)<a href='https://www.python.org/ftp/python/3.14.0/python-3.14.0-embed-amd64.zip'>Windows embeddable package (64-bit) />
+Download
+[19] (249,813)<a href='https://www.python.org/ftp/python/3.14.0/python-3.14.0-embed-win32.zip'>Windows embeddable package (32-bit) />
+Download
+[20] (252,851)<a href='https://www.python.org/ftp/python/3.14.0/python-3.14.0-embed-arm64.zip'>Windows embeddable package (ARM64) />
+Download
+[21] (210,889)<a href='https://www.python.org/ftp/python/3.14.0/windows-3.14.0.json'>Windows release manifest />
+[22] (126,927)<a href='/downloads/release/python-3138/'>Python 3.13.8 - Oct. 7, 2025 />
+Note that Python 3.13.8
+cannot
+be used on Windows 7 or earlier.
+Download
+[23] (701,-1)<a href='https://www.python.org/ftp/python/3.14.0/windows-3.14.0rc3.json'>Windows release manifest />
+[24] (689,38)<a href='/downloads/release/pymanager-250b14/'>Python install manager 25.0 beta 14 - Aug. 27, 2025 />
+Download
+[25] (668,76)<a href='https://www.python.org/ftp/python/pymanager/python-manager-25.0b14.msix'>Installer (MSIX) />
+Download
+[26] (660,114)<a href='https://www.python.org/ftp/python/pymanager/python-manager-25.0b14.msi'>MSI package />
+[27] (689,152)<a href='/downloads/release/pymanager-250b13/'>Python install manager 25.0 beta 13 - Aug. 14, 2025 />
+Download
+[28] (668,190)<a href='https://www.python.org/ftp/python/pymanager/python-manager-25.0b13.msix'>Installer (MSIX) />
+Download
+[29] (660,229)<a href='https://www.python.org/ftp/python/pymanager/python-manager-25.0b13.msi'>MSI package />
+[30] (631,267)<a href='/downloads/release/python-3140rc2/'>Python 3.14.0rc2 - Aug. 14, 2025 />
+Download
+[31] (700,305)<a href='https://www.python.org/ftp/python/3.14.0/python-3.14.0rc2-amd64.exe'>Windows installer (64-bit) />
+Download
+[32] (700,343)<a href='https://www.python.org/ftp/python/3.14.0/python-3.14.0rc2.exe'>Windows installer (32-bit) />
+Download
+[33] (703,381)<a href='https://www.python.org/ftp/python/3.14.0/python-3.14.0rc2-arm64.exe'>Windows installer (ARM64) />
+Download
+[34] (740,420)<a href='https://www.python.org/ftp/python/3.14.0/python-3.14.0rc2-embed-amd64.zip'>Windows embeddable package (64-bit) />
+Download
+[35] (740,458)<a href='https://www.python.org/ftp/python/3.14.0/python-3.14.0rc2-embed-win32.zip'>Windows embeddable package (32-bit) />
+Download
+[36] (743,496)<a href='https://www.python.org/ftp/python/3.14.0/python-3.14.0rc2-embed-arm64.zip'>Windows embeddable package (ARM64) />
+Download
+[37] (701,534)<a href='https://www.python.org/ftp/python/3.14.0/windows-3.14.0rc2.json'>Windows release manifest />
+[38] (688,572)<a href='/downloads/release/pymanager-250b12/'>Python install manager 25.0 beta 12 - July 22, 2025 />
+Download
+[39] (668,611)<a href='https://www.python.org/ftp/python/pymanager/python-manager-25.0b12.msix'>Installer (MSIX) />
+Download
+[40] (660,649)<a href='https://www.python.org/ftp/python/pymanager/python-manager-25.0b12.msi'>MSI package />
+[41] (631,687)<a href='/downloads/release/python-3140rc1/'>Python 3.14.0rc1 - July 22, 2025 />
+Download
+[42] (700,725)<a href='https://www.python.org/ftp/python/3.14.0/python-3.14.0rc1-amd64.exe'>Windows installer (64-bit) />
+Download
+[43] (700,763)<a href='https://www.python.org/ftp/python/3.14.0/python-3.14.0rc1.exe'>Windows installer (32-bit) />
+Download
+[44] (703,802)<a href='https://www.python.org/ftp/python/3.14.0/python-3.14.0rc1-arm64.exe'>Windows installer (ARM64) />
+Download
+[45] (740,840)<a href='https://www.python.org/ftp/python/3.14.0/python-3.14.0rc1-embed-amd64.zip'>Windows embeddable package (64-bit) />
+Download
+[46] (740,878)<a href='https://www.python.org/ftp/python/3.14.0/python-3.14.0rc1-embed-win32.zip'>Windows embeddable package (32-bit) />
+Download
+[47] (743,916)<a href='https://www.python.org/ftp/python/3.14.0/python-3.14.0rc1-embed-arm64.zip'>Windows embeddable package (ARM64) />
+Download
+[48] (701,954)<a href='https://www.python.org/ftp/python/3.14.0/windows-3.14.0rc1.json'>Windows release manifest />
+[49] (626,993)<a href='/downloads/release/python-3140b4/'>Python 3.14.0b4 - July 8, 2025 />
+
+</current_dom>

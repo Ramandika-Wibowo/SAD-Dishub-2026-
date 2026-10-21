@@ -1,0 +1,320 @@
+# Sistematika Penulisan Artikel
+## Judul: "Implementasi Website GEMATI Sebagai Decision Support System Stunting di Posyandu Mangunharjo"
+### Jurnal Target: Abdimas (Pengabdian Masyarakat) — Format Template Abdimas
+---
+
+> [!IMPORTANT]
+> **STATUS: SIAP TULIS — MENUNGGU LAMPU HIJAU ✅**
+> Semua pertanyaan kritis sudah terjawab. Sistematika ini adalah rencana final penulisan.
+
+> [!NOTE]
+> **Update terakhir:** Semua jawaban penulis sudah terintegrasi. Penulisan artikel penuh BELUM dimulai.
+
+---
+
+## Informasi Umum Artikel
+
+| Item | Keterangan |
+|------|-----------|
+| **Jenis Artikel** | Pengabdian Masyarakat (Abdimas) |
+| **Judul** | Implementasi Website GEMATI Sebagai Decision Support System Stunting di Posyandu Mangunharjo |
+| **Format Kutipan** | IEEE Style: [1], [2], [3], dst. |
+| **Panjang Target** | 7–12 halaman A4 (sesuai template) |
+| **Font** | Times New Roman 11pt |
+| **Spasi** | 1, rata kanan-kiri |
+| **Margin** | Atas 2.54cm, Bawah 2.54cm, Kiri 3.17cm, Kanan 3.17cm |
+
+---
+
+## Struktur Artikel (Sesuai Template Abdimas)
+
+### BAGIAN PEMBUKA
+
+**Judul** *(maks. 12 kata, Bhs. Indonesia, TNR 18pt)*
+> Implementasi Website GEMATI Sebagai Decision Support System Stunting di Posyandu Mangunharjo
+
+**Penulis & Afiliasi**
+> [Nama Penulis — akan diisi kemudian]*
+> Program Studi Sistem Informasi, UIN Sunan Ampel Surabaya, Indonesia
+
+---
+
+### ABSTRAK *(maks. 200 kata, cetak miring)*
+
+Abstrak akan mencakup 5 elemen wajib template:
+1. **Masalah mitra** → prevalensi stunting 11,7% (31 balita), pencatatan manual 8 posyandu
+2. **Alasan topik** → urgensi digitalisasi posyandu dalam percepatan penurunan stunting nasional
+3. **Tujuan pengabdian** → membangun & mengimplementasikan GEMATI sebagai DSS
+4. **Metode** → pengembangan sistem berbasis web dengan SDLC + pendampingan kader
+5. **Ringkasan hasil** → peningkatan efisiensi pelaporan, akurasi Z-Score otomatis, early warning
+
+**Kata Kunci:** Decision Support System, Stunting, Posyandu, Z-Score, Website, Mangunharjo
+
+---
+
+## 1. PENDAHULUAN *(5–7 paragraf)*
+
+| Sub-bagian | Isi | Kutipan |
+|---|---|---|
+| **1.1 Latar belakang umum** | Definisi stunting, dampak jangka panjang, prevalensi nasional 19,8% (2024) | [2], [3] |
+| **1.2 Isu terkait mitra** | Data spesifik Desa Mangunharjo: 11,7%, 31 balita stunting per Feb 2026, pencatatan manual via WhatsApp→Excel, 8 posyandu | (Data primer PRD) |
+| **1.3 Penelitian/Pengabdian terdahulu (bagian 1)** | DSS untuk status gizi dengan Fuzzy Logic, Z-Score di posyandu | [1], [4] |
+| **1.4 Penelitian/Pengabdian terdahulu (bagian 2)** | Sistem informasi posyandu berbasis web, monitoring gizi online | [9], [11], [12], [15], [16], [17] |
+| **1.5 Penelitian/Pengabdian terdahulu (bagian 3)** | Pemberdayaan digital posyandu & kader, e-health di komunitas | [5], [6], [7], [8] |
+| **1.6 Solusi yang ditawarkan** | GEMATI: web DSS dengan kalkulasi Z-Score otomatis, dashboard visualisasi 8 posyandu, early warning, log PMT | [13], [14] |
+| **1.7 Tujuan pengabdian** | Mengimplementasikan GEMATI, melatih kader, meningkatkan kecepatan & akurasi keputusan intervensi stunting | — |
+
+---
+
+## 2. METODE *(format bagan/tabel wajib)*
+
+### 2.1 Metode Pelaksanaan
+
+Tabel penjelasan tahapan pengabdian:
+
+| Tahap | Kegiatan | Waktu | Peserta |
+|---|---|---|---|
+| **Pra-kegiatan** | Analisis kebutuhan, wawancara kader, observasi proses pencatatan manual | Juni 2026 (Minggu 1–2) | Tim KKN + Kader |
+| **Pengembangan Sistem** | Desain ERD, UI/UX (Figma), coding (Next.js + Django), testing internal | Juni–Juli 2026 (Minggu 2–5) | Tim KKN |
+| **Sosialisasi** | Presentasi GEMATI kepada perangkat desa dan kader posyandu | Juli 2026 (Minggu 5) | Kader 8 posyandu |
+| **Pelatihan** | Pelatihan input data, penggunaan dashboard, ekspor laporan | Juli 2026 (Minggu 5–6) | 11–15 kader posyandu |
+| **Monitoring & Evaluasi** | Observasi penggunaan, UAT, kuesioner kepuasan | Juli 2026 (Minggu 6) | Semua pengguna |
+
+> Periode KKN: **17 Juni – 24 Juli 2026**, Desa Mangunharjo, Kecamatan Ngawi, Kabupaten Ngawi.
+
+### 2.2 Profil Mitra
+
+- **Nama Mitra:** Posyandu Mangunharjo (8 titik posyandu)
+- **Lokasi:** Desa Mangunharjo, Kecamatan Ngawi, Kabupaten Ngawi, Jawa Timur
+- **Jumlah Peserta:** 11–15 kader posyandu + 1 bidan desa + perangkat desa
+- **Masalah Utama:** Pencatatan manual, tidak ada sistem peringatan dini, pemetaan antar posyandu terbatas
+
+> [!NOTE]
+> Proses analisis kebutuhan sistem menggunakan pendekatan manajemen risiko **ISO 31000:2018** [18] untuk mengidentifikasi, menganalisis, dan memitigasi risiko operasional dalam penanganan data stunting.
+
+### 2.3 Desain Sistem GEMATI
+
+Penjelasan teknis singkat:
+- **Arsitektur:** Client-Server decoupled (Next.js frontend + Django backend + PostgreSQL)
+- **Metode klasifikasi:** Z-Score standar Kemenkes RI (BB/U, TB/U, BB/TB)
+- **Perancangan:** Use Case Diagram, ERD, Activity Diagram, Sequence Diagram, Class Diagram, Deployment Diagram
+
+**📷 [GAMBAR 1: Arsitektur Sistem GEMATI — Deployment Diagram]**
+> *Masukkan gambar Deployment Diagram dari file DeploymentDiagram_GEMATI.xml*
+
+**📷 [GAMBAR 2: Use Case Diagram GEMATI]**
+> *Masukkan gambar Use Case Diagram*
+
+**📷 [GAMBAR 3: ERD (Entity Relationship Diagram) GEMATI]**
+> *Masukkan gambar ERD*
+
+**📋 [TABEL 1: Kebutuhan Fungsional Utama GEMATI]**
+
+| Kode | Fungsi | Prioritas |
+|---|---|---|
+| REQ-F-01 | Login terautentikasi berbasis role | Must Have |
+| REQ-F-06 | Input data antropometri balita | Must Have |
+| REQ-F-08 | Kalkulasi Z-Score otomatis (Kemenkes RI) | Must Have |
+| REQ-F-10 | Dashboard visualisasi statistik antar posyandu | Must Have |
+| REQ-F-12 | Early warning stagnasi pertumbuhan | Should Have |
+| REQ-F-14 | Log intervensi PMT | Should Have |
+| REQ-F-17 | Ekspor laporan PDF/Excel | Should Have |
+
+**📋 [TABEL 2: Tech Stack GEMATI]**
+
+| Layer | Teknologi |
+|---|---|
+| Frontend | Next.js / React |
+| Backend | Django + Django REST Framework |
+| Database | PostgreSQL |
+| Web Server | Nginx (reverse proxy) |
+| Komunikasi | REST API, HTTPS/JSON |
+
+---
+
+## 3. HASIL DAN PEMBAHASAN
+
+### 3.1 Hasil Pengembangan Sistem
+
+Sistem GEMATI telah berhasil dikembangkan dan diimplementasikan dengan tingkat penyelesaian **±90%**, mencakup seluruh fitur inti (Must Have) dan sebagian besar fitur lanjutan (Should Have) sesuai dengan SRS GEMATI. Sistem dibangun menggunakan arsitektur decoupled dengan frontend Next.js/React dan backend Django REST Framework yang berkomunikasi melalui REST API.
+
+Fitur-fitur yang berhasil diimplementasikan:
+
+> [!NOTE]
+> Screenshot sistem akan dimasukkan secara manual oleh penulis pada posisi yang telah ditentukan di bawah ini.
+
+**📷 [GAMBAR 4: Screenshot Halaman Login GEMATI]**
+> *(Tempat screenshot halaman login — masukkan manual)*
+
+**📷 [GAMBAR 5: Screenshot Dashboard Utama — Visualisasi Statistik Stunting 8 Posyandu]**
+> *(Tempat screenshot dashboard dengan grafik perbandingan — masukkan manual)*
+
+**📷 [GAMBAR 6: Screenshot Formulir Input Data Antropometri Balita]**
+> *(Tempat screenshot form input berat badan, tinggi badan, usia — masukkan manual)*
+
+**📷 [GAMBAR 7: Screenshot Hasil Kalkulasi Z-Score dan Status Gizi]**
+> *(Tempat screenshot hasil kalkulasi otomatis Z-Score + klasifikasi — masukkan manual)*
+
+**📷 [GAMBAR 8: Screenshot Halaman Early Warning / Peringatan Dini]**
+> *(Tempat screenshot halaman balita dengan stagnasi pertumbuhan — masukkan manual)*
+
+**📷 [GAMBAR 9: Screenshot Portal Edukasi Publik]**
+> *(Tempat screenshot halaman edukasi publik tanpa login — masukkan manual)*
+
+**📷 [GAMBAR 10: Screenshot Fitur Ekspor Laporan PDF/Excel]**
+> *(Tempat screenshot fitur ekspor — masukkan manual)*
+
+### 3.2 Hasil Pelatihan Kader
+
+- Pelatihan diikuti oleh 11–15 kader dari 8 posyandu di Desa Mangunharjo, Kecamatan Ngawi
+- Peningkatan literasi digital kader sebelum/sesudah pelatihan (pre-test & post-test)
+- Jumlah kader yang berhasil mengoperasikan sistem secara mandiri
+
+> [!WARNING]
+> **Data lapangan belum tersedia.** Tabel 3, 4, dan 5 menggunakan format placeholder. Penulis mengisi angka hasil aktual setelah kegiatan pelatihan dan pengujian dilaksanakan.
+
+**📋 [TABEL 3: Hasil Pre-Test dan Post-Test Kader]**
+
+| Aspek | Pre-Test (%) | Post-Test (%) | Peningkatan (%) |
+|---|---|---|---|
+| Pemahaman stunting & Z-Score | *(isi setelah kegiatan)* | *(isi setelah kegiatan)* | *(isi setelah kegiatan)* |
+| Kemampuan input data digital | *(isi setelah kegiatan)* | *(isi setelah kegiatan)* | *(isi setelah kegiatan)* |
+| Kemampuan membaca dashboard | *(isi setelah kegiatan)* | *(isi setelah kegiatan)* | *(isi setelah kegiatan)* |
+
+### 3.3 Hasil Pengujian Sistem (UAT / Black Box)
+
+- Hasil Black Box Testing (semua fungsi berhasil/tidak)
+- Hasil User Acceptance Test (UAT) dengan skor skala Likert dari kader
+
+**📋 [TABEL 4: Hasil Black Box Testing]**
+
+| No | Fungsi yang Diuji | Skenario | Status |
+|---|---|---|---|
+| 1 | Login dengan kredensial valid | Masuk ke dashboard sesuai role | *(isi hasil uji)* |
+| 2 | Input data antropometri balita | Data tersimpan, Z-Score terhitung otomatis | *(isi hasil uji)* |
+| 3 | Kalkulasi Z-Score (BB/U, TB/U, BB/TB) | Hasil sesuai standar Permenkes No.2/2020 [14] | *(isi hasil uji)* |
+| 4 | Early warning stagnasi pertumbuhan | Label darurat muncul otomatis | *(isi hasil uji)* |
+| 5 | Log intervensi PMT | Data PMT tersimpan & terhubung ke balita | *(isi hasil uji)* |
+| 6 | Ekspor laporan PDF/Excel | File berhasil diunduh | *(isi hasil uji)* |
+| 7 | Akses portal edukasi tanpa login | Halaman publik terbuka | *(isi hasil uji)* |
+
+**📋 [TABEL 5: Hasil UAT — Kepuasan Pengguna (n = 11–15 kader)]**
+
+| Aspek Penilaian | Skor Rata-rata (1–5) | Kategori |
+|---|---|---|
+| Kemudahan penggunaan sistem | *(isi setelah UAT)* | *(isi)* |
+| Kecepatan respon sistem | *(isi setelah UAT)* | *(isi)* |
+| Kegunaan dashboard visualisasi | *(isi setelah UAT)* | *(isi)* |
+| Kejelasan informasi Z-Score & status gizi | *(isi setelah UAT)* | *(isi)* |
+| Manfaat early warning | *(isi setelah UAT)* | *(isi)* |
+| Kepuasan keseluruhan | *(isi setelah UAT)* | *(isi)* |
+
+### 3.4 Pembahasan
+
+Komparasi dengan penelitian/pengabdian terdahulu:
+- GEMATI vs. DSS Fuzzy Logic Bontang [1] → kelebihan Z-Score standar Kemenkes
+- GEMATI vs. sistem informasi posyandu lain [9][11][12][15][16] → kelebihan fitur early warning & log PMT
+- GEMATI vs. pengabdian pemberdayaan kader [5][6][7] → kombinasi sistem + pelatihan
+- Kontribusi terhadap program nasional percepatan penurunan stunting [3][8]
+
+---
+
+## 4. KESIMPULAN
+
+Poin-poin kesimpulan (ringkas):
+1. GEMATI berhasil diimplementasikan di 8 posyandu Mangunharjo sebagai DSS berbasis web
+2. Kalkulasi Z-Score otomatis menggantikan proses manual yang rawan error
+3. Dashboard visualisasi memungkinkan pemetaan sebaran stunting antar posyandu
+4. Pelatihan kader berhasil meningkatkan literasi digital [%] → [%]
+5. UAT menunjukkan tingkat penerimaan [%] ("Sangat Setuju")
+
+---
+
+## 5. UCAPAN TERIMA KASIH *(opsional)*
+
+Lembaga pendukung, pemerintah desa, dll.
+
+---
+
+## DAFTAR PUSTAKA (IEEE Style)
+
+Berdasarkan 17 artikel yang diberikan:
+
+| No | Referensi IEEE |
+|---|---|
+| [1] | T. Hidayat, A. Nugroho, dan Akbar, "Sistem Pendukung Keputusan Penentuan Status Gizi Balita Menggunakan Metode Logika Fuzzy (Studi Kasus di Dinas Kesehatan Kota Bontang)," *Jurnal Sains dan Sistem Teknologi Informasi (SANDI)*, vol. 6, no. 2, Nov. 2024. |
+| [2] | I. G. Huda dan S. Wulandari, "Pengembangan Aplikasi Mobile Berbasis Z-score untuk Deteksi Dini dan Pemantauan Status Gizi Balita Menggunakan Standar Antropometri WHO," *TIN: Terapan Informatika Nusantara*, vol. 6, no. 6, pp. 610–621, Nov. 2025. |
+| [3] | D. K. Sari, D. Yunamawan, A. Budiarti, F. Aryany, I. Kartisyah, dan S. Ariati, "Pemanfaatan Manajemen Informasi Gizi dan Pertumbuhan Balita untuk Mendukung Pengambilan Keputusan dalam Penanganan Stunting: Systematic Literature Review," *Life and Health Journal: Jurnal Ilmu Kesehatan*, vol. 2, no. 1, Jan. 2026. |
+| [4] | N. T. Simorangkir, L. Magdalena, dan R. Fahrudin, "Sistem Pendukung Keputusan Tumbuh Kembang Balita Usia (0–3 Tahun) Menggunakan Metode Z-Score pada Posyandu Cempaka," *JATI (Jurnal Mahasiswa Teknik Informatika)*, vol. 8, no. 6, Des. 2024. |
+| [5] | A. Trisnadoli, I. Lestari, A. I. Safitri, D. Winda, dan M. D. Utari, "Pemanfaatan Teknologi Kesehatan Digital untuk Meningkatkan Kapasitas Kader Posyandu dan Masyarakat," Politeknik Caltex Riau, Pekanbaru. *(nama jurnal lengkap perlu dikonfirmasi dari PDF halaman jurnal)* |
+| [6] | A. Izzuddin *et al.*, "Pemberdayaan Posyandu Melalui Digitalisasi dan Penguatan Kapasitas Kader dalam Pencegahan Stunting di Desa Jabung Sisir," *Kreatif: Jurnal Pengabdian Masyarakat Nusantara*, vol. 5, no. 1, pp. 276–284, Mar. 2025. |
+| [7] | B. Y. S. Nugroho, I. A. Sifai, Pujiono, dan R. Pramitasari, "Pendampingan dan Pelatihan Deteksi Dini Stunting Melalui Integrasi Aplikasi WhatsApp Auto Responding (WAR) di Posyandu Toto Maju Desa Kacangan," *Jurnal Pengabdian Masyarakat Bhinneka*, vol. 4, no. 2, Nov. 2025. |
+| [8] | E. S. Fitri, Y. Mandala, dan A. C. Rahman, "Transformasi Digital di Puskesmas: Peran E-PPGBM dalam Mengoptimalkan Deteksi Masalah Gizi di Lombok," *Cakrawala Medika: Journal of Health Sciences*, vol. 4, no. 1, Des. 2025. |
+| [9] | I. S. D. Shakti, "Rancang Bangun Sistem Informasi Posyandu Sebagai Monitoring Perkembangan Balita Berbasis Web," dalam *Seminar Nasional Teknologi Informasi dan Komunikasi*, 2022. |
+| [10] | Nicholas, R. P. Sari, dan I. Rusi, "Implementasi Metode User Centered Design pada Perancangan UI/UX Layanan Posyandu Berbasis Website," *Jurnal Sifo Mikroskil (JSM)*, vol. 27, no. 1, pp. 53–72, Apr. 2026. |
+| [11] | A. U. Said, T. Khotimah, dan A. Jazuli, "Perancangan Sistem Informasi Monitoring Gizi Anak Berbasis Website pada Posyandu," *JEMSI*, vol. 6, no. 6, Jul. 2025. |
+| [12] | W. Aprilya dan Y. Dian, "Implementasi Sistem Informasi Posyandu Digital Berbasis Web dalam Peningkatan Layanan Kesehatan Ibu dan Anak (Studi Kasus: Posyandu Nusaindah II)," *JEKIN*, vol. 5, no. 2, 2025. |
+| [13] | F. Rozi, I. N. Maulana, A. Aryasena, G. Haryani, dan I. Aulia, "Inovasi Digital Pencegahan Stunting Melalui Aplikasi Growell dengan Pendekatan User-Centered Design," *Journal of Informatics and Communications Technology (JICT)*, vol. 7, no. 1, pp. 175–188, Jun. 2025. |
+| [14] | Kementerian Kesehatan Republik Indonesia, *Peraturan Menteri Kesehatan Nomor 2 Tahun 2020 tentang Standar Antropometri Anak*. Jakarta: Kemenkes RI, 2020. *(Digunakan sebagai dasar rumus kalkulasi Z-Score: BB/U, TB/U, BB/TB pada sistem GEMATI)* |
+| [15] | A. Mulyani, F. Nuraeni, dan A. Yuliastri, "Rancang Bangun Sistem Informasi Posyandu untuk Mendukung Pelaporan Online Berbasis Web," *Jurnal Algoritma*, Institut Teknologi Garut. |
+| [16] | R. H. Errendyar dan T. Rahayu, "Perancangan Sistem Informasi Posyandu Berbasis Website pada Posyandu Cempaka 1 Desa Pasir Jambu Bogor," dalam *Seminar Nasional Mahasiswa Ilmu Komputer dan Aplikasinya (SENAMIKA)*, Jakarta, 20 Agustus 2022. |
+| [17] | Y. A. Putri, S. Widodo, dan Y. W. T. Arif, "Rancang Bangun Sistem Informasi Pengolahan Data Stunting Balita Berbasis Web di Posyandu Kemuning 13 Sondakan Laweyan Surakarta," dalam *Prosiding Seminar Informasi Kesehatan Nasional (SIKesNas)*, 2023. |
+| [18] | International Organization for Standardization, *ISO 31000:2018 — Risk Management: Guidelines*, 2nd ed. Geneva: ISO, 2018. *(Digunakan sebagai kerangka kerja manajemen risiko dalam proses analisis kebutuhan sistem GEMATI)* |
+
+---
+
+## Ringkasan Gambar dan Tabel yang Diperlukan
+
+### Gambar (perlu disiapkan manual)
+
+| No | Keterangan | Sumber |
+|---|---|---|
+| Gambar 1 | Arsitektur Sistem GEMATI (Deployment Diagram) | Export dari DeploymentDiagram_GEMATI.xml (draw.io) |
+| Gambar 2 | Use Case Diagram GEMATI | Dari TDD |
+| Gambar 3 | Entity Relationship Diagram (ERD) | Dari TDD |
+| Gambar 4 | Screenshot Halaman Login | Screenshot sistem |
+| Gambar 5 | Screenshot Dashboard Utama | Screenshot sistem |
+| Gambar 6 | Screenshot Form Input Antropometri | Screenshot sistem |
+| Gambar 7 | Screenshot Hasil Z-Score & Status Gizi | Screenshot sistem |
+| Gambar 8 | Screenshot Early Warning | Screenshot sistem |
+| Gambar 9 | Screenshot Portal Edukasi Publik | Screenshot sistem |
+| Gambar 10 | Screenshot Fitur Ekspor Laporan | Screenshot sistem |
+
+### Tabel (sebagian bisa langsung ditulis, sebagian butuh data lapangan)
+
+| No | Keterangan | Status |
+|---|---|---|
+| Tabel 1 | Kebutuhan Fungsional Utama GEMATI | ✅ Bisa langsung ditulis (dari SRS) |
+| Tabel 2 | Tech Stack GEMATI | ✅ Bisa langsung ditulis (dari TDD) |
+| Tabel 3 | Hasil Pre-Test dan Post-Test Kader | ⏳ Butuh data lapangan |
+| Tabel 4 | Hasil Black Box Testing | ⏳ Butuh data pengujian |
+| Tabel 5 | Hasil UAT — Kepuasan Pengguna | ⏳ Butuh data lapangan |
+
+---
+
+## ✅ Semua Jawaban Sudah Diterima
+
+| Pertanyaan | Jawaban |
+|---|---|
+| Nama penulis | Akan diisi kemudian |
+| Kecamatan | **Kecamatan Ngawi**, Kabupaten Ngawi |
+| Jumlah kader pelatihan | **11–15 orang** |
+| Timeline kegiatan | **17 Juni – 24 Juli 2026** (selama KKN) |
+| Status sistem | **90% selesai** — semua fitur Must Have + sebagian Should Have |
+| Screenshot sistem | **Sudah ada** — akan dimasukkan manual oleh penulis |
+| Data lapangan (pre-test, UAT, dll.) | **Belum tersedia** — tabel disiapkan dengan format placeholder |
+| File 10145-33818-1-PB.pdf | **Salah file** — diganti dengan ISO 31000 sebagai [18] |
+| Permenkes [14] | **Referensi rumus Z-Score** (BB/U, TB/U, BB/TB) yang digunakan di sistem |
+
+## ❓ Info Opsional (Bisa Diisi Saat Revisi, Tidak Menghambat Penulisan)
+
+| No | Informasi | Keterangan |
+|---|---|---|
+| 1 | Nama-nama 8 posyandu | Bisa dikosongkan atau disebut "Posyandu 1–8" dulu |
+| 2 | URL hosting / domain | Bisa disebutkan "sedang dalam proses deployment" |
+| 3 | Nama jurnal lengkap Artikel [5] | Perlu dikonfirmasi untuk daftar pustaka final |
+| 4 | Nama penulis & email korespondensi | Diisi saat finalisasi artikel |
+
+> [!TIP]
+> **Artikel siap ditulis!** Berikan lampu hijau 🟢 untuk memulai penulisan artikel lengkap dalam format `.txt`.
+

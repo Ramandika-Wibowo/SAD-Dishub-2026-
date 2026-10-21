@@ -1,0 +1,5 @@
+{
+  "artifactType":  "ARTIFACT_TYPE_OTHER",
+  "summary":  "Corrected C4 Software Architecture diagram for E-Internship using PlantUML, styled to match the existing SRS template (4 levels in one diagram with ZOOM IN arrows, simple boxes, monochrome). Content has been corrected to reflect actual implementation: Client-Server architecture, Sanctum token auth, in-app notifications, and accurate model fields.",
+  "updatedAt":  "2026-06-03T05:54:09.587643700Z"
+}

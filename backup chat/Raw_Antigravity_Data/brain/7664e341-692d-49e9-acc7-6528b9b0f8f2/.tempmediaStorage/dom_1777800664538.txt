@@ -1,0 +1,105 @@
+<current_dom_explanation>
+This is a temporary snapshot of the current page's DOM structure. The DOM will change if you navigate to or interact with another page. Use a tool like browser_get_dom to capture and preserve the DOM in your trajectory if needed for later reference.
+</current_dom_explanation>
+<current_dom>
+[0] (127,26)<a href='/downloads/release/python-3121/'>Python 3.12.1 - Dec. 8, 2023 />
+Note that Python 3.12.1
+cannot
+be used on Windows 7 or earlier.
+Download
+[1] (208,123)<a href='https://www.python.org/ftp/python/3.12.1/python-3.12.1-amd64.exe'>Windows installer (64-bit) />
+Download
+[2] (208,161)<a href='https://www.python.org/ftp/python/3.12.1/python-3.12.1.exe'>Windows installer (32-bit) />
+Download
+[3] (211,199)<a href='https://www.python.org/ftp/python/3.12.1/python-3.12.1-arm64.exe'>Windows installer (ARM64) />
+Download
+[4] (249,237)<a href='https://www.python.org/ftp/python/3.12.1/python-3.12.1-embed-amd64.zip'>Windows embeddable package (64-bit) />
+Download
+[5] (249,275)<a href='https://www.python.org/ftp/python/3.12.1/python-3.12.1-embed-win32.zip'>Windows embeddable package (32-bit) />
+Download
+[6] (252,314)<a href='https://www.python.org/ftp/python/3.12.1/python-3.12.1-embed-arm64.zip'>Windows embeddable package (ARM64) />
+[7] (127,352)<a href='/downloads/release/python-3117/'>Python 3.11.7 - Dec. 4, 2023 />
+Note that Python 3.11.7
+cannot
+be used on Windows 7 or earlier.
+Download
+[8] (208,448)<a href='https://www.python.org/ftp/python/3.11.7/python-3.11.7-amd64.exe'>Windows installer (64-bit) />
+Download
+[9] (208,487)<a href='https://www.python.org/ftp/python/3.11.7/python-3.11.7.exe'>Windows installer (32-bit) />
+Download
+[10] (211,525)<a href='https://www.python.org/ftp/python/3.11.7/python-3.11.7-arm64.exe'>Windows installer (ARM64) />
+Download
+[11] (249,563)<a href='https://www.python.org/ftp/python/3.11.7/python-3.11.7-embed-amd64.zip'>Windows embeddable package (64-bit) />
+Download
+[12] (249,601)<a href='https://www.python.org/ftp/python/3.11.7/python-3.11.7-embed-win32.zip'>Windows embeddable package (32-bit) />
+Download
+[13] (252,639)<a href='https://www.python.org/ftp/python/3.11.7/python-3.11.7-embed-arm64.zip'>Windows embeddable package (ARM64) />
+[14] (126,678)<a href='/downloads/release/python-3120/'>Python 3.12.0 - Oct. 2, 2023 />
+Note that Python 3.12.0
+cannot
+be used on Windows 7 or earlier.
+Download
+[15] (208,774)<a href='https://www.python.org/ftp/python/3.12.0/python-3.12.0-amd64.exe'>Windows installer (64-bit) />
+Download
+[16] (208,812)<a href='https://www.python.org/ftp/python/3.12.0/python-3.12.0.exe'>Windows installer (32-bit) />
+Download
+[17] (211,851)<a href='https://www.python.org/ftp/python/3.12.0/python-3.12.0-arm64.exe'>Windows installer (ARM64) />
+Download
+[18] (249,889)<a href='https://www.python.org/ftp/python/3.12.0/python-3.12.0-embed-amd64.zip'>Windows embeddable package (64-bit) />
+Download
+[19] (249,927)<a href='https://www.python.org/ftp/python/3.12.0/python-3.12.0-embed-win32.zip'>Windows embeddable package (32-bit) />
+Download
+[20] (252,965)<a href='https://www.python.org/ftp/python/3.12.0/python-3.12.0-embed-arm64.zip'>Windows embeddable package (ARM64) />
+Python 3.11.6 - Oct. 2, 2023
+Download
+Windows embeddable package (ARM64)
+[21] (629,30)<a href='/downloads/release/python-3130a1/'>Python 3.13.0a1 - Oct. 13, 2023 />
+Download
+[22] (700,69)<a href='https://www.python.org/ftp/python/3.13.0/python-3.13.0a1-amd64.exe'>Windows installer (64-bit) />
+Download
+[23] (700,107)<a href='https://www.python.org/ftp/python/3.13.0/python-3.13.0a1.exe'>Windows installer (32-bit) />
+Download
+[24] (703,145)<a href='https://www.python.org/ftp/python/3.13.0/python-3.13.0a1-arm64.exe'>Windows installer (ARM64) />
+Download
+[25] (740,183)<a href='https://www.python.org/ftp/python/3.13.0/python-3.13.0a1-embed-amd64.zip'>Windows embeddable package (64-bit) />
+Download
+[26] (740,221)<a href='https://www.python.org/ftp/python/3.13.0/python-3.13.0a1-embed-win32.zip'>Windows embeddable package (32-bit) />
+Download
+[27] (743,260)<a href='https://www.python.org/ftp/python/3.13.0/python-3.13.0a1-embed-arm64.zip'>Windows embeddable package (ARM64) />
+[28] (634,298)<a href='/downloads/release/python-3120rc3/'>Python 3.12.0rc3 - Sept. 19, 2023 />
+Download
+[29] (700,336)<a href='https://www.python.org/ftp/python/3.12.0/python-3.12.0rc3-amd64.exe'>Windows installer (64-bit) />
+Download
+[30] (700,374)<a href='https://www.python.org/ftp/python/3.12.0/python-3.12.0rc3.exe'>Windows installer (32-bit) />
+Download
+[31] (703,412)<a href='https://www.python.org/ftp/python/3.12.0/python-3.12.0rc3-arm64.exe'>Windows installer (ARM64) />
+Download
+[32] (740,451)<a href='https://www.python.org/ftp/python/3.12.0/python-3.12.0rc3-embed-amd64.zip'>Windows embeddable package (64-bit) />
+Download
+[33] (740,489)<a href='https://www.python.org/ftp/python/3.12.0/python-3.12.0rc3-embed-win32.zip'>Windows embeddable package (32-bit) />
+Download
+[34] (743,527)<a href='https://www.python.org/ftp/python/3.12.0/python-3.12.0rc3-embed-arm64.zip'>Windows embeddable package (ARM64) />
+[35] (630,565)<a href='/downloads/release/python-3120rc2/'>Python 3.12.0rc2 - Sept. 6, 2023 />
+Download
+[36] (700,603)<a href='https://www.python.org/ftp/python/3.12.0/python-3.12.0rc2-amd64.exe'>Windows installer (64-bit) />
+Download
+[37] (700,642)<a href='https://www.python.org/ftp/python/3.12.0/python-3.12.0rc2.exe'>Windows installer (32-bit) />
+Download
+[38] (703,680)<a href='https://www.python.org/ftp/python/3.12.0/python-3.12.0rc2-arm64.exe'>Windows installer (ARM64) />
+Download
+[39] (740,718)<a href='https://www.python.org/ftp/python/3.12.0/python-3.12.0rc2-embed-amd64.zip'>Windows embeddable package (64-bit) />
+Download
+[40] (740,756)<a href='https://www.python.org/ftp/python/3.12.0/python-3.12.0rc2-embed-win32.zip'>Windows embeddable package (32-bit) />
+Download
+[41] (743,794)<a href='https://www.python.org/ftp/python/3.12.0/python-3.12.0rc2-embed-arm64.zip'>Windows embeddable package (ARM64) />
+[42] (628,833)<a href='/downloads/release/python-3120rc1/'>Python 3.12.0rc1 - Aug. 6, 2023 />
+Download
+[43] (700,871)<a href='https://www.python.org/ftp/python/3.12.0/python-3.12.0rc1-amd64.exe'>Windows installer (64-bit) />
+Download
+[44] (700,909)<a href='https://www.python.org/ftp/python/3.12.0/python-3.12.0rc1.exe'>Windows installer (32-bit) />
+Download
+[45] (703,947)<a href='https://www.python.org/ftp/python/3.12.0/python-3.12.0rc1-arm64.exe'>Windows installer (ARM64) />
+Download
+[46] (740,985)<a href='https://www.python.org/ftp/python/3.12.0/python-3.12.0rc1-embed-amd64.zip'>Windows embeddable package (64-bit) />
+
+</current_dom>

@@ -1,0 +1,60 @@
+<current_dom_explanation>
+This is a temporary snapshot of the current page's DOM structure. The DOM will change if you navigate to or interact with another page. Use a tool like browser_get_dom to capture and preserve the DOM in your trajectory if needed for later reference.
+</current_dom_explanation>
+<current_dom>
+Deprecations
+The deprecated
+wstr
+and
+wstr_length
+members of the C implementation of unicode objects were removed, per
+[0] (759,91)<a href='https://peps.python.org/pep-0623/'>PEP 623 />
+.
+In the
+unittest
+module, a number of long deprecated methods and classes were removed. (They had been deprecated since Python 3.1 or 3.2.)
+The deprecated
+smtpd
+and
+distutils
+modules have been removed (see
+[1] (516,169)<a href='https://peps.python.org/pep-0594/'>PEP 594 />
+and
+[2] (594,169)<a href='https://peps.python.org/pep-0632/'>PEP 632 />
+.) The
+setuptools
+package continues to provide the
+distutils
+module.
+[3] (281,241)<a href='https://docs.python.org/3.12/whatsnew/3.12.html#removed'>A number of other old, broken and deprecated functions, classes and methods />
+have been removed.
+Invalid backslash escape sequences in strings now warn with
+SyntaxWarning
+instead of
+DeprecationWarning
+, making them more visible. (They will become syntax errors in the future.)
+The internal representation of integers has changed in preparation for performance enhancements. (This should not affect most users as it is an internal detail, but it may cause problems for Cython-generated code.)
+For more details on the changes to Python 3.12, see
+[4] (415,447)<a href='https://docs.python.org/3.12/whatsnew/3.12.html'>What's new in Python 3.12 />
+.
+More resources
+[5] (114,560)<a href='https://docs.python.org/3.12/'>Online Documentation />
+.
+[6] (69,598)<a href='https://www.python.org/dev/peps/pep-0693/'>PEP 693 />
+, the Python 3.12 Release Schedule.
+Report bugs via
+[7] (183,636)<a href='https://github.com/python/cpython/issues'>GitHub Issues />
+.
+[8] (122,675)<a href='https://www.python.org/psf/donations/python-dev/'>Help fund Python directly />
+or
+[9] (279,675)<a href='https://github.com/sponsors/python'>via GitHub Sponsors />
+, and support
+[10] (493,675)<a href='https://www.python.org/psf/donations/'>the Python community />
+.
+[11] (68,737)<a href='https://docs.python.org/release/3.12.10/whatsnew/changelog.html#python-3-12-10'>Full Changelog />
+Files
+macOS
+Windows
+Source release
+
+</current_dom>

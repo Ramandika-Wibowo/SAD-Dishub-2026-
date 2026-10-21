@@ -1,0 +1,6 @@
+# Checklist
+- [ ] Navigate to the screenshot URL
+- [ ] Capture a screenshot of the Stitch design
+- [ ] Navigate to http://localhost:3001/login
+- [ ] Capture a screenshot of the current login page
+- [ ] Describe findings and report to the user

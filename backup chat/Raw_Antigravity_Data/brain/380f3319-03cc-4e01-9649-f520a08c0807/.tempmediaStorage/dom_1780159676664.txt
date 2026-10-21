@@ -1,0 +1,22 @@
+<current_dom_explanation>
+This is a temporary snapshot of the current page's DOM structure. The DOM will change if you navigate to or interact with another page. Use a tool like browser_get_dom to capture and preserve the DOM in your trajectory if needed for later reference.
+</current_dom_explanation>
+<current_dom>
+E-Internship Dishub
+Portal Magang Dinas Perhubungan Kota Surabaya
+[0] (652,347)<a class='flex-1 pb-3 pt-2 text-center transition-colors duration-200 focus:outline-none text-sm border-b-2 border-transparent text-surface-500 hover:text-primary-700' href='/login'>Masuk />
+[1] (848,347)<a class='flex-1 pb-3 pt-2 text-center transition-colors duration-200 focus:outline-none text-sm border-b-2 border-primary-700 text-primary-700 font-semibold' href='/register'>Daftar />
+[2] (750,431)<label class='label-base'>Nama Lengkap />
+[3] (750,482)<input class='input-base pl-10 ' id='name' placeholder='Masukkan nama lengkap' />
+[4] (750,545)<label class='label-base'>Alamat Email />
+[5] (750,596)<input class='input-base pl-10 ' id='email' placeholder='nama@email.com' />
+[6] (750,659)<label class='text-sm font-medium text-surface-700 mb-1.5 block'>Kata Sandi />
+[7] (750,710)<input class='input-base pl-10 pr-10 ' id='password' placeholder='Buat kata sandi' />
+[8] (919,710)<button class='absolute right-3 top-1/2 -translate-y-1/2 text-surface-400 hover:text-surface-600 focus:outline-none' />
+[9] (750,773)<label class='label-base'>Konfirmasi Kata Sandi />
+[10] (750,824)<input class='input-base pl-10 ' id='password_confirmation' placeholder='Ulangi kata sandi' />
+[11] (750,888)<label class='text-sm font-medium text-surface-700 mb-1.5 block'>Jenis Pendaftar />
+[12] (750,938)<select class='input-base pl-10 appearance-none cursor-pointer' id='applicant_type' />
+Nama Institusi
+
+</current_dom>

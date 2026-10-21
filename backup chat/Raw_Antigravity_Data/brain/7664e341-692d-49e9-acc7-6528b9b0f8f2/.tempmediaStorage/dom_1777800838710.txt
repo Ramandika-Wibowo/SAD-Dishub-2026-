@@ -1,0 +1,81 @@
+<current_dom_explanation>
+This is a temporary snapshot of the current page's DOM structure. The DOM will change if you navigate to or interact with another page. Use a tool like browser_get_dom to capture and preserve the DOM in your trajectory if needed for later reference.
+</current_dom_explanation>
+<current_dom>
+Python version
+Maintenance status
+First released
+End of support
+Release schedule
+3.15
+pre-release
+[0] (359,271)<a href='/downloads/latest/python3.15/'>Download />
+	[1] (327,268)<span  />
+2026-10-01 (planned)
+2031-10
+[2] (832,271)<a href='https://peps.python.org/pep-0790/'>PEP 790 />
+3.14
+bugfix
+[3] (359,318)<a href='/downloads/latest/python3.14/'>Download />
+	[4] (327,316)<span  />
+2025-10-07
+2030-10
+[5] (832,318)<a href='https://peps.python.org/pep-0745/'>PEP 745 />
+3.13
+bugfix
+[6] (359,366)<a href='/downloads/latest/python3.13/'>Download />
+	[7] (327,363)<span  />
+2024-10-07
+2029-10
+[8] (832,366)<a href='https://peps.python.org/pep-0719/'>PEP 719 />
+3.12
+security
+[9] (359,414)<a href='/downloads/latest/python3.12/'>Download />
+	[10] (327,411)<span  />
+2023-10-02
+2028-10
+[11] (832,414)<a href='https://peps.python.org/pep-0693/'>PEP 693 />
+3.11
+security
+[12] (359,461)<a href='/downloads/latest/python3.11/'>Download />
+	[13] (327,459)<span  />
+2022-10-24
+2027-10
+[14] (832,461)<a href='https://peps.python.org/pep-0664/'>PEP 664 />
+3.10
+security
+[15] (359,509)<a href='/downloads/latest/python3.10/'>Download />
+	[16] (327,506)<span  />
+2021-10-04
+2026-10
+[17] (832,509)<a href='https://peps.python.org/pep-0619/'>PEP 619 />
+3.9
+end-of-life, last release was
+[18] (159,586)<a href='/downloads/release/python-3925/'>3.9.25 />
+[19] (359,571)<a href='/downloads/latest/python3.9/'>Download />
+	[20] (327,569)<span  />
+2020-10-05
+2025-10-31
+[21] (832,571)<a href='https://peps.python.org/pep-0596/'>PEP 596 />
+Looking for a specific release?
+Python releases by version number:
+Release version
+Release date
+Click for more
+[22] (500,1023)<ol class='list-row-container menu' scrollable='true' />
+	[23] (95,870)<a href='/downloads/release/python-3144/'>Python 3.14.4 />
+	April 7, 2026
+	[24] (532,871)<a href='/downloads/release/python-3144/'>Download />
+		[25] (499,868)<span  />
+	[26] (750,871)<a href='https://docs.python.org/release/3.14.4/whatsnew/changelog.html'>Release notes />
+	[27] (95,918)<a href='/downloads/release/python-3143/'>Python 3.14.3 />
+	Feb. 3, 2026
+	[28] (532,919)<a href='/downloads/release/python-3143/'>Download />
+		[29] (499,916)<span  />
+	[30] (750,919)<a href='https://docs.python.org/release/3.14.3/whatsnew/changelog.html'>Release notes />
+	[31] (95,966)<a href='/downloads/release/python-3142/'>Python 3.14.2 />
+	Dec. 5, 2025
+	Download
+	[32] (750,966)<a href='https://docs.python.org/release/3.14.2/whatsnew/changelog.html'>Release notes />
+
+</current_dom>

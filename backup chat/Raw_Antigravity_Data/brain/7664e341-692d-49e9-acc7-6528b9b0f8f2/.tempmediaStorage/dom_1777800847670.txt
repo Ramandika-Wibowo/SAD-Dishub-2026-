@@ -1,0 +1,64 @@
+<current_dom_explanation>
+This is a temporary snapshot of the current page's DOM structure. The DOM will change if you navigate to or interact with another page. Use a tool like browser_get_dom to capture and preserve the DOM in your trajectory if needed for later reference.
+</current_dom_explanation>
+<current_dom>
+Skip to content
+[0] (83,31)<a href='/' title='The Python Programming Language'>Python />
+[1] (250,31)<a href='https://www.python.org/psf/' title='The Python Software Foundation'>PSF />
+[2] (417,31)<a href='https://docs.python.org' title='Python Documentation'>Docs />
+[3] (583,31)<a href='https://pypi.org/' title='Python Package Index'>PyPI />
+[4] (750,31)<a href='/jobs/' title='Python Job Board'>Jobs />
+[5] (917,31)<a href='/community/'>Community />
+[6] (155,138)<a href='/' />
+	[7] (155,138)<img  />
+[8] (522,144)<a class='donate-button' href='https://donate.python.org/'>Donate />
+[9] (730,145)<fieldset >Search This Site />
+	Search This Site
+	[10] (725,142)<input class='search-field' id='id-search-field' placeholder='Search' />
+	[11] (866,141)<button class='search-button' id='submit' title='Submit this Search'>GO />
+[12] (940,145)<li  />
+	[13] (940,145)<a class='action-trigger' href='#'>Socialize />
+[14] (127,248)<li  />
+	[15] (127,248)<a href='/about/'>About />
+[16] (234,248)<li  />
+	[17] (234,248)<a href='/downloads/'>Downloads />
+[18] (377,248)<li  />
+	[19] (377,248)<a href='/doc/'>Documentation />
+[20] (522,248)<li  />
+	[21] (522,248)<a href='/community/'>Community />
+[22] (666,248)<li  />
+	[23] (666,248)<a href='/success-stories/' title='success-stories'>Success Stories />
+[24] (787,248)<li  />
+	[25] (787,248)<a href='/blogs/' title='News from around the Python world'>News />
+[26] (875,248)<li  />
+	[27] (875,248)<a href='/events/'>Events />
+Python 3.12.13
+Release date:
+March 3, 2026
+This is a security release of Python 3.12
+Note:
+The release you're looking at is Python 3.12.13, a
+security bugfix release
+for the legacy 3.12 series.
+Python 3.14
+is now the latest feature release series of Python 3.
+[28] (189,670)<a href='/downloads/'>Get the latest release of 3.14.x here />
+.
+Security content in this release
+Email and header-related
+[29] (76,893)<a href='https://github.com/python/cpython/issues/144125'>gh-144125 />
+:
+email.generator.BytesGenerator
+now refuses to serialize headers that are unsafely folded or delimited (see
+email.policy.Policy.verify_generated_headers
+); addressing
+[30] (520,927)<a href='https://nvd.nist.gov/vuln/detail/CVE-2024-6923'>CVE-2024-6923 />
+.
+[31] (76,965)<a href='https://github.com/python/cpython/issues/143935'>gh-143935 />
+: Fixed comment folding in modern email policies to prevent header injection when very long non-foldable comment text is wrapped.
+gh-136063
+:
+email.message
+now ensures linear complexity for legacy HTTP parameter parsing.
+
+</current_dom>
