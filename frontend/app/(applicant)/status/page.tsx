@@ -187,6 +187,7 @@ export default function StatusPage() {
           <h3 className="text-sm font-semibold text-surface-900 mb-3">Hasil Evaluasi Algoritma</h3>
           <div className="flex flex-wrap gap-2">
             <RuleBadge passed={app.r1_passed} label="R1 Dokumen" />
+            <RuleBadge passed={app.r2_passed} label="R2 Kualifikasi CV" />
             <RuleBadge passed={app.r3_passed} label="R3 Kuota" />
             <RuleBadge passed={app.r4_passed} label="R4 Kesesuaian" />
           </div>

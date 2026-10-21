@@ -17,6 +17,10 @@ class StoreApplicationRequest extends FormRequest
             'division_id'      => ['required', 'exists:divisions,id'],
             'institution_name' => ['required', 'string', 'max:255'],
             'study_program'    => ['nullable', 'string', 'max:255'],
+            'skills'           => ['nullable', 'string', 'max:2000'],
+            'experience'       => ['nullable', 'string', 'max:5000'],
+            'projects'         => ['nullable', 'string', 'max:5000'],
+            'portfolio_url'    => ['nullable', 'string', 'max:500'],
             'internship_start' => ['required', 'date', 'after_or_equal:today'],
             'internship_end'   => ['required', 'date', 'after:internship_start'],
         ];

@@ -32,19 +32,15 @@ const adminNavItems: NavItem[] = [
   { label: "Dashboard", href: "/admin/dashboard", icon: <LayoutDashboard className="w-5 h-5" /> },
   { label: "Pengajuan", href: "/admin/applications", icon: <FileText className="w-5 h-5" /> },
   { label: "Kuota Divisi", href: "/admin/quotas", icon: <Building2 className="w-5 h-5" /> },
-];
-
-const headNavItems: NavItem[] = [
-  { label: "Dashboard", href: "/head/dashboard", icon: <BarChart3 className="w-5 h-5" /> },
-  { label: "Ekspor Data", href: "/head/export", icon: <Download className="w-5 h-5" /> },
+  { label: "Analitik", href: "/admin/analytics", icon: <BarChart3 className="w-5 h-5" /> },
+  { label: "Ekspor Data", href: "/admin/export", icon: <Download className="w-5 h-5" /> },
 ];
 
 function getNavItems(role?: UserRole): NavItem[] {
   switch (role) {
     case "admin":
-      return adminNavItems;
     case "head":
-      return headNavItems;
+      return adminNavItems;
     default:
       return [];
   }

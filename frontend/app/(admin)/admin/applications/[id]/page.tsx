@@ -32,6 +32,11 @@ import {
   Loader2,
   ArrowLeft,
   Lightbulb,
+  Sparkles,
+  Briefcase,
+  Layers,
+  Globe,
+  ExternalLink,
 } from "lucide-react";
 
 export default function AdminApplicationDetailPage() {
@@ -194,6 +199,84 @@ export default function AdminApplicationDetailPage() {
         </div>
       </Card>
 
+      {/* Detail CV & Kualifikasi (Skills, Pengalaman, Projek) */}
+      <Card padding="lg">
+        <CardHeader>
+          <CardTitle>Detail CV & Kualifikasi</CardTitle>
+        </CardHeader>
+        <div className="space-y-4">
+          {/* Skills */}
+          <div>
+            <p className="text-xs font-semibold text-surface-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-primary-600" /> Keahlian & Tools (Skills)
+            </p>
+            {app.skills ? (
+              <div className="flex flex-wrap gap-1.5">
+                {app.skills.split(/[,;\n]+/).map((s, idx) => {
+                  const trimmed = s.trim();
+                  if (!trimmed) return null;
+                  return (
+                    <span
+                      key={idx}
+                      className="px-2.5 py-1 text-xs font-medium bg-primary-50 text-primary-700 dark:bg-primary-950/60 dark:text-primary-300 rounded-lg border border-primary-200/60 dark:border-primary-800"
+                    >
+                      {trimmed}
+                    </span>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="text-xs text-surface-400 italic">Belum mengisi daftar keahlian.</p>
+            )}
+          </div>
+
+          {/* Pengalaman */}
+          <div>
+            <p className="text-xs font-semibold text-surface-500 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <Briefcase className="w-3.5 h-3.5 text-emerald-600" /> Pengalaman Organisasi / Kerja / Magang
+            </p>
+            {app.experience ? (
+              <div className="p-3 bg-surface-50 dark:bg-surface-800/40 rounded-xl border border-surface-200/60 dark:border-surface-700 text-xs text-surface-700 whitespace-pre-line leading-relaxed">
+                {app.experience}
+              </div>
+            ) : (
+              <p className="text-xs text-surface-400 italic">Tidak ada catatan pengalaman.</p>
+            )}
+          </div>
+
+          {/* Proyek & Portofolio */}
+          <div>
+            <p className="text-xs font-semibold text-surface-500 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <Layers className="w-3.5 h-3.5 text-amber-600" /> Proyek & Hasil Karya
+            </p>
+            {app.projects ? (
+              <div className="p-3 bg-surface-50 dark:bg-surface-800/40 rounded-xl border border-surface-200/60 dark:border-surface-700 text-xs text-surface-700 whitespace-pre-line leading-relaxed">
+                {app.projects}
+              </div>
+            ) : (
+              <p className="text-xs text-surface-400 italic">Tidak ada catatan proyek.</p>
+            )}
+          </div>
+
+          {/* Tautan Portofolio */}
+          {app.portfolio_url && (
+            <div className="pt-2 border-t border-surface-100 dark:border-surface-700 flex items-center justify-between">
+              <span className="text-xs text-surface-500 flex items-center gap-1.5">
+                <Globe className="w-3.5 h-3.5 text-blue-600" /> Tautan Portofolio Pelamar
+              </span>
+              <a
+                href={app.portfolio_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-xs font-semibold text-primary-600 hover:text-primary-700 hover:underline"
+              >
+                Buka Portofolio <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+          )}
+        </div>
+      </Card>
+
       {/* Documents */}
       <Card padding="lg">
         <CardHeader><CardTitle>Dokumen</CardTitle></CardHeader>
@@ -238,7 +321,7 @@ export default function AdminApplicationDetailPage() {
               {rulesEvaluated ? "Jalankan Ulang Algoritma Sortir" : "Jalankan Algoritma Sortir"}
             </h3>
             <p className="text-sm text-surface-500 mb-4">
-              Evaluasi kelengkapan dokumen (R1), kuota divisi (R3), dan kesesuaian (R4).
+              Evaluasi kelengkapan dokumen (R1), kualifikasi CV (R2), kuota divisi (R3), dan kesesuaian program studi (R4).
               <br />
               <span className="text-xs text-surface-400 italic">
                 Hasil hanya sebagai pendukung keputusan — keputusan akhir ada di tangan Admin.
@@ -290,8 +373,9 @@ export default function AdminApplicationDetailPage() {
             {/* Rule Cards */}
             {[
               { label: "R1 — Kelengkapan Dokumen", passed: app.r1_passed, detail: rules?.r1_detail },
+              { label: "R2 — Kesesuaian Detail CV & Kualifikasi", passed: app.r2_passed ?? rules?.r2_passed, detail: rules?.r2_detail },
               { label: "R3 — Kuota Divisi", passed: app.r3_passed, detail: rules?.r3_detail },
-              { label: "R4 — Kesesuaian Kata Kunci", passed: app.r4_passed, detail: rules?.r4_detail },
+              { label: "R4 — Kesesuaian Program Studi & Kata Kunci", passed: app.r4_passed, detail: rules?.r4_detail },
             ].map((rule) => (
               <div key={rule.label} className={`flex items-center gap-3 p-3 rounded-lg border ${rule.passed ? "border-emerald-200 bg-emerald-50/50" :
                 rule.passed === false ? "border-amber-200 bg-amber-50/50" :

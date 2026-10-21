@@ -77,6 +77,114 @@ class AdminController extends Controller
 
     /**
      * GET /api/v1/admin/applications/{id}
+    /**
+     * Format rule results consistently for both showApplication and executeSort.
+     */
+    private function formatRuleResults(Application $application, ?array $warnings = null, ?bool $allPassed = null): array
+    {
+        $threshold = (float) config('services.algorithm.score_threshold', 60);
+
+        $r1Passed       = $application->r1_passed;
+        $r2Passed       = $application->r2_passed;
+        $r2Score        = $application->r2_score !== null ? round((float) $application->r2_score, 2) : null;
+        $r3Passed       = $application->r3_passed;
+        $r4Passed       = $application->r4_passed;
+        $r4Score        = $application->r4_score !== null ? round((float) $application->r4_score, 2) : null;
+        $algorithmScore = $application->algorithm_score !== null ? round((float) $application->algorithm_score, 2) : null;
+
+        $hasCvDetails = !empty(trim($application->skills ?? ''))
+            || !empty(trim($application->experience ?? ''))
+            || !empty(trim($application->projects ?? ''));
+
+        // Reconstruct warnings if not passed and application was already evaluated
+        if ($warnings === null && $r1Passed !== null) {
+            $warnings = [];
+            if (!$r1Passed) {
+                $warnings[] = 'R1 - Dokumen persyaratan belum lengkap';
+            }
+            if ($r2Passed === false) {
+                if (!$hasCvDetails) {
+                    $warnings[] = 'R2 - Pelamar belum mengisi detail CV & kualifikasi';
+                } else {
+                    $warnings[] = "R2 - Skor Detail CV & Kualifikasi ({$r2Score}/100) di bawah ambang batas ({$threshold})";
+                }
+            }
+            if ($r3Passed === false) {
+                $warnings[] = 'R3 - Kuota divisi sudah penuh atau terkunci';
+            }
+            if ($r4Passed === false) {
+                $warnings[] = "R4 - Skor kesesuaian Program Studi ({$r4Score}/100) di bawah ambang batas ({$threshold})";
+            }
+            if ($algorithmScore !== null && $algorithmScore < $threshold) {
+                $warnings[] = "Skor kesesuaian akhir ({$algorithmScore}/100) di bawah ambang batas ({$threshold})";
+            }
+        }
+
+        $r1Detail = null;
+        if ($r1Passed !== null) {
+            $r1Detail = $r1Passed ? 'Semua dokumen lengkap' : 'Dokumen persyaratan belum lengkap';
+        }
+
+        $r2Detail = null;
+        if ($r2Passed !== null || $r2Score !== null) {
+            if (!$hasCvDetails && ($r2Score === null || $r2Score === 0.0)) {
+                $r2Detail = 'Belum mengisi detail CV & kualifikasi (Skor: 0/100)';
+            } else {
+                $scoreText = $r2Score !== null ? $r2Score : ($r2Passed ? 100 : 0);
+                $r2Detail = "Skor: {$scoreText}/100 (threshold: {$threshold})";
+            }
+        }
+
+        $r3Detail = null;
+        if ($r3Passed !== null) {
+            $r3Detail = $r3Passed ? 'Kuota tersedia' : 'Kuota divisi penuh atau terkunci';
+        }
+
+        $r4Detail = null;
+        if ($r4Passed !== null || $r4Score !== null) {
+            $scoreText = $r4Score !== null ? $r4Score : ($algorithmScore ?? ($r4Passed ? 100 : 0));
+            $r4Detail = "Skor: {$scoreText}/100 (threshold: {$threshold})";
+        }
+
+        if ($allPassed === null && $r1Passed !== null) {
+            $allPassed = $r1Passed
+                && ($r2Passed ?? true)
+                && $r3Passed
+                && $r4Passed
+                && ($algorithmScore === null || $algorithmScore >= $threshold);
+        }
+
+        $recommendation = null;
+        if ($r1Passed !== null) {
+            $recommendation = $allPassed
+                ? 'Semua aturan terpenuhi. Disarankan untuk MENERIMA pengajuan ini.'
+                : 'Terdapat catatan yang perlu diperhatikan. Silakan tinjau sebelum mengambil keputusan.';
+        }
+
+        return [
+            'r1_passed'       => $r1Passed,
+            'r1_description'  => 'Kelengkapan Dokumen (CV, Surat Pengantar, Kartu Identitas)',
+            'r1_detail'       => $r1Detail,
+            'r2_passed'       => $r2Passed,
+            'r2_description'  => 'Kesesuaian Detail CV & Kualifikasi',
+            'r2_detail'       => $r2Detail,
+            'r2_score'        => $r2Score,
+            'r3_passed'       => $r3Passed,
+            'r3_description'  => 'Ketersediaan Kuota Divisi',
+            'r3_detail'       => $r3Detail,
+            'r4_passed'       => $r4Passed,
+            'r4_description'  => 'Kesesuaian Program Studi & Kata Kunci',
+            'r4_detail'       => $r4Detail,
+            'r4_score'        => $r4Score,
+            'algorithm_score' => $algorithmScore,
+            'all_passed'      => $allPassed,
+            'recommendation'  => $recommendation,
+            'warnings'        => $warnings ?? [],
+        ];
+    }
+
+    /**
+     * GET /api/v1/admin/applications/{id}
      *
      * Get full application detail.
      */
@@ -92,16 +200,8 @@ class AdminController extends Controller
         return response()->json([
             'success' => true,
             'data'    => [
-                'application' => $application,
-                'rule_results' => [
-                    'r1_passed'       => $application->r1_passed,
-                    'r1_description'  => 'Kelengkapan Dokumen (CV, Surat Pengantar, Kartu Identitas)',
-                    'r3_passed'       => $application->r3_passed,
-                    'r3_description'  => 'Ketersediaan Kuota Divisi',
-                    'r4_passed'       => $application->r4_passed,
-                    'r4_description'  => 'Kesesuaian Kata Kunci CV dengan Divisi',
-                    'algorithm_score' => $application->algorithm_score,
-                ],
+                'application'  => $application,
+                'rule_results' => $this->formatRuleResults($application),
             ],
         ]);
     }
@@ -114,8 +214,9 @@ class AdminController extends Controller
      * Admin makes the final accept/reject decision.
      *
      * R1: Document completeness check
+     * R2: CV Details & Qualifications matching (Skills, Pengalaman, Projek)
      * R3: Division quota availability check
-     * R4: Keyword matching score against division name
+     * R4: Study program & academic relevance check
      */
     public function executeSort(int $id): JsonResponse
     {
@@ -129,6 +230,7 @@ class AdminController extends Controller
         }
 
         $warnings = [];
+        $threshold = (float) config('services.algorithm.score_threshold', 60);
 
         // ═══════════════════════════════════════════════
         // R1: Document Completeness
@@ -149,36 +251,73 @@ class AdminController extends Controller
         }
 
         // ═══════════════════════════════════════════════
+        // R2: CV Details & Qualifications (Skills, Pengalaman, Projek)
+        // ═══════════════════════════════════════════════
+        $division = $application->division;
+        $hasCvDetails = !empty(trim($application->skills ?? ''))
+            || !empty(trim($application->experience ?? ''))
+            || !empty(trim($application->projects ?? ''));
+
+        $r2Score = $this->calculateCvScore($application, $division);
+        $r2Passed = $hasCvDetails && ($r2Score >= $threshold);
+
+        if (!$hasCvDetails) {
+            $warnings[] = 'R2 - Pelamar belum mengisi detail CV & kualifikasi';
+        } elseif (!$r2Passed) {
+            $warnings[] = "R2 - Skor Detail CV & Kualifikasi ({$r2Score}/100) di bawah ambang batas ({$threshold})";
+        }
+
+        // ═══════════════════════════════════════════════
         // R3: Division Quota Availability
         // ═══════════════════════════════════════════════
-        $division  = $application->division;
-        $r3Passed  = !$division->is_locked && $division->active_applicants < $division->max_quota;
+        $r3Passed = !$division->is_locked && $division->active_applicants < $division->max_quota;
 
         if (!$r3Passed) {
             $warnings[] = 'R3 - Kuota divisi ' . $division->name . ' sudah penuh atau terkunci';
         }
 
         // ═══════════════════════════════════════════════
-        // R4: Keyword Matching Score
+        // R4: Study Program & Academic Relevance
         // ═══════════════════════════════════════════════
-        $score = $this->calculateKeywordScore($application, $division);
-        $threshold = (float) config('services.algorithm.score_threshold', 60);
-        $r4Passed  = $score >= $threshold;
+        $r4Score = $this->calculateRelevanceScore($application, $division);
+        $r4Passed = $r4Score >= $threshold;
 
         if (!$r4Passed) {
-            $warnings[] = "R4 - Skor kesesuaian ({$score}/100) di bawah ambang batas ({$threshold})";
+            $warnings[] = "R4 - Skor kesesuaian Program Studi ({$r4Score}/100) di bawah ambang batas ({$threshold})";
+        }
+
+        // ═══════════════════════════════════════════════
+        // Composite Overall Algorithm Score
+        // ═══════════════════════════════════════════════
+        if ($hasCvDetails) {
+            $finalScore = ($r4Score * 0.4) + ($r2Score * 0.6);
+        } else {
+            $finalScore = ($r4Score * 0.6) + ($r2Score * 0.4);
+        }
+
+        // Base score minimum 30 if valid student/applicant data
+        if ($application->study_program && $application->institution_name) {
+            $finalScore = max($finalScore, 30.0);
+        }
+        $finalScore = round(min($finalScore, 100.0), 2);
+
+        if ($finalScore < $threshold) {
+            $warnings[] = "Skor kesesuaian akhir ({$finalScore}/100) di bawah ambang batas ({$threshold})";
         }
 
         // ═══════════════════════════════════════════════
         // Save Results (decision support only, no auto-reject)
         // ═══════════════════════════════════════════════
-        $allPassed = $r1Passed && $r3Passed && $r4Passed;
+        $allPassed = $r1Passed && $r2Passed && $r3Passed && $r4Passed && ($finalScore >= $threshold);
 
         $application->update([
             'r1_passed'       => $r1Passed,
+            'r2_passed'       => $r2Passed,
+            'r2_score'        => $r2Score,
             'r3_passed'       => $r3Passed,
             'r4_passed'       => $r4Passed,
-            'algorithm_score' => $score,
+            'r4_score'        => $r4Score,
+            'algorithm_score' => $finalScore,
             'status'          => 'reviewing',
         ]);
 
@@ -196,18 +335,7 @@ class AdminController extends Controller
             'message' => 'Evaluasi algoritma selesai. ' . $recommendation,
             'data'    => [
                 'application'  => $application,
-                'rule_results' => [
-                    'r1_passed'       => $r1Passed,
-                    'r1_detail'       => $r1Passed ? 'Semua dokumen lengkap' : 'Dokumen belum lengkap: ' . implode(', ', $missingTypes),
-                    'r3_passed'       => $r3Passed,
-                    'r3_detail'       => $r3Passed ? 'Kuota tersedia' : 'Kuota penuh/terkunci',
-                    'r4_passed'       => $r4Passed,
-                    'r4_detail'       => "Skor: {$score}/100 (threshold: {$threshold})",
-                    'algorithm_score' => $score,
-                    'all_passed'      => $allPassed,
-                    'recommendation'  => $recommendation,
-                    'warnings'        => $warnings,
-                ],
+                'rule_results' => $this->formatRuleResults($application, $warnings, $allPassed),
             ],
         ]);
     }
@@ -355,92 +483,103 @@ class AdminController extends Controller
     // ═══════════════════════════════════════════════════
 
     /**
+     * Calculate score for Detail CV & Kualifikasi (R2)
+     * based on skills, experience, projects, and CV document against target division.
+     * Returns score between 0 and 100.
+     */
+    private function calculateCvScore(Application $application, Division $division): float
+    {
+        $hasDetails = !empty(trim($application->skills ?? ''))
+            || !empty(trim($application->experience ?? ''))
+            || !empty(trim($application->projects ?? ''));
+
+        $cvDoc = $application->documents->firstWhere('type', 'cv');
+
+        if (!$hasDetails && !$cvDoc) {
+            return 0.0;
+        }
+
+        $keywords = [];
+        if (!empty($application->skills)) {
+            $keywords = array_merge($keywords, $this->extractKeywords($application->skills));
+        }
+        if (!empty($application->experience)) {
+            $keywords = array_merge($keywords, $this->extractKeywords($application->experience));
+        }
+        if (!empty($application->projects)) {
+            $keywords = array_merge($keywords, $this->extractKeywords($application->projects));
+        }
+        if ($cvDoc) {
+            $keywords = array_merge($keywords, $this->extractKeywords($cvDoc->file_name));
+        }
+
+        $keywords = array_unique(array_filter($keywords));
+        if (empty($keywords)) {
+            return 0.0;
+        }
+
+        $expandedKeywords = $this->expandWithSynonyms($keywords);
+
+        $divisionKeywords = $this->extractKeywords($division->name);
+        $expandedDivisionKeywords = $this->expandWithSynonyms($divisionKeywords);
+
+        if (empty($expandedDivisionKeywords)) {
+            return 50.0;
+        }
+
+        $matches = 0;
+        $maxPossible = count($expandedDivisionKeywords) * 2;
+
+        foreach ($expandedDivisionKeywords as $divKeyword) {
+            foreach ($expandedKeywords as $appKeyword) {
+                if ($divKeyword === $appKeyword) {
+                    $matches += 2;
+                } elseif (str_contains($appKeyword, $divKeyword) || str_contains($divKeyword, $appKeyword)) {
+                    $matches += 1;
+                }
+            }
+        }
+
+        $matchRatio = min($matches / max($maxPossible, 1), 1.0);
+        $cvScore = $matchRatio * 100.0;
+
+        return round(min($cvScore, 100.0), 2);
+    }
+
+    /**
+     * Calculate score for Program Studi & Kesesuaian Akademik (R4)
+     * based on study_program relevance map against target division.
+     * Returns score between 0 and 100.
+     */
+    private function calculateRelevanceScore(Application $application, Division $division): float
+    {
+        return round($this->getRelevanceMapScore(
+            strtolower($application->study_program ?? ''),
+            strtolower($division->name)
+        ), 2);
+    }
+
+    /**
      * Calculate keyword matching score between applicant's profile
      * and the target division.
-     *
-     * Strategy:
-     * 1. Check relevance mapping (study program → division)
-     * 2. Extract keywords from CV filename + application fields
-     * 3. Expand keywords with synonyms
-     * 4. Calculate overlap with division keywords
-     * 5. Combine relevance map score + keyword score
      *
      * @return float Score between 0 and 100
      */
     private function calculateKeywordScore(Application $application, Division $division): float
     {
-        $score = 0.0;
-        $divisionName = strtolower($division->name);
+        $r4Score = $this->calculateRelevanceScore($application, $division);
+        $r2Score = $this->calculateCvScore($application, $division);
 
-        // ─── Step 1: Relevance Map (program studi → divisi) ───
-        // Bobot utama: 60% dari skor total
-        $relevanceScore = $this->getRelevanceMapScore(
-            strtolower($application->study_program ?? ''),
-            $divisionName
-        );
+        $hasCvDetails = !empty(trim($application->skills ?? ''))
+            || !empty(trim($application->experience ?? ''))
+            || !empty(trim($application->projects ?? ''));
 
-        // ─── Step 2: Keyword Matching ───
-        // Bobot tambahan: 40% dari skor total
-        $applicantKeywords = [];
-
-        // From CV filename
-        $cvDoc = $application->documents->firstWhere('type', 'cv');
-        if ($cvDoc) {
-            $applicantKeywords = array_merge(
-                $applicantKeywords,
-                $this->extractKeywords($cvDoc->file_name)
-            );
+        if ($hasCvDetails) {
+            $finalScore = ($r4Score * 0.4) + ($r2Score * 0.6);
+        } else {
+            $finalScore = ($r4Score * 0.6) + ($r2Score * 0.4);
         }
 
-        // From study program
-        if ($application->study_program) {
-            $applicantKeywords = array_merge(
-                $applicantKeywords,
-                $this->extractKeywords($application->study_program)
-            );
-        }
-
-        // From institution name
-        if ($application->institution_name) {
-            $applicantKeywords = array_merge(
-                $applicantKeywords,
-                $this->extractKeywords($application->institution_name)
-            );
-        }
-
-        $applicantKeywords = array_unique(array_filter($applicantKeywords));
-
-        // Expand with synonyms
-        $expandedKeywords = $this->expandWithSynonyms($applicantKeywords);
-
-        // Division keywords (also expanded)
-        $divisionKeywords = $this->extractKeywords($division->name);
-        $expandedDivisionKeywords = $this->expandWithSynonyms($divisionKeywords);
-
-        // Calculate keyword overlap
-        $keywordScore = 0.0;
-        if (!empty($expandedDivisionKeywords) && !empty($expandedKeywords)) {
-            $matches = 0;
-            $maxPossible = count($expandedDivisionKeywords) * 2;
-
-            foreach ($expandedDivisionKeywords as $divKeyword) {
-                foreach ($expandedKeywords as $appKeyword) {
-                    if ($divKeyword === $appKeyword) {
-                        $matches += 2;
-                    } elseif (str_contains($appKeyword, $divKeyword) || str_contains($divKeyword, $appKeyword)) {
-                        $matches += 1;
-                    }
-                }
-            }
-
-            $keywordScore = min($matches / max($maxPossible, 1), 1.0) * 100;
-        }
-
-        // ─── Step 3: Combine scores ───
-        // relevanceScore (0-100) * 0.6 + keywordScore (0-100) * 0.4
-        $finalScore = ($relevanceScore * 0.6) + ($keywordScore * 0.4);
-
-        // Minimum base score of 30 for any valid application with complete data
         if ($application->study_program && $application->institution_name) {
             $finalScore = max($finalScore, 30.0);
         }
@@ -454,77 +593,147 @@ class AdminController extends Controller
      */
     private function getRelevanceMapScore(string $studyProgram, string $divisionName): float
     {
-        // Mapping: divisi → daftar program studi yang relevan (dengan bobot)
+        // Mapping: divisi Suara Surabaya Media → daftar program studi relevan
         $relevanceMap = [
-            'teknologi informasi' => [
-                'high' => ['teknik informatika', 'sistem informasi', 'ilmu komputer', 'informatika',
-                           'teknologi informasi', 'rekayasa perangkat lunak', 'sains data',
-                           'data science', 'computer science', 'information system',
-                           'information technology', 'software engineering', 'cybersecurity'],
-                'medium' => ['teknik elektro', 'teknik komputer', 'matematika', 'statistika',
-                             'manajemen informatika', 'komputerisasi akuntansi', 'multimedia'],
+            'business' => [
+                'high' => [
+                    'manajemen bisnis', 'administrasi bisnis', 'bisnis digital', 'kewirausahaan',
+                    'manajemen', 'ekonomi', 'ilmu ekonomi', 'manajemen pemasaran', 'bisnis internasional',
+                    'bisnis', 'entrepreneurship', 'business', 'ekonomi pembangunan', 'manajemen keuangan',
+                    'manajemen strategis', 'commerce', 'business administration', 'business management',
+                    'digital business', 'international business', 'financial management', 'manajemen retail',
+                    'retail management', 'adbis', 'bisnis kreatif', 'creative business', 'pengembangan bisnis',
+                    'business development', 'manajemen bisnis telekomunikasi', 'mbti', 'e-commerce',
+                    'perdagangan internasional', 'international trade', 'bisnis terapan', 'administrasi niaga',
+                    'tata niaga', 'ekonomi bisnis',
+                ],
+                'medium' => [
+                    'akuntansi', 'hubungan internasional', 'ilmu komunikasi', 'administrasi publik',
+                    'administrasi negara', 'teknik industri', 'industrial engineering', 'sistem informasi',
+                    'information systems', 'statistika', 'statistics', 'keuangan', 'perbankan',
+                    'banking and finance', 'manajemen logistik', 'supply chain', 'ilmu administrasi',
+                    'ekonomi syariah', 'perbankan syariah', 'manajemen operasional', 'sains data',
+                    'data science', 'adpub', 'aktuaris', 'komunikasi bisnis', 'hukum bisnis',
+                    'business law', 'manajemen informatika',
+                ],
             ],
-            'lalu lintas' => [
-                'high' => ['teknik sipil', 'teknik transportasi', 'perencanaan wilayah', 'planologi',
-                           'teknik lingkungan', 'manajemen transportasi', 'teknik jalan'],
-                'medium' => ['teknik informatika', 'sistem informasi', 'ilmu komputer', 'informatika',
-                             'teknik elektro', 'teknik mesin', 'administrasi publik', 'administrasi negara',
-                             'manajemen', 'hukum', 'statistika'],
+            'bnd' => [
+                'high' => [
+                    'manajemen bisnis', 'administrasi bisnis', 'bisnis digital', 'kewirausahaan',
+                    'manajemen', 'ekonomi', 'ilmu ekonomi', 'manajemen pemasaran', 'bisnis internasional',
+                    'bisnis', 'entrepreneurship', 'business', 'ekonomi pembangunan', 'manajemen keuangan',
+                    'manajemen strategis', 'commerce', 'business administration', 'business management',
+                    'digital business', 'international business', 'financial management', 'manajemen retail',
+                    'retail management', 'adbis', 'bisnis kreatif', 'creative business', 'pengembangan bisnis',
+                    'business development', 'manajemen bisnis telekomunikasi', 'mbti', 'e-commerce',
+                    'perdagangan internasional', 'international trade', 'bisnis terapan', 'administrasi niaga',
+                    'tata niaga', 'ekonomi bisnis',
+                ],
+                'medium' => [
+                    'akuntansi', 'hubungan internasional', 'ilmu komunikasi', 'administrasi publik',
+                    'administrasi negara', 'teknik industri', 'industrial engineering', 'sistem informasi',
+                    'information systems', 'statistika', 'statistics', 'keuangan', 'perbankan',
+                    'banking and finance', 'manajemen logistik', 'supply chain', 'ilmu administrasi',
+                    'ekonomi syariah', 'perbankan syariah', 'manajemen operasional', 'sains data',
+                    'data science', 'adpub', 'aktuaris', 'komunikasi bisnis', 'hukum bisnis',
+                    'business law', 'manajemen informatika',
+                ],
             ],
-            'angkutan' => [
-                'high' => ['teknik transportasi', 'manajemen transportasi', 'teknik sipil',
-                           'manajemen logistik', 'teknik industri'],
-                'medium' => ['manajemen', 'administrasi publik', 'administrasi negara', 'ekonomi',
-                             'teknik informatika', 'sistem informasi', 'ilmu komputer', 'informatika',
-                             'hukum', 'teknik mesin'],
+            'new media' => [
+                'high' => [
+                    'ilmu komunikasi', 'jurnalistik', 'jurnalisme', 'journalism', 'desain komunikasi visual', 'dkv',
+                    'multimedia', 'fotografi', 'photography', 'broadcasting', 'penyiaran', 'sastra',
+                    'sastra indonesia', 'sastra inggris', 'english literature', 'indonesian literature',
+                    'animasi', 'animation', 'film dan televisi', 'film & televisi', 'film', 'televisi',
+                    'media digital', 'digital media', 'periklanan', 'advertising', 'komunikasi massa',
+                    'mass communication', 'creative writing', 'penulisan kreatif', 'desain grafis',
+                    'graphic design', 'jurnalistik online', 'sinematografi', 'cinematography',
+                    'produksi media', 'media rekam', 'seni media rekam', 'videografi', 'videography',
+                    'video editing', 'motion graphic', 'content creation', 'ilkom', 'penerbitan',
+                    'publishing', 'media massa', 'jurnalistik digital', 'komunikasi digital',
+                    'creative media', 'desain media digital', 'komunikasi visual', 'visual communication',
+                ],
+                'medium' => [
+                    'teknik informatika', 'sistem informasi', 'rekayasa perangkat lunak', 'rpl',
+                    'seni rupa', 'fine arts', 'seni murni', 'desain produk', 'product design',
+                    'sosiologi', 'sociology', 'bahasa', 'linguistik', 'linguistics', 'hubungan masyarakat',
+                    'public relations', 'humas', 'manajemen komunikasi', 'sastra jepang', 'sastra arab',
+                    'sastra perancis', 'pendidikan bahasa', 'antropologi', 'ilmu politik', 'tata kelola media',
+                    'teknologi informasi', 'seni visual', 'pendidikan bahasa indonesia', 'pendidikan bahasa inggris',
+                    'filsafat', 'studi media', 'media studies', 'copywriting',
+                ],
             ],
-            'prasarana' => [
-                'high' => ['teknik sipil', 'arsitektur', 'teknik lingkungan', 'perencanaan wilayah',
-                           'planologi', 'teknik transportasi'],
-                'medium' => ['teknik mesin', 'teknik elektro', 'teknik industri',
-                             'manajemen', 'administrasi publik', 'teknik informatika',
-                             'sistem informasi', 'ilmu komputer', 'informatika'],
+            'on air' => [
+                'high' => [
+                    'broadcasting', 'penyiaran', 'penyiaran radio', 'radio', 'radio broadcasting',
+                    'ilmu komunikasi', 'jurnalistik', 'jurnalisme', 'teater', 'seni teater',
+                    'seni pertunjukan', 'performing arts', 'public relations', 'komunikasi penyiaran',
+                    'presenter', 'announcing', 'announcer', 'seni drama tari dan musik', 'sendratasik',
+                    'tata vokal', 'seni suara', 'seni musik', 'music', 'audio production', 'produksi siaran',
+                    'voice over', 'ilkom', 'komunikasi penyiaran islam', 'kpi', 'public speaking',
+                    'penyiar', 'broadcaster', 'voice talent', 'podcasting',
+                ],
+                'medium' => [
+                    'sastra indonesia', 'sastra inggris', 'sastra', 'linguistik', 'bahasa dan sastra',
+                    'hubungan masyarakat', 'humas', 'hukum', 'ilmu hukum', 'ilmu politik', 'psikologi',
+                    'psychology', 'sosiologi', 'komunikasi massa', 'pariwisata', 'tourism', 'kreatif',
+                    'pendidikan bahasa', 'pendidikan seni', 'seni media rekam', 'manajemen komunikasi',
+                    'hubungan internasional', 'pendidikan bahasa indonesia', 'pendidikan bahasa inggris', 'studi budaya',
+                ],
             ],
-            'keselamatan' => [
-                'high' => ['kesehatan masyarakat', 'keselamatan kerja', 'k3', 'teknik lingkungan',
-                           'teknik sipil', 'teknik transportasi'],
-                'medium' => ['hukum', 'administrasi publik', 'administrasi negara', 'manajemen',
-                             'teknik informatika', 'sistem informasi', 'ilmu komputer', 'informatika',
-                             'teknik mesin', 'teknik elektro', 'psikologi', 'sosiologi'],
+            'marketing' => [
+                'high' => [
+                    'manajemen pemasaran', 'marketing', 'marketing management', 'manajemen',
+                    'ilmu komunikasi', 'bisnis digital', 'administrasi bisnis', 'periklanan',
+                    'advertising', 'pemasaran', 'komunikasi pemasaran', 'marketing communication',
+                    'marcomm', 'sales', 'penjualan', 'digital marketing', 'manajemen penjualan',
+                    'business management', 'adbis', 'ilkom', 'brand management', 'manajemen bisnis',
+                    'kewirausahaan', 'entrepreneurship', 'commercial management', 'strategic marketing',
+                ],
+                'medium' => [
+                    'ekonomi', 'akuntansi', 'hubungan masyarakat', 'public relations', 'humas',
+                    'statistika', 'psikologi', 'administrasi publik', 'administrasi negara',
+                    'komunikasi bisnis', 'hubungan internasional', 'manajemen ritel', 'retail management',
+                    'perbankan', 'keuangan', 'teknik industri', 'sains data', 'adpub', 'hukum bisnis',
+                    'manajemen logistik', 'commerce',
+                ],
             ],
-            'pengembangan llaj' => [
-                'high' => ['teknik sipil', 'teknik transportasi', 'perencanaan wilayah', 'planologi',
-                           'teknik lingkungan', 'manajemen transportasi'],
-                'medium' => ['teknik informatika', 'sistem informasi', 'ilmu komputer', 'informatika',
-                             'teknik industri', 'manajemen', 'administrasi publik', 'hukum',
-                             'ekonomi pembangunan', 'statistika'],
+            'promotion' => [
+                'high' => [
+                    'periklanan', 'advertising', 'desain komunikasi visual', 'dkv',
+                    'hubungan masyarakat', 'public relations', 'humas', 'ilmu komunikasi',
+                    'event management', 'manajemen event', 'manajemen komunikasi', 'kreatif',
+                    'promosi', 'brand management', 'marcomm', 'marketing communication',
+                    'komunikasi pemasaran', 'creative advertising', 'manajemen promosi',
+                    'ilkom', 'public relations and communications', 'media relations',
+                    'aktivasi merek', 'brand activation', 'corporate communication',
+                ],
+                'medium' => [
+                    'manajemen pemasaran', 'marketing', 'multimedia', 'pariwisata', 'tourism',
+                    'hospitality', 'pariwisata dan perhotelan', 'seni rupa', 'desain grafis',
+                    'sastra', 'administrasi bisnis', 'komunikasi massa', 'seni pertunjukan',
+                    'teater', 'manajemen bisnis', 'sosiologi', 'adbis', 'broadcasting',
+                    'manajemen seni', 'penataan acara',
+                ],
             ],
-            'sekretariat' => [
-                'high' => ['administrasi publik', 'administrasi negara', 'administrasi bisnis',
-                           'manajemen', 'sekretaris', 'administrasi perkantoran', 'ilmu pemerintahan'],
-                'medium' => ['hukum', 'akuntansi', 'ekonomi', 'ilmu komunikasi', 'psikologi',
-                             'teknik informatika', 'sistem informasi', 'ilmu komputer', 'informatika',
-                             'sosiologi', 'sastra', 'perpustakaan'],
-            ],
-            'pengujian kendaraan' => [
-                'high' => ['teknik mesin', 'teknik otomotif', 'teknik kendaraan', 'teknik industri'],
-                'medium' => ['teknik elektro', 'teknik sipil', 'teknik lingkungan', 'fisika',
-                             'teknik informatika', 'sistem informasi', 'ilmu komputer', 'informatika',
-                             'kimia'],
-            ],
-            'pengelolaan parkir' => [
-                'high' => ['teknik sipil', 'perencanaan wilayah', 'planologi', 'manajemen',
-                           'teknik transportasi', 'administrasi publik'],
-                'medium' => ['teknik informatika', 'sistem informasi', 'ilmu komputer', 'informatika',
-                             'akuntansi', 'ekonomi', 'teknik industri', 'hukum',
-                             'administrasi bisnis'],
-            ],
-            'terminal' => [
-                'high' => ['teknik sipil', 'teknik transportasi', 'manajemen transportasi',
-                           'administrasi publik', 'manajemen'],
-                'medium' => ['teknik informatika', 'sistem informasi', 'ilmu komputer', 'informatika',
-                             'teknik mesin', 'teknik industri', 'arsitektur', 'hukum',
-                             'ekonomi', 'ilmu komunikasi'],
+            'teknik' => [
+                'high' => [
+                    'teknik elektro', 'teknik telekomunikasi', 'teknik informatika',
+                    'sistem informasi', 'teknik komputer', 'audio engineering', 'sound engineering',
+                    'audio production', 'teknik radio', 'teknologi informasi', 'rekayasa perangkat lunak',
+                    'teknik transmisi', 'teknik audio video', 'tav', 'mekatronika', 'elektronika',
+                    'teknik elektronika', 'teknik komputer dan jaringan', 'tkj', 'rpl',
+                    'computer science', 'information technology', 'electrical engineering',
+                    'telecommunication engineering', 'broadcast engineering', 'sistem komputer',
+                    'rekayasa sistem komputer', 'teknik informatika dan komputer',
+                ],
+                'medium' => [
+                    'teknik fisika', 'teknik industri', 'multimedia', 'manajemen informatika',
+                    'komputerisasi akuntansi', 'sains data', 'data science', 'teknik jaringan',
+                    'network engineering', 'sains informasi', 'ilmu komputer', 'cyber security',
+                    'keamanan siber', 'teknik otomasi', 'otomasi sistem industri', 'teknik mesin',
+                    'instrumentasi', 'teknik mekatronika', 'telekomunikasi',
+                ],
             ],
         ];
 
@@ -533,13 +742,13 @@ class AdminController extends Controller
             if (str_contains($divisionName, $divKey)) {
                 // Check high relevance (score: 85-100)
                 foreach ($programs['high'] as $program) {
-                    if (str_contains($studyProgram, $program) || str_contains($program, $studyProgram)) {
+                    if (str_contains($studyProgram, $program) || (strlen($studyProgram) >= 3 && str_contains($program, $studyProgram))) {
                         return 95.0;
                     }
                 }
                 // Check medium relevance (score: 60-80)
                 foreach ($programs['medium'] as $program) {
-                    if (str_contains($studyProgram, $program) || str_contains($program, $studyProgram)) {
+                    if (str_contains($studyProgram, $program) || (strlen($studyProgram) >= 3 && str_contains($program, $studyProgram))) {
                         return 70.0;
                     }
                 }
@@ -558,20 +767,58 @@ class AdminController extends Controller
     private function expandWithSynonyms(array $keywords): array
     {
         $synonymMap = [
-            'informasi'     => ['informatika', 'komputer', 'teknologi', 'digital', 'data', 'sistem'],
-            'informatika'   => ['informasi', 'komputer', 'teknologi', 'programming', 'software'],
-            'komputer'      => ['informatika', 'informasi', 'teknologi', 'digital', 'komputasi'],
-            'sistem'        => ['informasi', 'teknologi', 'manajemen', 'analisis'],
-            'transportasi'  => ['lalu', 'lintas', 'angkutan', 'kendaraan', 'terminal', 'parkir'],
-            'sipil'         => ['prasarana', 'infrastruktur', 'konstruksi', 'jalan', 'bangunan'],
-            'mesin'         => ['otomotif', 'kendaraan', 'pengujian', 'mekanik'],
-            'elektro'       => ['elektronik', 'listrik', 'teknologi', 'sinyal'],
-            'manajemen'     => ['administrasi', 'pengelolaan', 'sekretariat', 'organisasi'],
-            'administrasi'  => ['manajemen', 'sekretariat', 'perkantoran', 'birokrasi'],
-            'hukum'         => ['regulasi', 'peraturan', 'keselamatan', 'kepatuhan'],
-            'lingkungan'    => ['keselamatan', 'prasarana', 'infrastruktur'],
-            'lalu'          => ['lintas', 'transportasi', 'jalan'],
-            'lintas'        => ['lalu', 'transportasi', 'jalan'],
+            // Media, Jurnalisme & New Media
+            'reporter'        => ['jurnalis', 'wartawan', 'berita', 'peliputan', 'investigasi', 'wawancara', 'media', 'news', 'press', 'reportase'],
+            'jurnalis'        => ['reporter', 'wartawan', 'berita', 'redaksi', 'media', 'pers', 'jurnalistik', 'news'],
+            'editor'          => ['redaktur', 'editing', 'penyunting', 'naskah', 'tulisan', 'konten', 'video', 'audio', 'copyediting'],
+            'fotografer'      => ['fotografi', 'kamera', 'visual', 'foto', 'dokumentasi', 'photo', 'camera', 'lighting', 'hunting'],
+            'videografer'     => ['videografi', 'kamera', 'video', 'editing', 'shooting', 'cinematography', 'visual'],
+            'media'           => ['jurnalisme', 'broadcasting', 'komunikasi', 'penyiaran', 'digital', 'portal', 'online', 'pers'],
+            'sosial'          => ['social', 'media', 'instagram', 'tiktok', 'youtube', 'konten', 'engagement', 'feed', 'reels', 'story'],
+            'konten'          => ['content', 'creator', 'kreatif', 'video', 'reels', 'story', 'copywriting', 'creative', 'post', 'feed'],
+            'grafis'          => ['desain', 'dkv', 'visual', 'illustrator', 'photoshop', 'infografis', 'canva', 'corel', 'figma', 'banner', 'poster', 'layout'],
+            'desain'          => ['grafis', 'dkv', 'visual', 'illustrator', 'photoshop', 'canva', 'figma', 'creative', 'ui', 'ux'],
+            'animasi'         => ['animator', 'motion', 'after effects', 'visual', 'grafis', '3d', '2d'],
+
+            // Penyiaran / On Air
+            'siaran'          => ['onair', 'radio', 'broadcasting', 'announcer', 'penyiar', 'podcast', 'audio', 'vocal', 'talkshow', 'traffic'],
+            'broadcasting'    => ['penyiaran', 'radio', 'siaran', 'onair', 'audio', 'presenter', 'announcer', 'podcast', 'streaming'],
+            'radio'           => ['broadcasting', 'siaran', 'onair', 'fm', 'pemancar', 'suara', 'audio', 'frekuensi', 'streaming'],
+            'penyiar'         => ['announcer', 'presenter', 'host', 'broadcaster', 'onair', 'radio', 'podcaster', 'mc', 'moderator', 'voice'],
+            'presenter'       => ['host', 'penyiar', 'mc', 'announcer', 'moderator', 'broadcaster', 'onair'],
+            'audio'           => ['sound', 'suara', 'mixer', 'recording', 'rekaman', 'voice', 'akustik', 'mastering'],
+            'suara'           => ['voice', 'audio', 'sound', 'vokal', 'penyiar', 'announcer', 'podcast'],
+
+            // Business & Development (BND)
+            'bisnis'          => ['business', 'development', 'kemitraan', 'revenue', 'strategi', 'manajemen', 'kerjasama', 'b2b', 'partnership'],
+            'development'     => ['bisnis', 'business', 'pengembangan', 'pertumbuhan', 'inovasi', 'strategi', 'partnership'],
+            'kemitraan'       => ['partnership', 'kerjasama', 'bisnis', 'klien', 'sponsor', 'kolaborasi'],
+            'manajemen'       => ['administrasi', 'pengelolaan', 'organisasi', 'strategi', 'bisnis', 'operasional'],
+
+            // Marketing & Sales
+            'marketing'       => ['pemasaran', 'sales', 'iklan', 'sponsorship', 'klien', 'campaign', 'komersial', 'digital', 'leads', 'revenue'],
+            'pemasaran'       => ['marketing', 'sales', 'iklan', 'promosi', 'komersial', 'kampanye', 'pasar'],
+            'sales'           => ['penjualan', 'marketing', 'klien', 'closing', 'target', 'komersial', 'revenue'],
+
+            // Promotion & Public Relations
+            'promosi'         => ['promotion', 'iklan', 'branding', 'event', 'publikasi', 'aktivasi', 'pameran', 'sosialisasi', 'marcomm'],
+            'promotion'       => ['promosi', 'iklan', 'branding', 'event', 'campaign', 'marcomm', 'activation'],
+            'iklan'           => ['advertising', 'periklanan', 'sponsorship', 'marketing', 'promosi', 'commercial', 'endorse', 'ads'],
+            'advertising'     => ['periklanan', 'iklan', 'ads', 'campaign', 'marketing', 'promosi', 'creative'],
+            'event'           => ['acara', 'organizer', 'eo', 'kegiatan', 'aktivasi', 'expo', 'workshop', 'seminar', 'festival'],
+            'branding'        => ['brand', 'citra', 'promosi', 'marketing', 'reputasi', 'identitas', 'positioning'],
+            'humas'           => ['public relations', 'pr', 'komunikasi', 'relasi', 'media', 'protokoler', 'stakeholder'],
+
+            // Teknik & IT
+            'teknik'          => ['engineering', 'elektro', 'telekomunikasi', 'jaringan', 'pemancar', 'it', 'audio', 'hardware', 'maintenance'],
+            'elektro'         => ['listrik', 'pemancar', 'transmisi', 'frekuensi', 'perangkat', 'teknik', 'elektronika', 'circuits'],
+            'telekomunikasi'  => ['transmisi', 'jaringan', 'pemancar', 'radio', 'frekuensi', 'antena', 'sinyal'],
+            'it'              => ['informatika', 'komputer', 'sistem', 'software', 'website', 'aplikasi', 'jaringan', 'network', 'server'],
+            'komputer'        => ['informatika', 'sistem', 'software', 'programming', 'teknologi', 'it', 'hardware', 'jaringan'],
+            'informasi'       => ['sistem', 'teknologi', 'komputer', 'data', 'digital', 'analisis', 'database'],
+            'jaringan'        => ['network', 'lan', 'wifi', 'router', 'switch', 'mikrotik', 'cisco', 'internet', 'server'],
+            'transmisi'       => ['pemancar', 'transmitter', 'antena', 'frekuensi', 'broadcast', 'rf', 'repeater'],
+            'software'        => ['perangkat lunak', 'aplikasi', 'coding', 'programming', 'developer', 'web', 'sistem'],
         ];
 
         $expanded = $keywords;

@@ -177,6 +177,7 @@ class HeadController extends Controller
             'Status',
             'Skor Algoritma',
             'R1 (Dokumen)',
+            'R2 (Kualifikasi CV)',
             'R3 (Kuota)',
             'R4 (Kesesuaian)',
             'Alasan Penolakan',
@@ -189,7 +190,7 @@ class HeadController extends Controller
             $colLetter = Coordinate::stringFromColumnIndex($colIdx + 1);
             $sheet->setCellValue($colLetter . '1', $header);
         }
-        $sheet->getStyle('A1:Q1')->applyFromArray($headerStyle);
+        $sheet->getStyle('A1:R1')->applyFromArray($headerStyle);
         $sheet->getRowDimension(1)->setRowHeight(30);
 
         // Data rows
@@ -207,16 +208,17 @@ class HeadController extends Controller
             $sheet->setCellValue('I' . $row, $this->formatStatus($app->status));
             $sheet->setCellValue('J' . $row, $app->algorithm_score ?? '-');
             $sheet->setCellValue('K' . $row, $this->formatBool($app->r1_passed));
-            $sheet->setCellValue('L' . $row, $this->formatBool($app->r3_passed));
-            $sheet->setCellValue('M' . $row, $this->formatBool($app->r4_passed));
-            $sheet->setCellValue('N' . $row, $app->rejection_reason ?? '-');
-            $sheet->setCellValue('O' . $row, $app->internship_start?->format('d/m/Y') ?? '-');
-            $sheet->setCellValue('P' . $row, $app->internship_end?->format('d/m/Y') ?? '-');
-            $sheet->setCellValue('Q' . $row, $app->created_at->format('d/m/Y H:i'));
+            $sheet->setCellValue('L' . $row, $this->formatBool($app->r2_passed));
+            $sheet->setCellValue('M' . $row, $this->formatBool($app->r3_passed));
+            $sheet->setCellValue('N' . $row, $this->formatBool($app->r4_passed));
+            $sheet->setCellValue('O' . $row, $app->rejection_reason ?? '-');
+            $sheet->setCellValue('P' . $row, $app->internship_start?->format('d/m/Y') ?? '-');
+            $sheet->setCellValue('Q' . $row, $app->internship_end?->format('d/m/Y') ?? '-');
+            $sheet->setCellValue('R' . $row, $app->created_at->format('d/m/Y H:i'));
         }
 
         // Auto-size columns
-        foreach (range('A', 'Q') as $col) {
+        foreach (range('A', 'R') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
 

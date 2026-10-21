@@ -27,11 +27,12 @@ import {
 
 // Deskripsi singkat per divisi (fallback jika tidak ada dari API)
 const DIVISION_DESCRIPTIONS: Record<string, string> = {
-  "Bidang Lalu Lintas": "Mengatur dan menganalisis manajemen lalu lintas kota.",
-  "Bidang Angkutan": "Pengelolaan moda transportasi dan angkutan umum.",
-  "Bidang Teknik Sarana": "Pemeliharaan dan pengujian sarana transportasi.",
-  "Bidang Keselamatan": "Program keselamatan dan ketertiban berlalu lintas.",
-  "Sekretariat": "Administrasi umum, kepegawaian, dan keuangan.",
+  "Business and Development (BND)": "Pengembangan strategi bisnis media, kemitraan strategis, dan monetisasi program.",
+  "New Media": "Jurnalisme digital: reporter, editor, fotografi, social media, content creator, dan grafis.",
+  "On Air": "Produksi siaran radio, siaran langsung informasi publik & lalu lintas, announcer, dan audio broadcasting.",
+  "Marketing": "Perencanaan kampanye pemasaran, sponsorship, brand activation, dan solusi periklanan media.",
+  "Promotion": "Promosi program on-air & off-air, aktivasi event, publikasi media kreatif, dan engagement pendengar.",
+  "Teknik": "Operasional pemancar radio, audio/sound engineering, transmisi frekuensi, IT dan infrastruktur penyiaran.",
 };
 
 const STEPS = [
@@ -157,11 +158,15 @@ export default function ApplicantDashboardPage() {
   // Tentukan step aktif berdasarkan status aplikasi.
   // Return 4 saat accepted/rejected agar SEMUA 4 step memenuhi: idx < activeStep → isDone=true
   const getActiveStep = () => {
-    if (!latestApp) return 0;
-    if (latestApp.status === "pending") return 1;
-    if (latestApp.status === "reviewing") return 2;
+    if (!latestApp || isInternshipEnded) return user?.institution_name && user?.phone ? 1 : 0;
+    // Ketika pelamar telah mengirimkan pengajuan & seluruh dokumen (status pending):
+    // Step 0 (Lengkapi Profil) dan Step 1 (Unggah Dokumen) sudah selesai (isDone = true -> hijau)
+    if (latestApp.status === "pending") {
+      return latestApp.r1_passed !== null ? 3 : 2;
+    }
+    if (latestApp.status === "reviewing") return 3;
     if (latestApp.status === "accepted" || latestApp.status === "rejected") return 4;
-    return 3;
+    return 2;
   };
   const activeStep = getActiveStep();
   const isRejected = latestApp?.status === "rejected";
@@ -326,7 +331,9 @@ export default function ApplicantDashboardPage() {
               <div key={step.title} className="relative">
                 {/* Connector line */}
                 {idx < STEPS.length - 1 && (
-                  <div className="hidden sm:block absolute top-5 left-[calc(50%+22px)] right-0 h-0.5 bg-surface-100 dark:bg-slate-800 z-0" />
+                  <div className={`hidden sm:block absolute top-5 left-[calc(50%+22px)] right-0 h-0.5 z-0 transition-colors ${
+                    idx < activeStep - 1 ? "bg-emerald-400 dark:bg-emerald-600" : "bg-surface-100 dark:bg-slate-800"
+                  }`} />
                 )}
                 <div className={`relative z-10 rounded-2xl border p-4 transition-all ${
                   isDone
@@ -353,7 +360,13 @@ export default function ApplicantDashboardPage() {
                         }`}>{step.title}</p>
                       </div>
                       <p className={`text-xs leading-relaxed ${isDone || isActive ? "text-surface-500 dark:text-slate-300" : "text-surface-300 dark:text-slate-500"}`}>
-                        {step.desc}
+                        {idx === 0 && isDone
+                          ? "Data diri & instansi telah terverifikasi."
+                          : idx === 1 && isDone
+                          ? "Seluruh berkas pendaftaran berhasil dikirim."
+                          : idx === 2 && isDone
+                          ? "Berkas telah ditinjau & dievaluasi."
+                          : step.desc}
                       </p>
                     </div>
                   </div>

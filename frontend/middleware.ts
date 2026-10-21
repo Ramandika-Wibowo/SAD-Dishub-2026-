@@ -6,8 +6,8 @@ const protectedRoutes: Record<string, string[]> = {
   "/dashboard": ["applicant"],
   "/apply": ["applicant"],
   "/status": ["applicant"],
-  "/admin": ["admin"],
-  "/head": ["head"],
+  "/admin": ["admin", "head"],
+  "/head": ["admin", "head"],
 };
 
 const publicRoutes = ["/login", "/register"];
@@ -73,9 +73,8 @@ function getDashboardPath(role: string): string {
     case "applicant":
       return "/dashboard";
     case "admin":
-      return "/admin/dashboard";
     case "head":
-      return "/head/dashboard";
+      return "/admin/dashboard";
     default:
       return "/login";
   }

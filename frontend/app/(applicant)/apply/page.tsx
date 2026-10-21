@@ -22,11 +22,16 @@ import {
   Send,
   CheckCircle,
   AlertCircle,
+  Sparkles,
+  Briefcase,
+  Layers,
+  Globe,
 } from "lucide-react";
 
 const steps = [
   { label: "Pilih Divisi", description: "Tentukan penempatan" },
   { label: "Isi Data Diri", description: "Lengkapi informasi" },
+  { label: "Detail CV", description: "Skills & Portofolio" },
   { label: "Unggah Dokumen", description: "Upload berkas" },
 ];
 
@@ -47,6 +52,10 @@ export default function ApplyPage() {
   const [formData, setFormData] = useState({
     institution_name: user?.institution_name || "",
     study_program: "",
+    skills: "",
+    experience: "",
+    projects: "",
+    portfolio_url: "",
     internship_start: "",
     internship_end: "",
   });
@@ -115,6 +124,11 @@ export default function ApplyPage() {
         e.internship_end = "Harus setelah tanggal mulai.";
     }
     if (step === 2) {
+      if (!formData.skills.trim()) {
+        e.skills = "Sebutkan minimal 1 keahlian atau tools utama Anda.";
+      }
+    }
+    if (step === 3) {
       if (!files.cv) e.cv = "CV wajib diunggah.";
       if (!files.cover_letter) e.cover_letter = "Surat pengantar wajib diunggah.";
       if (!files.id_card) e.id_card = "Kartu identitas wajib diunggah.";
@@ -124,7 +138,7 @@ export default function ApplyPage() {
     return Object.keys(e).length === 0;
   };
 
-  const nextStep = () => { if (validateStep()) setStep((s) => Math.min(s + 1, 2)); };
+  const nextStep = () => { if (validateStep()) setStep((s) => Math.min(s + 1, 3)); };
   const prevStep = () => { setErrors({}); setStep((s) => Math.max(s - 1, 0)); };
 
   const handleSubmit = async () => {
@@ -190,7 +204,7 @@ export default function ApplyPage() {
       {/* Header */}
       <div className="page-header">
         <h1 className="page-title">Pengajuan Magang</h1>
-        <p className="page-subtitle">Lengkapi 3 langkah berikut untuk mengajukan magang.</p>
+        <p className="page-subtitle">Lengkapi 4 langkah berikut untuk mengajukan magang di Suara Surabaya Media.</p>
       </div>
 
       {/* Step Indicator */}
@@ -316,8 +330,103 @@ export default function ApplyPage() {
         </Card>
       )}
 
-      {/* ═══ Step 3: Unggah Dokumen ═══ */}
+      {/* ═══ Step 3: Detail CV (Kualifikasi & Skills) ═══ */}
       {step === 2 && (
+        <Card padding="lg">
+          <div className="mb-4">
+            <h3 className="text-base font-semibold text-surface-900">Detail CV & Kualifikasi</h3>
+            <p className="text-xs text-surface-500 mt-0.5">
+              Informasi ini digunakan oleh algoritma penilaian Suara Surabaya Media untuk mengukur kecocokan keahlian Anda dengan divisi tujuan.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {/* Card 1: Skills */}
+            <div className="p-4 rounded-xl border border-surface-200 dark:border-surface-700 bg-surface-50/50 dark:bg-surface-800/30 space-y-2">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-primary-600" />
+                <label className="text-sm font-semibold text-surface-800">
+                  Keahlian & Tools yang Dikuasai <span className="text-red-500">*</span>
+                </label>
+              </div>
+              <p className="text-xs text-surface-500">
+                Sebutkan skill teknis, aplikasi, atau kompetensi utama (pisahkan dengan koma).
+              </p>
+              <textarea
+                rows={3}
+                value={formData.skills}
+                onChange={(e) => setFormData({ ...formData, skills: e.target.value })}
+                className={`input-base !h-auto min-h-[80px] py-2.5 leading-relaxed resize-y ${errors.skills ? "input-error" : ""}`}
+                placeholder="Contoh: Adobe Premiere Pro, Voice Over, Copywriting, DKV, Canva, Fotografi, Jurnalistik Berita, Figma..."
+              />
+              {errors.skills && <p className="text-xs text-red-500 mt-1">{errors.skills}</p>}
+            </div>
+
+            {/* Card 2: Experience */}
+            <div className="p-4 rounded-xl border border-surface-200 dark:border-surface-700 bg-surface-50/50 dark:bg-surface-800/30 space-y-2">
+              <div className="flex items-center gap-2">
+                <Briefcase className="w-4 h-4 text-emerald-600" />
+                <label className="text-sm font-semibold text-surface-800">
+                  Pengalaman Organisasi / Kerja / Magang
+                </label>
+              </div>
+              <p className="text-xs text-surface-500">
+                Pengalaman kepanitiaan, himpunan mahasiswa, magang sebelumnya, atau pekerjaan lepas (freelance).
+              </p>
+              <textarea
+                rows={4}
+                value={formData.experience}
+                onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
+                className="input-base !h-auto min-h-[110px] py-2.5 leading-relaxed resize-y"
+                placeholder="Contoh:&#10;- Reporter di Lembaga Pers Mahasiswa (2024 - 2025)&#10;- Koordinator Publikasi & Dokumentasi Event Kampus (2024)&#10;- Kontributor Artikel Berita Online"
+              />
+            </div>
+
+            {/* Card 3: Projects */}
+            <div className="p-4 rounded-xl border border-surface-200 dark:border-surface-700 bg-surface-50/50 dark:bg-surface-800/30 space-y-2">
+              <div className="flex items-center gap-2">
+                <Layers className="w-4 h-4 text-amber-600" />
+                <label className="text-sm font-semibold text-surface-800">
+                  Proyek & Karya Terbaik
+                </label>
+              </div>
+              <p className="text-xs text-surface-500">
+                Karya audio, video, tulisan artikel, desain grafis, sistem IT, atau kampanye yang pernah Anda buat.
+              </p>
+              <textarea
+                rows={4}
+                value={formData.projects}
+                onChange={(e) => setFormData({ ...formData, projects: e.target.value })}
+                className="input-base !h-auto min-h-[110px] py-2.5 leading-relaxed resize-y"
+                placeholder="Contoh:&#10;- Membuat liputan video berita singkat UMKM Surabaya (15k views di TikTok)&#10;- Desain identitas visual (branding) & konten Instagram UKM&#10;- Memproduksi siaran podcast bertema edukasi anak muda"
+              />
+            </div>
+
+            {/* Card 4: Portfolio Link */}
+            <div className="p-4 rounded-xl border border-surface-200 dark:border-surface-700 bg-surface-50/50 dark:bg-surface-800/30 space-y-2">
+              <div className="flex items-center gap-2">
+                <Globe className="w-4 h-4 text-blue-600" />
+                <label className="text-sm font-semibold text-surface-800">
+                  Tautan Portofolio / Hasil Karya (Opsional)
+                </label>
+              </div>
+              <p className="text-xs text-surface-500">
+                Tautan link Google Drive, Behance, GitHub, YouTube, LinkedIn, atau Media Sosial portofolio Anda.
+              </p>
+              <input
+                type="url"
+                value={formData.portfolio_url}
+                onChange={(e) => setFormData({ ...formData, portfolio_url: e.target.value })}
+                className="input-base"
+                placeholder="https://drive.google.com/... atau https://behance.net/username"
+              />
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {/* ═══ Step 4: Unggah Dokumen ═══ */}
+      {step === 3 && (
         <Card padding="lg">
           <h3 className="text-base font-semibold text-surface-900 mb-4">Unggah Berkas</h3>
           <div className="space-y-5">
@@ -351,7 +460,7 @@ export default function ApplyPage() {
           icon={<ChevronLeft className="w-4 h-4" />}>
           Kembali
         </Button>
-        {step < 2 ? (
+        {step < 3 ? (
           <Button onClick={nextStep} icon={<ChevronRight className="w-4 h-4" />} iconPosition="right">
             Selanjutnya
           </Button>
@@ -377,6 +486,10 @@ export default function ApplyPage() {
           <p><span className="font-medium text-surface-600">Divisi:</span> {selectedDiv?.name || "-"}</p>
           <p><span className="font-medium text-surface-600">Institusi:</span> {formData.institution_name}</p>
           <p><span className="font-medium text-surface-600">Prodi:</span> {formData.study_program}</p>
+          <p><span className="font-medium text-surface-600">Keahlian (Skills):</span> {formData.skills || "-"}</p>
+          {formData.portfolio_url && (
+            <p><span className="font-medium text-surface-600">Portofolio:</span> {formData.portfolio_url}</p>
+          )}
           <p><span className="font-medium text-surface-600">Periode:</span> {formData.internship_start} s/d {formData.internship_end}</p>
           <p><span className="font-medium text-surface-600">Dokumen:</span> {[files.cv?.name, files.cover_letter?.name, files.id_card?.name, files.proposal?.name].filter(Boolean).join(", ")}</p>
         </div>

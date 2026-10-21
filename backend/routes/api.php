@@ -52,9 +52,9 @@ Route::prefix('v1')->group(function () {
     });
 
     // ═══════════════════════════════════════════════════
-    // ADMIN ROUTES (role: admin)
+    // ADMIN ROUTES (role: admin, head)
     // ═══════════════════════════════════════════════════
-    Route::prefix('admin')->middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::prefix('admin')->middleware(['auth:sanctum', 'role:admin,head'])->group(function () {
 
         // Applications management
         Route::get('/applications',                    [AdminController::class, 'listApplications']);
@@ -68,12 +68,16 @@ Route::prefix('v1')->group(function () {
 
         // Document proxy (stream file to browser regardless of storage driver)
         Route::get('/documents/{id}/stream', [AdminController::class, 'streamDocument']);
+
+        // Analytics & Export (merged from Head)
+        Route::get('/analytics',   [HeadController::class, 'analytics']);
+        Route::post('/export',     [HeadController::class, 'export']);
     });
 
     // ═══════════════════════════════════════════════════
-    // HEAD / PIMPINAN ROUTES (role: head)
+    // HEAD / PIMPINAN ROUTES (role: admin, head)
     // ═══════════════════════════════════════════════════
-    Route::prefix('head')->middleware(['auth:sanctum', 'role:head'])->group(function () {
+    Route::prefix('head')->middleware(['auth:sanctum', 'role:admin,head'])->group(function () {
 
         Route::get('/analytics',   [HeadController::class, 'analytics']);
         Route::post('/export',     [HeadController::class, 'export']);
